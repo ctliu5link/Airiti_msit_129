@@ -13,9 +13,8 @@ namespace Airiti_msit_129 {
 
             Console.WriteLine("test");
 
-
             Console.WriteLine("Cloud");
-            Console.WriteLine("Cloud77");
+         
         }
     }
 }
