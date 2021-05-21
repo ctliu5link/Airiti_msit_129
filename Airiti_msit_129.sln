@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31313.79
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airiti_msit_129", "Airiti_msit_129\Airiti_msit_129.csproj", "{F44D2FF7-1E2C-49AC-93F7-228BA5F1861A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F44D2FF7-1E2C-49AC-93F7-228BA5F1861A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F44D2FF7-1E2C-49AC-93F7-228BA5F1861A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F44D2FF7-1E2C-49AC-93F7-228BA5F1861A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F44D2FF7-1E2C-49AC-93F7-228BA5F1861A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7F2CE314-7665-4EF2-AD3F-D70FA632A9A8}
+	EndGlobalSection
+EndGlobal
