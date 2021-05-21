@@ -5,6 +5,7 @@ namespace Airiti_msit_129 {
         static void Main(string[] args) {
             Console.WriteLine("Hello World!");
             Console.WriteLine("Leo Shen");
+            Console.WriteLine("test");
         }
     }
 }
