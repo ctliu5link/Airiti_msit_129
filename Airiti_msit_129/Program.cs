@@ -8,6 +8,9 @@ namespace Airiti_msit_129 {
             Console.WriteLine("hi, 我是爲中");
 
             Console.WriteLine("Leo Shen");
+
+            Console.WriteLine("Jay");
+
             Console.WriteLine("test");
         }
     }
