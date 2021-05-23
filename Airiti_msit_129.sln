@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31313.79
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airiti_msit_129", "Airiti_msit_129\Airiti_msit_129.csproj", "{F44D2FF7-1E2C-49AC-93F7-228BA5F1861A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airiti_msit_129", "Airiti_msit_129\Airiti_msit_129.csproj", "{F44D2FF7-1E2C-49AC-93F7-228BA5F1861A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DelegateEvent_Leo_WeiChung", "DelegateEvent_Leo_WeiChung\DelegateEvent_Leo_WeiChung.csproj", "{6176AAED-C9CF-4448-B3A0-8F322B873D94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{F44D2FF7-1E2C-49AC-93F7-228BA5F1861A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F44D2FF7-1E2C-49AC-93F7-228BA5F1861A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F44D2FF7-1E2C-49AC-93F7-228BA5F1861A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6176AAED-C9CF-4448-B3A0-8F322B873D94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6176AAED-C9CF-4448-B3A0-8F322B873D94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6176AAED-C9CF-4448-B3A0-8F322B873D94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6176AAED-C9CF-4448-B3A0-8F322B873D94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
