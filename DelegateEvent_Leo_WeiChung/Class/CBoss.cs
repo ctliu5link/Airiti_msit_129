@@ -8,6 +8,7 @@ namespace DelegateEvent_Leo_WeiChung.Class
 {
     class CBoss
     {
+        Random random = new Random();
         public string name { get; } // NPC 名稱
         public int normalAttack { get; set; } // 普攻傷害
         public int heavyAttack { get; set; } // 重擊傷害
@@ -21,25 +22,56 @@ namespace DelegateEvent_Leo_WeiChung.Class
             this.skillName = skillName;
             this.skillAttack = skillAttack;
         }
-        public void NormalAttack(CPlayer cplayer) // 普攻
+        public void NormalAttack(List<CPlayer> listPlayer) // 隨機挑一個進行普攻
         {
-            int hp = (cplayer.HP - normalAttack >= 0) ? cplayer.HP - normalAttack : 0;
-            Console.WriteLine($"{name} 使用 普通攻擊 對 {cplayer.name}({cplayer.HP}) 造成 {normalAttack} 點傷害! {cplayer.name} 生命值剩 {hp} !");
-            cplayer.HP = hp;
+            CPlayer player;
+            bool run = true;
+            do
+            {
+                player = listPlayer[random.Next(listPlayer.Count)];                
+                if (player.HP != 0)
+                {                    
+                    int hp = (player.HP - normalAttack >= 0) ? player.HP - normalAttack : 0;
+                    Console.WriteLine($"{name} 使用 普通攻擊 隨機目標：{player.name}。");
+                    Console.WriteLine($"{blank}對 {player.name}({player.HP}) 造成 {normalAttack} 點傷害! {player.name} 生命值剩 {hp} !");
+                    player.HP = hp;
+                    run = false;
+                }
+            } while (run);
         }
 
-        public void HeavyAttack(CPlayer cplayer) // 重擊
+        public void HeavyAttack(List<CPlayer> listPlayer) // 重擊
         {
-            int hp = (cplayer.HP - heavyAttack >= 0) ? cplayer.HP - heavyAttack : 0;
-            Console.WriteLine($"{name} 使用 重型攻擊 對 {cplayer.name}({cplayer.HP}) 造成 {heavyAttack} 點傷害! {cplayer.name} 生命值剩 {hp} !");
-            cplayer.HP = hp;
+            CPlayer player;
+            bool run = true;
+            do
+            {
+                player = listPlayer[random.Next(listPlayer.Count)];
+                if (player.HP != 0)
+                {
+                    int hp = (player.HP - heavyAttack >= 0) ? player.HP - heavyAttack : 0;
+                    Console.WriteLine($"{name} 使用 重型攻擊 隨機目標：{player.name}。");
+                    Console.WriteLine($"{blank}對 {player.name}({player.HP}) 造成 {heavyAttack} 點傷害! {player.name} 生命值剩 {hp} !");
+                    player.HP = hp;
+                    run = false;
+                }
+            } while (run);
         }
 
-        public void SkillAttack(CPlayer cplayer) // 技能攻擊
+        public void SkillAttack(List<CPlayer> listPlayer) // 技能攻擊
         {
-            int hp = (cplayer.HP - skillAttack >= 0) ? cplayer.HP - skillAttack : 0;
-            Console.WriteLine($"{name} 使用 {skillName} 對 {cplayer.name}({cplayer.HP}) 造成 {skillAttack} 點傷害! {cplayer.name} 生命值剩 {hp} !");
-            cplayer.HP = hp;
+            Console.WriteLine($"{name} 使用 技能攻擊： {skillName}");
+            foreach (var player in listPlayer)
+            {
+                if (player.HP != 0) // 判斷是否還有血量
+                {
+                    int hp = (player.HP - skillAttack >= 0) ? player.HP - skillAttack : 0;
+                    
+                    Console.WriteLine($"{blank}對 {player.name}({player.HP}) 造成 {skillAttack} 點傷害! {player.name} 生命值剩 {hp} !");
+                    player.HP = hp;
+                }                
+            }
         }
+        string blank = new string(' ', 31);
     }
 }
