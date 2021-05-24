@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airiti_msit_129", "Airiti_m
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DelegateEvent_Leo_WeiChung", "DelegateEvent_Leo_WeiChung\DelegateEvent_Leo_WeiChung.csproj", "{6176AAED-C9CF-4448-B3A0-8F322B873D94}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchemaNote_11083", "SchemaNote_11083\SchemaNote_11083.csproj", "{2BD1964D-A21A-4273-BD79-6F7AB886D2AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{6176AAED-C9CF-4448-B3A0-8F322B873D94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6176AAED-C9CF-4448-B3A0-8F322B873D94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6176AAED-C9CF-4448-B3A0-8F322B873D94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BD1964D-A21A-4273-BD79-6F7AB886D2AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BD1964D-A21A-4273-BD79-6F7AB886D2AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BD1964D-A21A-4273-BD79-6F7AB886D2AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BD1964D-A21A-4273-BD79-6F7AB886D2AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,10 +8,22 @@ using System.Threading.Tasks;
 
 namespace DelegateEvent_Leo_WeiChung
 {
- 
+
     class Program
     {
-        
+        //delegate 支援out and ref
+        public static string abbb(int a )
+        {
+
+            return "(a + b)";
+        }
+        public static void abc(Func<int,string> abc)
+        {
+            Console.WriteLine(abc(5));
+        }
+
+
+
         public delegate void Delegate(List<CPlayer> listPlayer);        
         static CChatMember 鄉民A = new CChatMember() { name = "鄉民A" };
         static CChatMember 鄉民B = new CChatMember() { name = "鄉民B" };
@@ -20,7 +32,8 @@ namespace DelegateEvent_Leo_WeiChung
         
         static void Main(string[] args)
         {
-            
+            abc(abbb);
+
             bool newGame = true;
             var random = new Random();
             do
