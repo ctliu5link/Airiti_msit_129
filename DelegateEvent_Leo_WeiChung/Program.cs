@@ -45,14 +45,14 @@ namespace DelegateEvent_Leo_WeiChung
                 // 模擬遊戲
                 int round = 1; // 回合數
                 CPlayer Tom = new CPlayer("Tom", 150);
-                Tom.HPChange0 += HPChange0;
+                Tom.HPChange0 += HPChange0;                
                 CPlayer John = new CPlayer("John", 200);
                 John.HPChange0 += HPChange0;
                 CBoss 巴哈姆特 = new CBoss("巴哈姆特", 20, 30, "龍之怒", 30);
 
-                鄉民看戲區.最新通知 += 鄉民A.通知我;
-                鄉民看戲區.最新通知 += 鄉民B.通知我;
-                鄉民看戲區.最新通知 += 鄉民C.通知我;
+                鄉民看戲區.NewInfo += 鄉民A.SendMe;
+                鄉民看戲區.NewInfo += 鄉民B.SendMe;
+                鄉民看戲區.NewInfo += 鄉民C.SendMe;
 
                 Console.WriteLine("鄉民A 已加入聊天室");
                 Console.WriteLine("鄉民B 已加入聊天室");
@@ -61,14 +61,16 @@ namespace DelegateEvent_Leo_WeiChung
 
                 // Boss attack 模式 round % 3
                 // 1：隨機普攻一名玩家。
-                // 2：隨機普攻且重擊一名玩家。
+                // 2：隨機普攻一名玩家，隨機重擊一名玩家。
                 // 3：隨機普攻一名玩家，施放技能。
+                // 有玩家死亡時觸發 event 對聊天室內的成員發送訊息並發送信件通知。
+
 
                 Delegate delegate1 = new Delegate(巴哈姆特.NormalAttack);
 
                 Delegate delegate2 = new Delegate(巴哈姆特.NormalAttack);
                 delegate2 += 巴哈姆特.HeavyAttack;
-
+                
                 //Delegate delegate2 = delegate1 + 巴哈姆特.HeavyAttack;
 
                 Delegate delegate3 = new Delegate(巴哈姆特.NormalAttack);
@@ -134,6 +136,7 @@ namespace DelegateEvent_Leo_WeiChung
                         newGame = false;
             } while (newGame);
         }
+
         private static void HPChange0(object sender, EventArgs e)
         {
             string message = $"{((CPlayer)sender).name}已經死了";
@@ -141,11 +144,11 @@ namespace DelegateEvent_Leo_WeiChung
             Console.WriteLine("死亡 Event 觸發，發送聊天室通知中...");            
             Console.WriteLine();
             ChatRoom(message, 鄉民看戲區);
-            foreach(var item in 鄉民看戲區.最新通知.GetInvocationList())
+            foreach(var item in 鄉民看戲區.NewInfo.GetInvocationList())
             {
-                if (((CChatMember)鄉民看戲區.最新通知.GetInvocationList()[0].Target).name == "鄉民A")
+                if (((CChatMember)鄉民看戲區.NewInfo.GetInvocationList()[0].Target).name == "鄉民A")
                 {
-                    鄉民看戲區.最新通知 -= 鄉民A.通知我;
+                    鄉民看戲區.NewInfo -= 鄉民A.SendMe;
                     Console.WriteLine("鄉民A 已退出聊天室");
                 }
             }
@@ -157,7 +160,7 @@ namespace DelegateEvent_Leo_WeiChung
             
             CMail cMail = new CMail();
             cMail.SendMail("伺服器公告<rovingwind93@gmail.com>", toList, title, message);
-            //cMail.SendMail2("伺服器公告2<rovingwind93@gmail.com>", toList, title, message);
+            cMail.SendMail2("伺服器公告2<rovingwind93@gmail.com>", toList, title, message);
             
             Console.WriteLine(message + " 通知信已發送");
             Console.WriteLine();

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DelegateEvent_Leo_WeiChung.Class
 {
-    // public event EventHandler HPChange0;
+    //public event EventHandler HPChange0;
     public class CPlayer
     {
         public event EventHandler HPChange0;

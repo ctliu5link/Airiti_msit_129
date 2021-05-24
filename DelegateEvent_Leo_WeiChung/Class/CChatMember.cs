@@ -10,7 +10,7 @@ namespace DelegateEvent_Leo_WeiChung.Class
     {
         public string name;
 
-        public void 通知我(string message)
+        public void SendMe(string message)
         {
             Console.WriteLine($"我是{name}，收到通知：{message}");
         }

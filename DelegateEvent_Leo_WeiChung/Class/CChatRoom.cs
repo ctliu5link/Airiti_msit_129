@@ -8,12 +8,12 @@ namespace DelegateEvent_Leo_WeiChung.Class
 {
     class CChatRoom
     {
-        public delegate void 通知對象(string message);
-        public 通知對象 最新通知;
+        public delegate void SendTo(string message);
+        public SendTo NewInfo;
         public void 發送聊天室通知(string message)
         {
             //觸發事件
-            最新通知.Invoke(message);
+            NewInfo.Invoke(message);
         }
     }
 }
