@@ -16,7 +16,7 @@ namespace DelegateEvent_Leo_WeiChung
         static CChatMember 鄉民B = new CChatMember() { name = "鄉民B" };
         static CChatMember 鄉民C = new CChatMember() { name = "鄉民C" };
         static CChatRoom 鄉民看戲區 = new CChatRoom();
-
+        
         static void Main(string[] args)
         {
             
@@ -35,11 +35,11 @@ namespace DelegateEvent_Leo_WeiChung
                 CPlayer John = new CPlayer("John", 200);
                 John.HPChange0 += HPChange0;
                 CBoss 巴哈姆特 = new CBoss("巴哈姆特", 20, 30, "龍之怒", 30);
-                
+
                 鄉民看戲區.最新通知 += 鄉民A.通知我;
                 鄉民看戲區.最新通知 += 鄉民B.通知我;
                 鄉民看戲區.最新通知 += 鄉民C.通知我;
-                
+
                 Console.WriteLine("鄉民A 已加入聊天室");
                 Console.WriteLine("鄉民B 已加入聊天室");
                 Console.WriteLine("鄉民C 已加入聊天室");
@@ -126,8 +126,16 @@ namespace DelegateEvent_Leo_WeiChung
             Console.WriteLine();
             Console.WriteLine("死亡 Event 觸發，發送聊天室通知中...");            
             Console.WriteLine();
-            ChatRoom(message, 鄉民看戲區);            
-            
+            ChatRoom(message, 鄉民看戲區);
+            foreach(var item in 鄉民看戲區.最新通知.GetInvocationList())
+            {
+                if (((CChatMember)鄉民看戲區.最新通知.GetInvocationList()[0].Target).name == "鄉民A")
+                {
+                    鄉民看戲區.最新通知 -= 鄉民A.通知我;
+                    Console.WriteLine("鄉民A 已退出聊天室");
+                }
+            }
+             
             Console.WriteLine();
             Console.WriteLine("死亡 Event 觸發，發送信件通知中...");
             string title = "對戰結果";
