@@ -1,4 +1,0 @@
-C:\Users\liang\Source\Repos\ctliu5link\Airiti_msit_129\Airiti_msit_129\obj\Debug\netcoreapp3.1\Airiti_msit_129.csprojAssemblyReference.cache
-C:\Users\liang\Source\Repos\ctliu5link\Airiti_msit_129\Airiti_msit_129\obj\Debug\netcoreapp3.1\Airiti_msit_129.AssemblyInfoInputs.cache
-C:\Users\liang\Source\Repos\ctliu5link\Airiti_msit_129\Airiti_msit_129\obj\Debug\netcoreapp3.1\Airiti_msit_129.AssemblyInfo.cs
-C:\Users\liang\Source\Repos\ctliu5link\Airiti_msit_129\Airiti_msit_129\obj\Debug\netcoreapp3.1\Airiti_msit_129.csproj.CoreCompileInputs.cache
