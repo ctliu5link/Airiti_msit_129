@@ -21,7 +21,7 @@ namespace SchemaNote_11083.Controllers
         public ActionResult DBdata(string DBConnection)
         {
             try
-            {
+            { 
                 using (var conn = new SqlConnection(DBConnection))
                 {
                     var tables = conn.Query<Ttable_dapper>(dapper_getAllTables());
