@@ -24,6 +24,16 @@ namespace SchemaNote_11083
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddDistributedMemoryCache();
+
+            //設定session
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(60);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -32,6 +42,8 @@ namespace SchemaNote_11083
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                //網頁同步更新套件
+                app.UseBrowserLink();
             }
             else
             {
@@ -44,13 +56,15 @@ namespace SchemaNote_11083
 
             app.UseRouting();
 
+            app.UseSession();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=SchemaNote}/{id?}");
             });
         }
     }
