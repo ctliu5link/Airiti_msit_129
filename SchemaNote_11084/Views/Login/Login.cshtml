@@ -1,0 +1,109 @@
+﻿@model SchemaNote_11084.Models.TEmployee
+
+@{ ViewData["Title"] = "Login"; }
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" >
+    <title>Leo Shen Test Site</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" >
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/theme/plugins/fontawesome-free/css/all.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="~/theme/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' >
+
+
+    <!-- Theme style -->
+
+    <link href="~/css/site.css" rel="stylesheet" >
+</head>
+<body>
+
+    <div class="row">
+        <div class="col-md-6 mx-auto p-0">
+            <div class="login-box">
+                <div class="login-snip">
+                    <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">登入系統</label> <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">註冊帳號</label>
+                    <div class="login-space">
+                        <div class="login">
+                            <form asp-action="Login">
+                                @*<div class="group"> <label for="user" class="label">帳號</label> <input id="user" name="txtAccount" type="text" class="input" placeholder="輸入帳號" autocomplete="off"> </div>
+                                    <div class="group"> <label for="pass" class="label">密碼</label> <input id="pass" name="txtPassword" type="password" class="input" data-type="password" placeholder="輸入密碼"> </div>                                
+                                    <div class="group"> <input id="check" type="checkbox" class="check" checked> <label for="check"><span class="icon"></span>保持登入</label> </div>*@
+                                <div class="group"> <label for="user" class="label">帳號</label> <input id="txtAccount" name="FAccount" type="text" class="input" placeholder="輸入帳號" autocomplete="off"> </div>
+                                <div class="group"> <label for="pass" class="label">密碼</label> <input id="txtPassword" name="FPassword" type="password" class="input" data-type="password" placeholder="輸入密碼" autocomplete="off"> </div>
+
+                                @*<div class="group"> <input type="submit" class="button" style="filter: grayscale(50%)" value="登入"> </div>*@
+                                <div class="group"> <input type="submit" id="btnlogin" name="btnlogin" class="button" style="filter: grayscale(50%)" value="登入"> </div>
+                                <div class="hr"></div>
+                                <div class="foot"> <a href="#">Forgot Password?</a> </div>
+                            </form>
+                        </div>
+
+
+                        <div class="sign-up-form">
+                            @*<form asp-action="AccEnable">*@
+                            <form>
+                                <div class="group"> <label for="username" class="label">英文名稱</label> <input asp-for="FAccount" id="txtAccount1" name="txtAccount1" type="text" class="input"> </div>
+                                <div class="group"> <label for="pass" class="label">密碼</label> <input asp-for="FPassword" id="txtPassword1" name="txtPassword1" type="password" class="input" data-type="password"> </div>
+
+                                <div class="group" style="display:none"> <label for="cAccountEnable" class="label">帳號狀態</label> <input asp-for="FEmail" id="AccountEnable" type="text" class="input" value="1"> </div>
+                                <div class="group"><input type="button" class="button" style="filter: grayscale(50%)" value="註冊" id="btnOnboard" name="btnOnboard" @*onclick="return (confirm('報到成功，請重新登入。'))"*@></div>
+
+                                <div class="hr"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /.login-box -->
+    <!-- jQuery -->
+    <script src="~/theme/plugins/jquery/jquery.min.js"></script>
+
+    @*DemoKey*@
+    <script type="text/javascript" src="~/MyJs/DemoKey_Login.js"></script>
+
+    <!-- Bootstrap 4 -->
+    <script src="~/theme/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/theme/dist/js/adminlte.min.js"></script>
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+
+    <script>
+        $("#btnlogin").click(function () {
+            account = $("#txtAccount").val();
+            password = $("#txtPassword").val();
+            if (password == "" || account == "") {
+                window.alert("帳號、密碼不得為空");
+            }
+            else {
+                var datas = {
+                    FAccount: $("#txtAccount").val(),
+                    FPassword: $("#txtPassword").val(),
+                }
+                $.ajax({
+                    type: "POST",
+                    url: '/Login/CheckLogin',
+                    data: JSON.stringify(datas),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        window.alert(data);
+                    },
+                    error: function () {
+                        window.alert('錯誤');
+                    }
+                })
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+﻿@model SchemaNote_11084.Models.TResult
+
+@{
+    ViewData["Title"] = "Edit";
+    var lisTableName = ViewBag.lisTableName;    
+}
+
+<div id="tabpage" style="width:100%">
+    <div id="iOption" style="background-color:white ;padding:20px; border-radius:10px">
+        <h3>編輯</h3>
+        <form method="post">
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label class="col-lg-3 control-label">表名:</label>
+                    <select class="filter" id="Filter_Status">
+                        <option value="" disabled selected>請選擇</option>
+                        <option selected="selected" value="All">All</option>
+                        @for (int i = 0; i < lisTableName.Count; i++)
+                        {
+                            <option value="@lisTableName[i]"> @lisTableName[i] </option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <br />
+    <div id="iList">
+        <div class="card">
+            <div class="card" style="width:60%;margin:0px auto;padding:0px;">
+                <div class="card-header">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group">
+                            <label asp-for="Table_Name" class="control-label"></label>
+                            <input asp-for="Table_Name" class="form-control" readonly="readonly" />
+                            <span asp-validation-for="Table_Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="COLUMN_NAME" class="control-label"></label>
+                            <input asp-for="COLUMN_NAME" class="form-control" readonly="readonly" />
+                            <span asp-validation-for="COLUMN_NAME" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="TABLE_SCHEMA" class="control-label"></label>
+                            <input asp-for="TABLE_SCHEMA" class="form-control" readonly="readonly" />
+                            <span asp-validation-for="TABLE_SCHEMA" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="資料型態" class="control-label"></label>
+                            <input asp-for="資料型態" class="form-control" readonly="readonly">
+                            <span asp-validation-for="資料型態" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="主鍵" class="control-label"></label>
+                            <input asp-for="主鍵" class="form-control" readonly="readonly" />
+                            <span asp-validation-for="主鍵" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="預設值" class="control-label"></label>
+                            <input asp-for="預設值" class="form-control" readonly="readonly" />
+                            <span asp-validation-for="預設值" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="欄位說明" class="control-label"></label>
+                            <input asp-for="欄位說明" class="form-control" />
+                            <span asp-validation-for="欄位說明" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="備註" class="control-label"></label>
+                            <input asp-for="備註" class="form-control" />
+                            <span asp-validation-for="備註" class="text-danger"></span>
+                        </div>
+
+                        <div class="card-footer">
+                            <input type="submit" value="取消修改" class="btn btn-default btn-lg" onclick="return(confirm('修改尚未完成，確定離開此頁?'))" asp-action="Index" />
+                            @*<input type="button" value="確認修改" class="btn btn-info btn-lg float-right" onclick="editSubmit('@(JsonSerializer.Serialize(Model))')" , style="filter: grayscale(50%)" />*@
+                            <input type="submit" value="確認修改" class="btn btn-info btn-lg float-right" onclick="return(confirm('確定修改?\n如果狀態修改為&quot;待報到&quot;將跳轉至員工註冊頁'))" style="filter: grayscale(50%)" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
