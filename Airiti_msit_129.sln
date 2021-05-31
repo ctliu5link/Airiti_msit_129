@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchemaNote_11083", "SchemaN
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchemaNote_11084", "SchemaNote_11084\SchemaNote_11084.csproj", "{C3D3084D-37C1-4DA4-B009-207D7FD01B51}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchemaNote_11085", "SchemaNote_11085\SchemaNote_11085.csproj", "{A9A9131A-29E8-4B1D-AB9F-65B56F94D3A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C3D3084D-37C1-4DA4-B009-207D7FD01B51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3D3084D-37C1-4DA4-B009-207D7FD01B51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3D3084D-37C1-4DA4-B009-207D7FD01B51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9A9131A-29E8-4B1D-AB9F-65B56F94D3A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9A9131A-29E8-4B1D-AB9F-65B56F94D3A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9A9131A-29E8-4B1D-AB9F-65B56F94D3A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9A9131A-29E8-4B1D-AB9F-65B56F94D3A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
