@@ -1,0 +1,59 @@
+﻿@model IEnumerable<SchemaNote_A11085.ViewModel.CAccountViewModel>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+    <h4>Account</h4>
+    <P>使用者帳號主表</P>
+    <p>物件類型</p>
+    <p>結構描述名稱</p>
+    <p>物件創建日期</p>
+    <p>物件修改日期</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                欄位名稱
+            </th>
+            <th>
+                欄位說明
+            </th>
+            <th>
+                資料型態
+            </th>
+            <th>
+                主鍵
+            </th>
+            <th>
+                不為Null
+            </th>
+            <th>
+                預設值
+            </th>
+            <th>
+                備註
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    
+    <tbody>
+
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Table_Name</td>
+                <td>@item.Table_Description</td>
+                <td>@item.Table_PK</td>
+                <td>@item.Table_Type</td>
+                <td>@item.Table_IsNullable</td>
+                <td>@item.Table_Default</td>
+                <td>@item.Table_Remark</td>
+            </tr>
+            
+        }
