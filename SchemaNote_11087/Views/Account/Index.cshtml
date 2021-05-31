@@ -1,0 +1,114 @@
+﻿@*@model SchemaNote_A11087.ViewModel.SchemaNoteViewModel*@
+
+@model IEnumerable<SchemaNote_A11087.Models.Account>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.AccountPassword)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ContactEmail)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CustomerId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CustomerFrom)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RegisterDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AccountType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AccountStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AccountSdate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AccountEdate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RegCustomerId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VerifyId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AppsyncStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GracePeriod)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Sort)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccountPassword)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContactEmail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerFrom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegisterDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccountType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccountStatus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccountSdate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccountEdate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegCustomerId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VerifyId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AppsyncStatus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GracePeriod)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sort)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.AccountId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.AccountId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.AccountId">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
