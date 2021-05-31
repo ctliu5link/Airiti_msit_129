@@ -1,7 +1,7 @@
 <root>
   <Login>
-    <id account="Leo" password="0000" photo="Leo.png" />
-    <id account="Tom" password="1111" photo="Tom.png" />
+    <id account="Leo" password="12345678" photo="Leo.png" />
+    <id account="Tom" password="87654321" photo="Tom.png" />
   </Login>
   <Log>
     <info time="11" editor="Leo" message="hihi" />
