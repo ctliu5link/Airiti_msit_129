@@ -16,6 +16,8 @@ namespace Airiti_msit_129 {
             Console.WriteLine("Cloud");
          
             Console.WriteLine("hi, 我是亮均");
+
+            int a = 0;
         }
     }
 }

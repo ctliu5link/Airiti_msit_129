@@ -1,0 +1,203 @@
+﻿@model IEnumerable<SchemaNote_11084.Models.TResult>
+
+@{
+    ViewData["Title"] = "List";
+    var lisTableName = ViewBag.lisTableName;    
+}
+
+<header>
+    <style>
+        #popupcontent {
+            position: absolute;
+            visibility: hidden;
+            overflow: hidden;
+            border: 1px solid #CCC;
+            background-color: #F9F9F9;
+            border: 1px solid #333;
+            padding: 5px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .col {
+            flex-grow: 1;
+            margin: 15px;
+            text-align: center;
+            font-size: 20px;
+            font-family: 微軟正黑體;
+            font-weight: normal;
+        }
+
+        h2 {
+            background-color: #cbb2ae;
+            border-left: 5px solid #808080;
+            font-family: "微软雅黑", "宋体", "黑体", Arial;
+            font-size: 25px;
+            height: 80px;
+            line-height: 80px;
+            font-weight: bold;
+            text-shadow: 2px 2px 3px #222222;
+            color: #FFFFFF;
+            padding-left: 10px;
+        }
+    </style>
+</header>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div onclick="location.href='/SQL_Server/Index';">
+            <h2>SQL Server 維護</h2>
+        </div>
+        <div>
+            <div class="col-md-6 form-group">
+                <input type="button" name="Leave_Search" value="查詢" onclick="location.href='@Url.Action("Index", "SQL_Server")'" class="btn btn-info" style="filter: grayscale(50%)" />
+                <input type="button" name="Leave_Search" value="歷史記錄" onclick="loglist()" class="btn btn-info" style="filter: grayscale(50%)" />                
+                @*<a class="btn btn-primary" href="/Service/ExcelInterview" style="filter: grayscale(50%)" type="button">匯出EXCEL</a>*@
+            </div>
+        </div>
+        <div id ="iRepalce" class="row" style="padding:20px">            
+            <div id="tabpage" style="width:100%">
+                <div id="iOption" style="background-color:white ;padding:20px; border-radius:10px">
+                    <h3>查詢條件</h3>
+                    <form method="post">
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label class="col-lg-3 control-label">表名:</label>
+                                <select class="filter" id="Filter_Status">
+                                    <option value="" disabled selected>請選擇</option>
+                                    <option selected="selected" value="All">All</option>
+                                    @for (int i = 0; i < lisTableName.Count; i++)
+                                    {
+                                        <option value="@lisTableName[i]"> @lisTableName[i] </option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <br />
+                <div id="iList">
+                    <div class="card">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr style="text-align:center">
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.COLUMN_NAME)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.TABLE_SCHEMA)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.資料型態)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.主鍵)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.預設值)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.欄位說明)
+                                    </th>                                    
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.備註)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.COLUMN_NAME)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TABLE_SCHEMA)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.資料型態)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.主鍵)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.預設值)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.欄位說明)
+                                        </td>                                        
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.備註)
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-success" onclick="edit('@item.COLUMN_NAME')">編輯</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+
+    // 條件查詢
+    $(".filter").change(function () {
+        cate = $("#Filter_Status").val();
+        //dept = $("#Filter_Dept").val();
+        $.ajax({
+            type: "get",
+            dataType: "html",
+            url: "/SQL_Server/Filter",
+            data: { cate: cate },
+            success: function (data) {                
+                $("#iList").html(data);
+            },
+            error: function (msg) {
+                alert("error:" + msg);
+            }
+        })
+    });
+
+    // 編輯頁
+    function edit(column) {
+        id = $("#Filter_Status").val();
+        
+        $.ajax({
+            type: "get",
+            dataType: "html",
+            url: "/SQL_Server/Edit",
+            data: { id: id, column: column },
+            success: function (data) {
+                console.log("edit");
+                $('#iRepalce').html(data);
+            },
+            error: function (msg) {
+                alert("error:" + msg);
+            }
+        })
+    }
+
+    function loglist() {
+        $.ajax({
+            type: "get",
+            dataType: "html",
+            url: "/SQL_Server/LogList",            
+            success: function (data) {
+                console.log("edit");
+                $('#iRepalce').html(data);
+            },
+            error: function (msg) {
+                alert("error:" + msg);
+            }
+        })
+    }
+
+</script>

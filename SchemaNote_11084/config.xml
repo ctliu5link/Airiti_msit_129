@@ -1,0 +1,17 @@
+<root>
+  <Login>
+    <id account="Leo" password="12345678" photo="Leo.png" />
+    <id account="Tom" password="87654321" photo="Tom.png" />
+  </Login>
+  <Log>
+    <info time="11" editor="Leo" message="hihi" />
+    <info time="2" editor="3" message="4" />
+    <info time="2021/5/31 上午 05:56:03" editor="Leo" message="更新資料表：Account_SchInfo 欄位：StudentShip 欄位說明：身份代碼1 備註：Identity.StudentShip1" />
+    <info time="2021/5/31 上午 06:38:40" editor="Leo" message="更新資料表：Account_ETDS&#xA;欄位：schoolID&#xA;欄位說明：ETDS學校編號2&#xA;備註：關聯 CETDSchoolCustomer.schoolID2" />
+    <info time="2021/5/31 上午 07:14:39" editor="Leo" message="更新資料表：Account_ETDS&#xA;欄位：schoolID&#xA;欄位說明：ETDS學校編號2 =&gt; ETDS學校編號&#xA;備註：關聯 CETDSchoolCustomer.schoolID2 =&gt; 關聯 CETDSchoolCustomer.schoolID" />
+    <info time="2021/5/31 上午 07:53:31" editor="Leo" message="更新資料表：Account_ETDS&#xA;欄位：schoolID&#xA;欄位說明：ETDS學校編號 =&gt; ETDS學校編號2&#xA;備註：關聯 CETDSchoolCustomer.schoolID =&gt; 關聯 CETDSchoolCustomer.schoolID2" />
+    <info time="2021/5/31 上午 07:53:45" editor="Leo" message="更新資料表：Account_ETDS&#xA;欄位：schoolID&#xA;備註：關聯 CETDSchoolCustomer.schoolID2 =&gt; 關聯 CETDSchoolCustomer.schoolID3" />
+    <info time="2021/5/31 上午 07:56:47" editor="Tom" message="更新資料表：Account_SchInfo&#xA;欄位：StudentShip&#xA;欄位說明：身份代碼1 =&gt; 身份代碼&#xA;備註：Identity.StudentShip1 =&gt; Identity.StudentShip" />
+    <info time="2021/5/31 上午 07:57:22" editor="Tom" message="更新資料表：Account_SchInfo&#xA;欄位：StudentShip&#xA;欄位說明：身份代碼 =&gt; 身份代碼2" />
+  </Log>
+</root>

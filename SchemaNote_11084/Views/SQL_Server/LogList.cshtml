@@ -1,0 +1,40 @@
+﻿@model IEnumerable<SchemaNote_11084.Models.CLog>
+
+@{
+    ViewData["Title"] = "Edit";
+    var lisTableName = ViewBag.lisTableName;
+}
+
+<div class="card">
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr style="text-align:center">
+                <th>
+                    @Html.DisplayNameFor(model => model.time)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.editor)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.message)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.editor)
+                    </td>
+                    <td>
+                        <span style="white-space: pre-line">@Html.DisplayFor(modelItem => item.message)</span>                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
