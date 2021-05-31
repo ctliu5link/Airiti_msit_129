@@ -45,7 +45,7 @@ namespace SchemaNote_A11085.Controllers
             AiritiDB();
             List<CAccountViewModel> list = new List<CAccountViewModel>();
            
-            foreach (DataRow item in ds.Tables[0].Rows)
+            foreach (DataRow item in ds.Tables[0].Rows)//選擇第幾張表
             {
                 //AiritiTable A = new AiritiTable();
                 CAccountViewModel model = new CAccountViewModel();
@@ -97,6 +97,7 @@ namespace SchemaNote_A11085.Controllers
                 SqlConnection Connection = new SqlConnection(conn);//使用連接字串初始SqlConnection物件連接資料庫
                 SqlCommand command = new SqlCommand($"{comm}", Connection);
                 SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);
+               
                 sqlDataAdapter.Fill(ds);
             }
             catch
