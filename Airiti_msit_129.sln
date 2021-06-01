@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchemaNote_11084", "SchemaN
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchemaNote_11085", "SchemaNote_11085\SchemaNote_11085.csproj", "{A9A9131A-29E8-4B1D-AB9F-65B56F94D3A1}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchemaNote_11087", "SchemaNote_11087\SchemaNote_11087.csproj", "{3CCADCAC-1213-4C7D-B85B-225DCC33A264}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchemaNote_11086", "SchemaNote_11086\SchemaNote_11086.csproj", "{60377952-8E1E-40A7-AA8F-72F3447EB030}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{A9A9131A-29E8-4B1D-AB9F-65B56F94D3A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9A9131A-29E8-4B1D-AB9F-65B56F94D3A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9A9131A-29E8-4B1D-AB9F-65B56F94D3A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CCADCAC-1213-4C7D-B85B-225DCC33A264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CCADCAC-1213-4C7D-B85B-225DCC33A264}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CCADCAC-1213-4C7D-B85B-225DCC33A264}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CCADCAC-1213-4C7D-B85B-225DCC33A264}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60377952-8E1E-40A7-AA8F-72F3447EB030}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60377952-8E1E-40A7-AA8F-72F3447EB030}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60377952-8E1E-40A7-AA8F-72F3447EB030}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60377952-8E1E-40A7-AA8F-72F3447EB030}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
