@@ -139,6 +139,8 @@ namespace SchemaNote_11083.Controllers
                     command.Parameters.Add(new SqlParameter("@data_column", data.column));
 
                     command.ExecuteNonQuery();
+
+
                 }
                 catch (SqlException e)
                 {

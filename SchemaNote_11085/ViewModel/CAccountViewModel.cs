@@ -23,19 +23,19 @@ namespace SchemaNote_A11085.ViewModel
             iv_airititable = new AiritiTable();
         }
         [DisplayName("欄位名稱")]
-        public string Table_Name { get { return iv_airititable.Table_Name; } set { iv_airititable.Table_Name = value; } }
+        public string Column_Name { get { return iv_airititable.Column_Name; } set { iv_airititable.Column_Name = value; } }
         [DisplayName("欄位說明")]
-        public string Table_Description { get { return iv_airititable.Table_Description; } set { iv_airititable.Table_Description = value; } }
+        public string Column_Description { get { return iv_airititable.Column_Description; } set { iv_airititable.Column_Description = value; } }
         [DisplayName("主鍵")]
-        public string Table_PK { get { return iv_airititable.Table_PK; } set { iv_airititable.Table_PK = value; } }
+        public bool Column_PK { get { return iv_airititable.Column_PK; } set { iv_airititable.Column_PK = value; } }
         [DisplayName("資料型態")]
-        public string Table_Type { get { return iv_airititable.Table_Type; } set { iv_airititable.Table_Type = value; } }
+        public string Column_Type { get { return iv_airititable.Column_Type; } set { iv_airititable.Column_Type = value; } }
         [DisplayName("不為Null")]
-        public string Table_IsNullable { get { return iv_airititable.Table_IsNullable; } set { iv_airititable.Table_IsNullable = value; } }
+        public bool Column_IsNullable { get { return iv_airititable.Column_IsNullable; } set { iv_airititable.Column_IsNullable = value; } }
         [DisplayName("預設值")]
-        public string Table_Default { get { return iv_airititable.Table_Default; } set { iv_airititable.Table_Default = value; } }
+        public string Column_Default { get { return iv_airititable.Column_Default; } set { iv_airititable.Column_Default = value; } }
         [DisplayName("備註")]
-        public string Table_Remark { get { return iv_airititable.Table_Remark; } set { iv_airititable.Table_Remark = value; } }
+        public string Column_Remark { get { return iv_airititable.Column_Remark; } set { iv_airititable.Column_Remark = value; } }
 
         //private AiritiTable iv_airitiTablet = null;
         //public AiritiTable airitiTable { get { return iv_airitiTable; } }
