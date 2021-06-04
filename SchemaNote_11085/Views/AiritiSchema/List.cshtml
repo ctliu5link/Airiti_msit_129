@@ -4,15 +4,16 @@
     ViewData["Title"] = "List";
 }
 
-    <h4>Account</h4>
-    <P>使用者帳號主表</P>
-    <p>物件類型</p>
-    <p>結構描述名稱</p>
-    <p>物件創建日期</p>
-    <p>物件修改日期</p>
+<!-- #region Account -->
+<h4>Account</h4>
+<P>使用者帳號主表</P>
+<p>物件類型</p>
+<p>結構描述名稱</p>
+<p>物件創建日期</p>
+<p>物件修改日期</p>
 
 
-<table class="table"style="border:3px #cccccc solid;" cellpadding="10" border='1'>
+<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
     <thead>
         <tr>
             <th>欄位名稱</th>
@@ -23,7 +24,7 @@
             <th>預設值</th>
             <th>備註</th>
         </tr>
-    </thead>    
+    </thead>
     <tbody>
         @foreach (var item in Model)
         {
@@ -41,142 +42,204 @@
                 <td>@item.Column_Remark</td>
             </tr>
         }
-        </tbody>
-    </table>
-
+    </tbody>
+</table>
+<!-- #endregion -->
+<!-- #region Account_ETDS -->
 <h4>Account_ETDS</h4>
-        <P>使用者帳號主表</P>
-        <p>物件類型</p>
-        <p>結構描述名稱</p>
-        <p>物件創建日期</p>
-        <p>物件修改日期</p>
+<P>使用者帳號主表</P>
+<p>物件類型</p>
+<p>結構描述名稱</p>
+<p>物件創建日期</p>
+<p>物件修改日期</p>
 
-        <table class="table"style="border:3px #cccccc solid;" cellpadding="10" border='1'>
-            <thead>
+<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
+    <thead>
+        <tr>
+            <th>欄位名稱</th>
+            <th>欄位說明</th>
+            <th>資料型態</th>
+            <th>主鍵</th>
+            <th>不為Null</th>
+            <th>預設值</th>
+            <th>備註</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @{
+            var count = 0;
+        }
+
+        @foreach (var item in Model)
+        {
+            //Console.WriteLine(item);
+
+            if (item.Column_Name == "schoolID")
+            {
+                count++;
+            }
+            if (count == 1 && item.Column_Name != "ID")
+            {
                 <tr>
-                    <th>欄位名稱</th>
-                    <th>欄位說明</th>
-                    <th>資料型態</th>
-                    <th>主鍵</th>
-                    <th>不為Null</th>
-                    <th>預設值</th>
-                    <th>備註</th>
+                    <td>@item.Column_Name</td>
+                    <td>@item.Column_Description</td>
+                    <td>@item.Column_PK</td>
+                    <td>@item.Column_Type</td>
+                    <td>@item.Column_IsNullable</td>
+                    <td>@item.Column_Default</td>
+                    <td>@item.Column_Remark</td>
                 </tr>
-            </thead>
-            </table>
-            <tbody>
-                @{
-                    var count = 0;
-                }
+            }
+            else if (item.Column_Name == "ID")
+            {
+                break;
+            }
 
-                @foreach (var item in Model)
-                {
-                    //Console.WriteLine(item);
+        }
+    </tbody>
+</table>
+<!-- #endregion -->
+<!-- #region Account_SchInfo -->
+<h4>Account_SchInfo</h4>
+<P>使用者帳號主表</P>
+<p>物件類型</p>
+<p>結構描述名稱</p>
+<p>物件創建日期</p>
+<p>物件修改日期</p>
 
-                    if (item.Column_Name == "schoolID")
-                    {
-                        count++;
-                    }
-                    if (count == 1 && item.Column_Name != "ID")
-                    {
-                            <tr>
-                                <td>@item.Column_Name</td>
-                                <td>@item.Column_Description</td>
-                                <td>@item.Column_PK</td>
-                                <td>@item.Column_Type</td>
-                                <td>@item.Column_IsNullable</td>
-                                <td>@item.Column_Default</td>
-                                <td>@item.Column_Remark</td>
-                            </tr>
-                    }
-                    else if (item.Column_Name == "ID")
-                    {
-                        break;
-                    }
+<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
+    <thead>
+        <tr>
+            <th>欄位名稱</th>
+            <th>欄位說明</th>
+            <th>資料型態</th>
+            <th>主鍵</th>
+            <th>不為Null</th>
+            <th>預設值</th>
+            <th>備註</th>
+        </tr>
+    </thead>
 
-                }
-            </tbody>
+    <tbody>
 
-            <h4>Account_SchInfo</h4>
-            <P>使用者帳號主表</P>
-            <p>物件類型</p>
-            <p>結構描述名稱</p>
-            <p>物件創建日期</p>
-            <p>物件修改日期</p>
+        @foreach (var item in Model)
+        {
 
-            <table class="table"style="border:3px #cccccc solid;" cellpadding="10" border='1'>
-                <thead>
-                    <tr>
-                        <th>欄位名稱</th>
-                        <th>欄位說明</th>
-                        <th>資料型態</th>
-                        <th>主鍵</th>
-                        <th>不為Null</th>
-                        <th>預設值</th>
-                        <th>備註</th>                 
-                    </tr>
-                </thead>
-                </table>
-                <tbody>
+            if (item.Column_Name == "ID")
+            {
+                count++;
+            }
+            if (count == 2 && item.Column_Name != "RefuseTime")
+            {
+                <tr>
+                    <td>@item.Column_Name</td>
+                    <td>@item.Column_Description</td>
+                    <td>@item.Column_PK</td>
+                    <td>@item.Column_Type</td>
+                    <td>@item.Column_IsNullable</td>
+                    <td>@item.Column_Default</td>
+                    <td>@item.Column_Remark</td>
+                </tr>
+            }
+            else if (item.Column_Name == "RefuseTime")
+            {
+                break;
+            }
+        }
+    </tbody>
+</table>
+<!-- #endregion -->
+<!-- #region Account_SchInfoRefuse -->
+<h4>Account_SchInfoRefuse</h4>
+<P>使用者帳號主表</P>
+<p>物件類型</p>
+<p>結構描述名稱</p>
+<p>物件創建日期</p>
+<p>物件修改日期</p>
 
-                    @foreach (var item in Model)
-                    {
+<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
+    <thead>
+        <tr>
+            <th>欄位名稱</th>
+            <th>欄位說明</th>
+            <th>資料型態</th>
+            <th>主鍵</th>
+            <th>不為Null</th>
+            <th>預設值</th>
+            <th>備註</th>
+        </tr>
+    </thead>
 
-                        if (item.Column_Name == "ID")
-                        {
-                            count++;
-                        }
-                        if (count == 2 && item.Column_Name != "RefuseTime")
-                        {
-                            <tr>
-                                <td>@item.Column_Name</td>
-                                <td>@item.Column_Description</td>
-                                <td>@item.Column_PK</td>
-                                <td>@item.Column_Type</td>
-                                <td>@item.Column_IsNullable</td>
-                                <td>@item.Column_Default</td>
-                                <td>@item.Column_Remark</td>
-                            </tr>
-                        }
-                        else if (item.Column_Name == "RefuseTime")
-                        {
-                            break;
-                        }
-                    }
-                </tbody>
+    <tbody>
 
-                <h4>Account_SchInfoRefuse</h4>
-                <P>使用者帳號主表</P>
-                <p>物件類型</p>
-                <p>結構描述名稱</p>
-                <p>物件創建日期</p>
-                <p>物件修改日期</p>
+        @foreach (var item in Model)
+        {
 
-                <table class="table"style="border:3px #cccccc solid;" cellpadding="10" border='1'>
-                    <thead>
-                        <tr>
-                            <th>欄位名稱</th>
-                            <th>欄位說明</th>
-                            <th>資料型態</th>
-                            <th>主鍵</th>
-                            <th>不為Null</th>
-                            <th>預設值</th>
-                            <th>備註</th>                            
-                        </tr>
-                    </thead>
+            if (item.Column_Name == "ID")
+            {
+                count++;
+            }
+            if (count == 2 && item.Column_Name != "RefuseTime")
+            {
+                <tr>
+                    <td>@item.Column_Name</td>
+                    <td>@item.Column_Description</td>
+                    <td>@item.Column_PK</td>
+                    <td>@item.Column_Type</td>
+                    <td>@item.Column_IsNullable</td>
+                    <td>@item.Column_Default</td>
+                    <td>@item.Column_Remark</td>
+                </tr>
+            }
+            else if (item.Column_Name == "RefuseTime")
+            {
+                break;
+            }
+        }
+    </tbody>
+</table>
+<!-- #endregion -->
+<!-- #region AccountRefuse -->
+<h4>AccountRefuse</h4>
+<P>使用者帳號主表</P>
+<p>物件類型</p>
+<p>結構描述名稱</p>
+<p>物件創建日期</p>
+<p>物件修改日期</p>
 
-                    <tbody>
+<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
+    <thead>
+        <tr>
+            <th>欄位名稱</th>
+            <th>欄位說明</th>
+            <th>資料型態</th>
+            <th>主鍵</th>
+            <th>不為Null</th>
+            <th>預設值</th>
+            <th>備註</th>
+        </tr>
+    </thead>
 
-                        @foreach (var item in Model)
-                        {
-                            if (item.Column_Name == "RefuseTime")
-                            {
-                                count++;
-                            }                           
-                            if (item.Column_Name == "Sort")
-                            {
-                                break;
-                            }
-                        }
-                    </tbody>
-                </table>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+
+            if (item.Column_Name == "RefuseTime")
+            {
+                <tr>
+                    <td>@item.Column_Name</td>
+                    <td>@item.Column_Description</td>
+                    <td>@item.Column_PK</td>
+                    <td>@item.Column_Type</td>
+                    <td>@item.Column_IsNullable</td>
+                    <td>@item.Column_Default</td>
+                    <td>@item.Column_Remark</td>
+                </tr>
+                break;
+            }       
+        }
+    </tbody>
+</table>
+<!-- #endregion -->
