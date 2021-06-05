@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace SchemaNote_A11085.ViewModel
 {
-    public class CAccountViewModel
+    public class ColumnViewModel
     {
 
         private AiritiTable iv_airititable = null;
         public AiritiTable schairitable  { get { return iv_airititable; } }
 
-        public CAccountViewModel(AiritiTable a)
+        public ColumnViewModel(AiritiTable a)
         {
             iv_airititable = a;
         }
-        public CAccountViewModel()
+        public ColumnViewModel()
         {
             iv_airititable = new AiritiTable();
         }
@@ -36,6 +36,16 @@ namespace SchemaNote_A11085.ViewModel
         public string Column_Default { get { return iv_airititable.Column_Default; } set { iv_airititable.Column_Default = value; } }
         [DisplayName("備註")]
         public string Column_Remark { get { return iv_airititable.Column_Remark; } set { iv_airititable.Column_Remark = value; } }
+
+        //public string Account { get { return iv_airititable.Account; } set { iv_airititable.Account = value; } }
+
+        //public string Account_ETDS { get { return iv_airititable.Account_ETDS; } set { iv_airititable.Account_ETDS = value; } }
+
+        //public string Account_SchInfo { get { return iv_airititable.Account_SchInfo; } set { iv_airititable.Account_SchInfo = value; } }
+
+        //public string Account_SchInfoRefuse { get { return iv_airititable.Account_SchInfoRefuse; } set { iv_airititable.Account_SchInfoRefuse = value; } }
+
+        //public string AccountRefuse { get { return iv_airititable.AccountRefuse; } set { iv_airititable.AccountRefuse = value; } }
 
         //private AiritiTable iv_airitiTablet = null;
         //public AiritiTable airitiTable { get { return iv_airitiTable; } }
