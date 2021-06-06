@@ -15,9 +15,9 @@ namespace SchemaNote_A11087.Controllers
         AiritiCheckContext db = new AiritiCheckContext();
         public IActionResult Index()
         {
-            DataSet ds = new DataSet();
+            
             string con = @"Data Source = DESKTOP-13I52L2\SQLEXPRESS; Initial Catalog = AiritiCheck; Integrated Security = True";   
-            string comm = @"select o.TABLE_NAME,o.COLUMN_NAME,o.TABLE_SCHEMA,DATA_TYPE +'('+cast(CHARACTER_MAXIMUM_LENGTH as nvarchar)+')'as 資料型態,k.type as 主鍵,IS_NULLABLE as 不為Null,COLUMN_DEFAULT as 預設值, m.value as 欄位說明,r.value as 備註,
+            string sql = @"select o.TABLE_NAME,o.COLUMN_NAME,o.TABLE_SCHEMA,DATA_TYPE +'('+cast(CHARACTER_MAXIMUM_LENGTH as nvarchar)+')'as 資料型態,k.type as 主鍵,IS_NULLABLE as 不為Null,COLUMN_DEFAULT as 預設值, m.value as 欄位說明,r.value as 備註,
                     FORMAT(d.create_date, 'd', 'zh-cn' ) 'create_date', FORMAT(d.modify_date, 'd', 'zh-cn' ) 'modify_date'
                     FROM INFORMATION_SCHEMA.COLUMNS as o
                     LEFT JOIN sys.tables as d
@@ -33,13 +33,15 @@ namespace SchemaNote_A11087.Controllers
                     on r.name='REMARK'and o.COLUMN_NAME = r.objname COLLATE SQL_Latin1_General_CP1_CI_AS 
                     WHERE o.TABLE_NAME = 'Account'";
 
-            SqlConnection sql = new SqlConnection(con);
+            SqlConnection connection = new SqlConnection(con);
 
-            SqlCommand command = new SqlCommand($"{comm}", sql);
+            SqlCommand cmd = new SqlCommand($"{sql}", connection);
 
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-            
-            dataAdapter.Fill(ds);
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+
+            DataSet ds = new DataSet();
+
+            dataAdapter.Fill(ds); //將資料讀到dataSet中
 
             List<SchemaNoteViewModel> list = new List<SchemaNoteViewModel>();
             
@@ -50,9 +52,6 @@ namespace SchemaNote_A11087.Controllers
 
                 list.Add(new SchemaNoteViewModel(schemaNote));
             }
-            
-                  
-            //var accounts = db.Accounts.ToList();  
             return View(list);
         }
         public IActionResult Edit()
