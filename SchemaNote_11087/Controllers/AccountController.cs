@@ -12,9 +12,33 @@ using System.Threading.Tasks;
 
 namespace SchemaNote_A11087.Controllers
 {
+    /*
+    public static class ExtString
+    {
+        public static int? ConvertToInt(this string input)
+        {
+            int result;
+            if (int.TryParse(input, out result))
+            {
+                return result;
+            }
+            return null;
+        }
+        public static DateTime? ConvertToDateTime(this string input)
+        {
+            DateTime result;
+            if (DateTime.TryParse(input, out result))
+            {
+                return result;
+            }
+            return null;
+        }
+    }
+    */
     public class AccountController : Controller
     {
-        public static string _ConnectionString { get; set; }
+        
+        public string _ConnectionString { get; set; }//宣告全域變數
 
         public AccountController(IOptions<ConnectionStringConfig> config)
         {
@@ -26,7 +50,7 @@ namespace SchemaNote_A11087.Controllers
 
             ViewBag.TableNames = tableNames;
 
-            List<TableModel> result = GetTableDesc(tableName);
+            List<TableModel> result = GetTableInfo(tableName);
 
             return View(result);
         }
@@ -39,7 +63,7 @@ namespace SchemaNote_A11087.Controllers
             {
                 sql = $"{sql}, @level2type=N'COLUMN',@level2name=@ColumnName";
             }
-            ExecuteSql(tableProperty, sql);
+            ExecuteSql(sql, tableProperty);
         }
         private List<string> GetTableNames()
         {
@@ -49,7 +73,7 @@ FROM INFORMATION_SCHEMA.TABLES
 ";
             return QueryList<string>(sql);
         }
-        private static List<TableModel> GetTableDesc(string tableName)
+        private List<TableModel> GetTableInfo(string tableName)
         {
             string sql = @"
 SELECT
@@ -79,7 +103,7 @@ ORDER BY
             var result = QueryList<TableModel>(sql, new { TName = tableName });
             return result;
         }
-        private static List<T> QueryList<T>(string sql, object param = null)
+        private List<T> QueryList<T>(string sql, object param = null)
         {
             using (var conn = new SqlConnection(_ConnectionString))
             {
@@ -87,11 +111,11 @@ ORDER BY
                 return tables.ToList();
             }
         }
-        private static void ExecuteSql(TablePropertyEditModel tableProperty, string sql)
+        private void ExecuteSql(string sql,object param = null)
         {
             using (SqlConnection conn = new SqlConnection(_ConnectionString))
             {
-                conn.Execute(sql, tableProperty);
+                conn.Execute(sql, param);
             }
         }
     }
