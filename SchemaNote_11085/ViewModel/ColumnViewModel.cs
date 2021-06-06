@@ -27,15 +27,25 @@ namespace SchemaNote_A11085.ViewModel
         [DisplayName("欄位說明")]
         public string Column_Description { get { return iv_airititable.Column_Description; } set { iv_airititable.Column_Description = value; } }
         [DisplayName("主鍵")]
-        public bool Column_PK { get { return iv_airititable.Column_PK; } set { iv_airititable.Column_PK = value; } }
+        public int Column_PK { get { return iv_airititable.Column_PK; } set { iv_airititable.Column_PK = value; } }
         [DisplayName("資料型態")]
         public string Column_Type { get { return iv_airititable.Column_Type; } set { iv_airititable.Column_Type = value; } }
         [DisplayName("不為Null")]
-        public bool Column_IsNullable { get { return iv_airititable.Column_IsNullable; } set { iv_airititable.Column_IsNullable = value; } }
+        public int Column_IsNullable { get { return iv_airititable.Column_IsNullable; } set { iv_airititable.Column_IsNullable = value; } }
         [DisplayName("預設值")]
         public string Column_Default { get { return iv_airititable.Column_Default; } set { iv_airititable.Column_Default = value; } }
         [DisplayName("備註")]
         public string Column_Remark { get { return iv_airititable.Column_Remark; } set { iv_airititable.Column_Remark = value; } }
+
+        public string TableName { get { return iv_airititable.TableName; } set { iv_airititable.TableName = value; } }
+        [DisplayName("表欄位說明")]
+        public string Main_UserTable { get { return iv_airititable.Main_UserTable; } set { iv_airititable.Main_UserTable = value; } }      
+        public string DescriptionName { get { return iv_airititable.DescriptionName; } set { iv_airititable.DescriptionName = value; } }
+        public string Object_CreateDay { get { return iv_airititable.Object_CreateDay; } set { iv_airititable.Object_CreateDay = value; } }
+        public string Object_UpdateDay { get { return iv_airititable.Object_UpdateDay; } set { iv_airititable.Object_UpdateDay = value; } }
+        public string TotalCount { get { return iv_airititable.TotalCount; } set { iv_airititable.TotalCount = value; } }
+        [DisplayName("表備註")]
+        public string Remark { get { return iv_airititable.Remark; } set { iv_airititable.Remark = value; } }
 
         //public string Account { get { return iv_airititable.Account; } set { iv_airititable.Account = value; } }
 
