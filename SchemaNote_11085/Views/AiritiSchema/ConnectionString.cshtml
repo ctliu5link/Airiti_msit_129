@@ -1,0 +1,34 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div>
+    <label style="width:5%">連接字串:</label>
+    <input style="width:50%" id="connection" type="text" name="Connect" />
+    <input type="button" value="查詢" onclick="getdb()" />
+</div>
+<div id="subscribe" style="display:none">
+    <label style="width:5%">Email:</label>
+    <input style="width:50%" id="connection" type="text" name="DBConnection" />
+    <input type="button" value="訂閱" onclick="subscribe()" />
+</div>
+<div id="database"></div>
+
+<script>
+    function getdb() {
+        $.ajax({
+            url: `/AiritiSchema/List/?Connect=${$("#connection").val()}`,
+            success: function (data) {
+                if (data === "error") {
+                    $("#database").html("");
+                    $("#subscribe").css("display", "none");
+                    return window.alert("連結錯誤");
+                }
+                $("#subscribe").css("display", "");
+                $("#database").html(data);
+            }
+        })
+    }
+</script>
