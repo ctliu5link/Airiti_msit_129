@@ -9,6 +9,7 @@
     <input type="button" value="查詢" onclick="getdb()" />
     <input type="button" value="Dapper" onclick="getdbByDapper()" />
     <input type="button" value="Reflection" onclick="getdbByReflection()" />
+    <input type="button" value="Airiti" onclick="getdbByAiriti()" />
 </div>
 <div id="subscribe" style="display:none">
     <label style="width:5%">Email:</label>
@@ -51,9 +52,27 @@
             
             }
         })
-    } function getdbByReflection() {
+    }
+
+    function getdbByReflection() {
         $.ajax({
             url: `/Reflection/DBdata/?DBConnection=${$("#connection").val()}`,
+            success: function (data) {
+                if (data === "error") {
+                    $("#database").html("");
+                    $("#subscribe").css("display", "none");
+                    return window.alert("連結錯誤");
+                }
+                $("#subscribe").css("display", "");
+                $("#database").html(data);
+
+            }
+        })
+    }
+
+    function getdbByAiriti() {
+        $.ajax({
+            url: `/Airiti/DBdata/?DBConnection=${$("#connection").val()}`,
             success: function (data) {
                 if (data === "error") {
                     $("#database").html("");
