@@ -27,6 +27,10 @@ namespace SchemaNote_11083
 
             services.AddDistributedMemoryCache();
 
+            //程式執行時可按重新整理看cshtml的變更內容(變更須儲存)，也可用nuget套件達成
+            services.AddRazorPages()
+                .AddRazorRuntimeCompilation();
+            
             //設定session
             services.AddSession(options =>
             {

@@ -3,14 +3,19 @@
 *@
 @{
 }
-<form action="/Home/DBdata" method="get" style="text-align:center">
+<div>
+    <label style="width:5%">連接字串:</label>
     <input style="width:50%" id="connection" type="text" name="DBConnection" />
-    @*<input type="submit" value="查詢" />*@
     <input type="button" value="查詢" onclick="getdb()" />
     <input type="button" value="Dapper" onclick="getdbByDapper()" />
-</form>
-
-
+    <input type="button" value="Reflection" onclick="getdbByReflection()" />
+    <input type="button" value="Airiti" onclick="getdbByAiriti()" />
+</div>
+<div id="subscribe" style="display:none">
+    <label style="width:5%">Email:</label>
+    <input style="width:50%" id="connection" type="text" name="DBConnection" />
+    <input type="button" value="訂閱" onclick="subscribe()" />
+</div>
 <div id="database"></div>
 
 
@@ -21,8 +26,12 @@
         $.ajax({
             url: `/Home/DBdata/?DBConnection=${$("#connection").val()}`,
             success: function (data) {
-                if (data === "error") 
+                if (data === "error") {
+                    $("#database").html("");
+                    $("#subscribe").css("display", "none");
                     return window.alert("連結錯誤");
+                }
+                $("#subscribe").css("display", "");
                 $("#database").html(data);
             }
         })
@@ -33,8 +42,46 @@
             url: `/Dapper/DBdata/?DBConnection=${$("#connection").val()}`,
             success: function (data) {
                 if (data === "error")
+                {
+                    $("#database").html("");
+                    $("#subscribe").css("display", "none");
                     return window.alert("連結錯誤");
+                }
+                $("#subscribe").css("display", "");
                 $("#database").html(data);
+            
+            }
+        })
+    }
+
+    function getdbByReflection() {
+        $.ajax({
+            url: `/Reflection/DBdata/?DBConnection=${$("#connection").val()}`,
+            success: function (data) {
+                if (data === "error") {
+                    $("#database").html("");
+                    $("#subscribe").css("display", "none");
+                    return window.alert("連結錯誤");
+                }
+                $("#subscribe").css("display", "");
+                $("#database").html(data);
+
+            }
+        })
+    }
+
+    function getdbByAiriti() {
+        $.ajax({
+            url: `/Airiti/DBdata/?DBConnection=${$("#connection").val()}`,
+            success: function (data) {
+                if (data === "error") {
+                    $("#database").html("");
+                    $("#subscribe").css("display", "none");
+                    return window.alert("連結錯誤");
+                }
+                $("#subscribe").css("display", "");
+                $("#database").html(data);
+
             }
         })
     }

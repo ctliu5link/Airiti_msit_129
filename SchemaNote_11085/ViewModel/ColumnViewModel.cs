@@ -8,34 +8,54 @@ using System.Threading.Tasks;
 
 namespace SchemaNote_A11085.ViewModel
 {
-    public class CAccountViewModel
+    public class ColumnViewModel
     {
 
-        private AiritiTable iv_airititable = null;
-        public AiritiTable schairitable  { get { return iv_airititable; } }
+        private Combine iv_airititable = null;
+        public Combine schairitable  { get { return iv_airititable; } }
 
-        public CAccountViewModel(AiritiTable a)
+        public ColumnViewModel(Combine A)
         {
-            iv_airititable = a;
+            iv_airititable =A;
         }
-        public CAccountViewModel()
+        public ColumnViewModel()
         {
-            iv_airititable = new AiritiTable();
+            iv_airititable = new Combine();
         }
-        [DisplayName("欄位名稱")]
-        public string Table_Name { get { return iv_airititable.Table_Name; } set { iv_airititable.Table_Name = value; } }
-        [DisplayName("欄位說明")]
-        public string Table_Description { get { return iv_airititable.Table_Description; } set { iv_airititable.Table_Description = value; } }
-        [DisplayName("主鍵")]
-        public string Table_PK { get { return iv_airititable.Table_PK; } set { iv_airititable.Table_PK = value; } }
-        [DisplayName("資料型態")]
-        public string Table_Type { get { return iv_airititable.Table_Type; } set { iv_airititable.Table_Type = value; } }
-        [DisplayName("不為Null")]
-        public string Table_IsNullable { get { return iv_airititable.Table_IsNullable; } set { iv_airititable.Table_IsNullable = value; } }
-        [DisplayName("預設值")]
-        public string Table_Default { get { return iv_airititable.Table_Default; } set { iv_airititable.Table_Default = value; } }
-        [DisplayName("備註")]
-        public string Table_Remark { get { return iv_airititable.Table_Remark; } set { iv_airititable.Table_Remark = value; } }
+        //[DisplayName("欄位名稱")]
+        //public string Column_Name { get { return iv_airititable.a.Column_Name; } set { iv_airititable.a.Column_Name = value; } }
+        //[DisplayName("欄位說明")]
+        //public string Column_Description { get { return iv_airititable.a.Column_Description; } set { iv_airititable.a.Column_Description = value; } }
+        //[DisplayName("主鍵")]
+        //public int Column_PK { get { return iv_airititable.a.Column_PK; } set { iv_airititable.a.Column_PK = value; } }
+        //[DisplayName("資料型態")]
+        //public string Column_Type { get { return iv_airititable.a.Column_Type; } set { iv_airititable.a.Column_Type = value; } }
+        //[DisplayName("不為Null")]
+        //public int Column_IsNullable { get { return iv_airititable.a.Column_IsNullable; } set { iv_airititable.a.Column_IsNullable = value; } }
+        //[DisplayName("預設值")]
+        //public string Column_Default { get { return iv_airititable.a.Column_Default; } set { iv_airititable.a.Column_Default = value; } }
+        //[DisplayName("備註")]
+        //public string Column_Remark { get { return iv_airititable.a.Column_Remark; } set { iv_airititable.a.Column_Remark = value; } }
+
+        //public string TableName { get { return iv_airititable.b.TableName; } set { iv_airititable.b.TableName = value; } }
+        //[DisplayName("表欄位說明")]
+        //public string Main_UserTable { get { return iv_airititable.b.Main_UserTable; } set { iv_airititable.b.Main_UserTable = value; } }      
+        //public string DescriptionName { get { return iv_airititable.b.DescriptionName; } set { iv_airititable.b.DescriptionName = value; } }
+        //public string Object_CreateDay { get { return iv_airititable.b.Object_CreateDay; } set { iv_airititable.b.Object_CreateDay = value; } }
+        //public string Object_UpdateDay { get { return iv_airititable.b.Object_UpdateDay; } set { iv_airititable.b.Object_UpdateDay = value; } }
+        //public string TotalCount { get { return iv_airititable.b.TotalCount; } set { iv_airititable.b.TotalCount = value; } }
+        //[DisplayName("表備註")]
+        //public string Remark { get { return iv_airititable.b.Remark; } set { iv_airititable.b.Remark = value; } }
+
+        //public string Account { get { return iv_airititable.Account; } set { iv_airititable.Account = value; } }
+
+        //public string Account_ETDS { get { return iv_airititable.Account_ETDS; } set { iv_airititable.Account_ETDS = value; } }
+
+        //public string Account_SchInfo { get { return iv_airititable.Account_SchInfo; } set { iv_airititable.Account_SchInfo = value; } }
+
+        //public string Account_SchInfoRefuse { get { return iv_airititable.Account_SchInfoRefuse; } set { iv_airititable.Account_SchInfoRefuse = value; } }
+
+        //public string AccountRefuse { get { return iv_airititable.AccountRefuse; } set { iv_airititable.AccountRefuse = value; } }
 
         //private AiritiTable iv_airitiTablet = null;
         //public AiritiTable airitiTable { get { return iv_airitiTable; } }

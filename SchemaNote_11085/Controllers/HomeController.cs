@@ -18,7 +18,21 @@ namespace SchemaNote_A11085.Controllers
         //    _logger = logger;
         //}
 
-        
+        public IActionResult ConnectionString()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ConnectionString(string DbConn)
+        {
+            if (DbConn != null)
+            {
+                string DbConnString = DbConn.Replace(@"""", "");
+                TempData["Entry"] = DbConnString;
+                return RedirectToAction("List");
+            }
+            return View("ConnectionString");
+        }
 
         public IActionResult Index()
         {
