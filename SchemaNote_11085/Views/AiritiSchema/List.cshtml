@@ -22,7 +22,7 @@
                 var Table_description = table.Main_UserTable == "" ? "null" : table.Main_UserTable;
                 var Table_remark = table.Remark == "" ? "null" : table.Remark;
                 var id = $"{table.TableName}";
-
+             
                 <div style="position:relative">
                     <h4 style="display:inline-block ">@table.TableName</h4>
                     <input id="text_Description_@id" style="display:none;margin-left:15px;width:50%" type="text" value="@table.Main_UserTable" />
@@ -42,7 +42,7 @@
                        onclick="Edit('@table.TableName','','REMARK')">@Table_remark</a>
                     <input id="text_REMARK_@id" style="display:none; width:80%" type="text" value="@table.Remark" />
                 </div>
-                @*<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
+                <table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
                     <tr style="text-align:center">
                         <td style="width:8%">欄位名稱</td>
                         <td style="width:8%">欄位說明</td>
@@ -52,7 +52,7 @@
                         <td style="width:5%">預設值</td>
                         <td style="width:40%">備註</td>
                     </tr>
-                </table>*@
+                </table>
             }
 
             foreach (var column in item)
@@ -65,7 +65,7 @@
                     var Column_description = column.a.Column_Description == "" ? "null" : column.a.Column_Description;
                     var Column_remark = column.a.Column_Remark == "" ? "null" : column.a.Column_Remark;
                     var idc = $"{column.b.TableName}{column.a.Column_Name}";
-                
+                <table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
                 <tr>
                     <td style="text-align:center">@column.a.Column_Name</td>
                     <td style="text-align:center">
@@ -83,6 +83,7 @@
                         <input id="text_REMARK_@idc" style="display:none;width:100%" type="text" value="@column.a.Column_Remark" />
                     </td>
                 </tr>
+                    </table>
                 @*<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
                     <tr style="text-align:center">
                         <td style="width:8%">欄位名稱</td>
