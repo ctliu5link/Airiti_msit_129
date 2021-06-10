@@ -8,44 +8,60 @@
 
 <div class="dropdown">
     <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        選擇 Table
+       @table.TableName
     </a>
-
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        @foreach (var item in tableNames)
+    <div id="tt" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        @foreach (var Ttable in tableNames) //下拉表顯示
         {
-            <a class="dropdown-item" href="@Url.Action("Index","Account",new { tableName = item})">@item</a>
+            <a class="dropdown-item" href="@Url.Action("Index", "Account", new { tableName = Ttable })">@Ttable</a>
         }
     </div>
 </div>
+@{
+    var idd = $"{table.TableName}_";
+    <div>
+        <h4>@table.TableName</h4>
+        <input id="text_MSDescription_@idd" style="display:none;margin-left:15px;width:50%" type="text" value="" />
+        <a id="a_Remark_@idd"></a>
+
+        <h4 style="right:5px">筆數：@table.TotalRows</h4>
+
+    </div>    
+}
+
+<span>物件類型：</span><span>資料表</span>
+<br />
 @Html.DisplayNameFor(model => model.TableSchema) : @table.TableSchema
+<br />
 @Html.DisplayNameFor(model => model.CreateDate): @table.CreateDate
+<br />
 @Html.DisplayNameFor(model => model.ModifyDate): @table.ModifyDate
-<table class="table">
+<br />
+<table class="table-bordered">
     <thead>
-        <tr>
-            <th>
+        <tr style="text-align:center">
+            <th style="width:8%">
                 @Html.DisplayNameFor(model => model.ColumnName)
             </th>
 
-            <th>
+            <th style="width:8%">
                 @Html.DisplayNameFor(model => model.MSDescription)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataTpye)
+            <th style="width:5%">
+                @Html.DisplayNameFor(model => model.DataType)
             </th>
 
-            <th>
+            <th style="width:5%">
                 @Html.DisplayNameFor(model => model.IsPK)
             </th>
-            <th>
+            <th style="width:8%">
                 @Html.DisplayNameFor(model => model.IsNullable)
             </th>
 
-            <th>
+            <th style="width:5%">
                 @Html.DisplayNameFor(model => model.ColumnDefault)
             </th>
-            <th>
+            <th style="width:40%">
                 @Html.DisplayNameFor(model => model.Remark)
             </th>
         </tr>
@@ -53,31 +69,75 @@
     <tbody>
         @foreach (var item in Model)
         {
+            bool PK = item.IsPK == 1 ? true : false;//判斷是否為主鍵
+            bool isNullable = item.IsNullable == "NO" ? true : false;//判斷是否可以為null
+
+            var id = $"{item.TableName}_{item.ColumnName}"; //設定id的欄位規則 (a/text)_(擴充屬性欄位名稱)_(Table名稱)_(欄位名稱)
+
+            //如果擴充屬性未設定或為空字串則顯示(修改)
+            var N_MSDescription = item.MSDescription == "" ? "新增" : item.MSDescription;
+            var N_Remark = item.Remark == "" ? "新增" : item.Remark;
+
+
             <tr>
-                <td>
+                <td style="text-align:center">
                     @Html.DisplayFor(modelItem => item.ColumnName)
                 </td>
-
-                <td>
-                    @Html.DisplayFor(modelItem => item.MSDescription)
-                </td>
-                <td>
-                    @(string.IsNullOrWhiteSpace(item.CharacterMaximumLength) ? item.DataTpye : string.Format("{0}({1})", item.DataTpye, item.CharacterMaximumLength))
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsPK)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsNullable)
+             
+                <td style="text-align:center">
+                    <input id="text_MSDescription_@id" style="display:none" type="text" value="@item.MSDescription" />
+                    <a id="a_MSDescription_@id" style="color:#ff0000;cursor:pointer;text-decoration:underline"
+                       onclick="revise_extendedproperty('@item.TableName', '@item.ColumnName','MSDescription')">@N_MSDescription</a>         
                 </td>
 
+                <td style="text-align:center">
+                    @(string.IsNullOrWhiteSpace(item.CharacterMaximumLength) ? item.DataType : string.Format("{0}({1})", item.DataType,item.CharacterMaximumLength))
+                </td>
+                <td style="text-align:center"><input type="checkbox" checked="@PK" disabled="disabled" /></td>
+                <td style="text-align:center"><input type="checkbox" checked="@isNullable" disabled="disabled" /></td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ColumnDefault)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Remark)
+
+                <td>                    
+                    <input id="text_Remark_@id" style="display:none;width:100%" type="text" value="@item.Remark"/>
+                    <a id="a_Remark_@id" style="color:#ff0000;cursor:pointer;text-decoration:underline"
+                       onclick="revise_extendedproperty('@item.TableName', '@item.ColumnName','Remark')">@item.Remark</a>               
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<script>
+     //切換a標籤為input標籤，修改擴充屬性內容。
+    function revise_extendedproperty(tName, column,tItem) {
+        $(`#a_${tItem}_${tName}_${column}`).css("display", "none");
+        $(`#text_${tItem}_${tName}_${column}`).css("display", "").focus()
+            .attr("onblur", `set_extendedproperty('${tName}','${column}','${tItem}')`);       
+    }
+
+    function set_extendedproperty(tName, column, tItem) {
+        var value = escapeHtml($(`#text_${tItem}_${tName}_${column}`).css("display", "none").val());
+        $(`#a_${tItem}_${tName}_${column}`).html(value == "" ? '(新增)' : value).css("display", "");
+    
+    $.ajax({
+        type: "POST",
+        contentType: "application/json", //application??
+        url: "/Account/updateExpendedProperty",
+        data: JSON.stringify({ "tName": `${tName}`, "column": `${column}`, "tItem": `${tItem}`, "value": `${value}` }),
+        success: function (data) {
+        }
+    })
+    }
+
+    //特殊字元轉碼，避免input特殊字元導致錯誤
+    function escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+</script>

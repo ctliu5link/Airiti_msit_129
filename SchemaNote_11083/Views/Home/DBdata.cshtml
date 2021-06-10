@@ -16,6 +16,7 @@
         //如果擴充屬性未設定或為空白則顯示(新增註解)
         var table_description = item.Table_Description == "" ? "(新增註解)" : item.Table_Description;
         var table_remark = item.Table_REMARK == "" ? "(新增註解)" : item.Table_REMARK;
+        
     <div style="position:relative">
         <h4 style="display:inline">@item.Table_Name</h4>
         <input id="text_Description_@id" style="display:none;margin-left:15px;width:50%" type="text" value="@item.Table_Description" />
