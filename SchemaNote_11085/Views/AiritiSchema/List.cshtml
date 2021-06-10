@@ -19,15 +19,15 @@
 
             if (table is b)
             {
-                var Table_description = table.Main_UserTable == "" ? "null" : table.Main_UserTable;
+                var Table_description = table.MainUserTable == "" ? "null" : table.MainUserTable;
                 var Table_remark = table.Remark == "" ? "null" : table.Remark;
-                var id = $"{table.TableName}";
-             
+                var id = $"{table.TableName}_";
+
                 <div style="position:relative">
                     <h4 style="display:inline-block ">@table.TableName</h4>
-                    <input id="text_Description_@id" style="display:none;margin-left:15px;width:50%" type="text" value="@table.Main_UserTable" />
-                    <a id="a_Description_@id" style="color: #0080FF;text-decoration:underline;cursor:pointer;margin-left:15px"
-                       onclick="Edit('@table.TableName','','Description')">@table.Main_UserTable</a>
+                    <input id="text_ColumnDescription_@id" style="display:none;margin-left:15px;width:50%" type="text" value="@table.MainUserTable" />
+                    <a id="a_ColumnDescription_@id" style="color: #0080FF;text-decoration:underline;cursor:pointer;margin-left:15px"
+                       onclick="revise_extendedproperty('@table.TableName','','ColumnDescription')">@Table_description</a>
                     <h4 style="display:inline;position:absolute;right:5px;">筆數 : @table.TotalCount</h4>
                 </div>
                 <div style="display:inline-block;width:48%">
@@ -38,9 +38,9 @@
                 </div>
                 <div style="display:inline-block;width:48%">
                     <span>備註：</span>
-                    <a id="a_REMARK_@id" style="color: #0080FF;text-decoration:underline;cursor:pointer"
-                       onclick="Edit('@table.TableName','','REMARK')">@Table_remark</a>
-                    <input id="text_REMARK_@id" style="display:none; width:80%" type="text" value="@table.Remark" />
+                    <a id="a_ColumnRemark_@id" style="color: #0080FF;text-decoration:underline;cursor:pointer"
+                       onclick="revise_extendedproperty('@table.TableName','','ColumnRemark')">@Table_remark</a>
+                    <input id="text_ColumnRemark_@id" style="display:none; width:80%" type="text" value="@table.Remark" />
                 </div>
                 <table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
                     <tr style="text-align:center">
@@ -62,42 +62,31 @@
 
                     bool PK = column.a.Column_PK == 0 ? false : true; //判斷是否為主鍵
                     bool isNullable = column.a.Column_IsNullable == 0 ? true : false; //判斷是否可以為null
-                    var Column_description = column.a.Column_Description == "" ? "null" : column.a.Column_Description;
-                    var Column_remark = column.a.Column_Remark == "" ? "null" : column.a.Column_Remark;
-                    var idc = $"{column.b.TableName}{column.a.Column_Name}";
+                    var Column_description = column.a.ColumnDescription == "" ? "null" : column.a.ColumnDescription;
+                    var Column_remark = column.a.ColumnRemark == "" ? "null" : column.a.ColumnRemark;
+                    var idc = $"{column.b.TableName}_{column.a.Column_Name}";
                 <table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
                 <tr>
                     <td style="text-align:center">@column.a.Column_Name</td>
                     <td style="text-align:center">
-                        <input id="text_Description_@idc" style="display:none" type="text" value="@column.a.Column_Description" />
-                        <a id="a_Description_@idc" style="color: #0080FF;text-decoration:underline;cursor:pointer"
-                           onclick="Edit('@column.b.TableName','@column.a.Column_Name', 'Description')">@Column_description</a>
+                        <input id="text_DescriptionName_@idc" style="display:none" type="text" value="@column.a.ColumnDescription" />
+                        <a id="a_DescriptionName_@idc" style="color: #0080FF;text-decoration:underline;cursor:pointer"
+                           onclick="revise_extendedproperty('@column.b.TableName','@column.a.Column_Name', 'DescriptionName')">@Column_description</a>
+                       
                     </td>
                     <td style="text-align:center">@column.a.Column_Type</td>
                     <td style="text-align:center"><input type="checkbox" checked="@PK" disabled="disabled" /></td>
                     <td style="text-align:center"><input type="checkbox" checked="@isNullable" disabled="disabled" /></td>
                     <td>@column.a.Column_Default</td>
                     <td>
-                        <a id="a_REMARK_@idc" style="color: #0080FF;text-decoration:underline;cursor:pointer"
-                           onclick="Edit('@column.b.TableName', '@column.a.Column_Name', 'REMARK')">@Column_description</a>
-                        <input id="text_REMARK_@idc" style="display:none;width:100%" type="text" value="@column.a.Column_Remark" />
+                        <a id="a_ColumnRemark_@idc" style="color: #0080FF;text-decoration:underline;cursor:pointer"
+                           onclick="revise_extendedproperty('@column.b.TableName', '@column.a.Column_Name', 'ColumnRemark')">@Column_remark</a>
+                        <input id="text_ColumnRemark_@idc" style="display:none;width:100%" type="text" value="@column.a.ColumnRemark" />
                     </td>
                 </tr>
-                    </table>
-                @*<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
-                    <tr style="text-align:center">
-                        <td style="width:8%">欄位名稱</td>
-                        <td style="width:8%">欄位說明</td>
-                        <td style="width:5%">資料型態</td>
-                        <td style="width:5%">主鍵</td>
-                        <td style="width:5%">不為Null</td>
-                        <td style="width:5%">預設值</td>
-                        <td style="width:40%">備註</td>
-                    </tr>
-                </table>*@
+                </table>          
                 }
             }
-
         }
     }
 }
@@ -106,11 +95,33 @@
 
 
 <script>
-    //修改擴充屬性內容
-    function Edit(table, column, target) {
-        $(`#a_${target}_${table}_${column}`).css("display", "none");
-        $(`#text_${target}_${table}_${column}`).css("display", "").focus()
-            .attr("onblur", `set_extendedproperty('${table}','${column}','${target}')`);
+    //function revise_extendedproperty(table, column, target)
+    //{
+    //    $(`#a_${target}_${table}_${column}`).css("display","none");
+    //    $(`#text_${target}_${table}_${column}`).css("display", "")
+    //       .attr("onblur", `set_extendedproperty('${table}','${column}','${target}')`);    
+    //}  
+    function revise_extendedproperty(table, column, target)
+    {
+        console.log($(`#a_${target}_${table}_${column}`).css("display", "none"));
+        console.log($(`#text_${target}_${table}_${column}`).css("display", "")
+            .attr("onblur", `set_extendedproperty('${table}','${column}','${target}')`));
+
+    }
+    function set_extendedproperty(table, column, target) {
+        var value = ($(`#text_${target}_${table}_${column}`).css("display", "none").val());
+        $(`#a_${target}_${table}_${column}`).html(value==""? 'null':value).css("display", "");
+
+        $.ajax(
+            {
+            type: "POST",
+            contentType:"application/json",
+            url: `/AiritiSchema/updateExpendedProperty`,
+            data: JSON.stringify({ "table": `${table}`, "column": `${column}`, "target": `${target}`, "value": `${value}` }),
+            success: function (data) {
+            }
+        })
     }
 
+  
 </script>
