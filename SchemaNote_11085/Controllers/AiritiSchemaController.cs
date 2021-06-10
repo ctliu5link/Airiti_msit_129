@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using SchemaNote_11085.Models;
 using SchemaNote_A11085.Models;
 using SchemaNote_A11085.ViewModel;
 using System;
@@ -14,7 +16,7 @@ using System.Threading.Tasks;
 namespace SchemaNote_A11085.Controllers
 {
     public class AiritiSchemaController : Controller
-    {
+    {       
         DataSet ds = new DataSet();
         AiritiCheckContext db = new AiritiCheckContext();
         //private readonly AiritiCheckContext db_AiritiCheck;
@@ -35,176 +37,110 @@ namespace SchemaNote_A11085.Controllers
         //        list.Add(new CAccountViewModel(n));
         //    }
         //    return list;
-        //}
+        //}      
 
-        public IActionResult List()
+        public ActionResult List()
         {
             //ScheNoteViewModel SchemaNoteVM = new ScheNoteViewModel();
             //var table = from c in (new AiritiCheckContext()).Accounts
             //            select c;
             //string a = $"http\n....";
             //Console.WriteLine(a);
-            AiritiDB();
-            List<CAccountViewModel> list = new List<CAccountViewModel>();
-           
-            foreach (DataRow item in ds.Tables[0].Rows)//選擇第幾張表
-            {
-                //AiritiTable A = new AiritiTable();
-                CAccountViewModel model = new CAccountViewModel();
-                model.Column_Name = item["欄位名稱"].ToString();
-                model.Column_Description = item["欄位說明"].ToString();
-                if (item["主鍵"].ToString()=="PK")
-                {
-                    model.Column_PK = true;
-                }
-                else
-                {
-                    model.Column_PK = false;
-                }
-                model.Column_Type = item["資料型態"].ToString();
-                if (item["不為Null"].ToString() == "PK")
-                {
-                    model.Column_IsNullable = true;
-                }
-                else
-                {
-                    model.Column_IsNullable = false;
-                }
-                model.Column_Default = item["預設值"].ToString();
-                model.Column_Remark = item["備註"].ToString();
+            //AiritiDB1();
 
-                //A.Table_Name = item["欄位名稱"].ToString();
-                //A.Table_Description = item["欄位說明"].ToString();
-                //A.Table_PK = item["主鍵"].ToString();
-                //A.Table_Type = item["資料型態"].ToString();
-                //A.Table_IsNullable = item["不為Null"].ToString();
-                //A.Table_Default = item["預設值"].ToString();
-                //A.Table_Remark = item["備註"].ToString();
-                //list.Add(new CAccountViewModel(A));
+
+            AiritiDB();
+
+            List<Combine> list = new List<Combine>();
+            IEnumerable<IGrouping<string, Combine>> q = null;
+            foreach (DataRow item in ds.Tables[0].Rows)//選擇第幾張表
+            {               
+                Combine model = new Combine();       
+                model.b.TableName = item["TableName"].ToString();
+                model.b.MainUserTable = item["表欄位說明"].ToString();
+                model.b.DescriptionName = item["DescriptionName"].ToString();
+                model.b.Object_CreateDay = item["Object_CreateDay"].ToString();
+                model.b.Object_UpdateDay = item["Object_UpdateDay"].ToString();
+                model.b.TotalCount = item["TotalCount"].ToString();
+                model.b.Remark = item["表備註"].ToString();
+                model.a.Column_Name = item["欄位名稱"].ToString();
+                model.a.ColumnDescription = item["欄位說明"].ToString();
+                if (item["主鍵"].ToString() == "PK")
+                {
+                    model.a.Column_PK = 1;
+                }
+                else
+                {
+                    model.a.Column_PK = 0;
+                }
+                //model.a.Column_IsNullable = (item["主鍵"].ToString() == "PK") ? 1 : 0;
+                model.a.Column_Type = item["資料型態"].ToString();
+                //model.a.Column_IsNullable = item["不為Null"].ToString();
+                if (item["不為Null"].ToString() == "NO")
+                {
+                    model.a.Column_IsNullable = 1;
+                }
+                else
+                {
+                    model.a.Column_IsNullable = 0;
+                }
+                model.a.Column_Default = item["預設值"].ToString();
+                model.a.ColumnRemark = item["備註"].ToString();
                 list.Add(model);
+               
+                q = from L in list
+                        group L by L.b.TableName into X
+                        select X;
+                                
             }
             //ScheNoteViewModel schema = new ScheNoteViewModel();
             //schema.SchemaNote = list;            
-            return View(list);         
+            return View(q);         
         }
 
         public void AiritiDB()
         {
             try
             {
-                string conn = @"Data Source=JAY\SQLEXPRESS;Initial Catalog=AiritiCheck;Integrated Security=True";
-                string comm = @"select  C.COLUMN_NAME AS '欄位名稱',sep.value as '欄位說明',k.type as'主鍵',
+                //string dbStringconn = TempData["Entry"].ToString();
+                string conn =
+                //dbStringconn;
+                @"Data Source=JAY\SQLEXPRESS;Initial Catalog=AiritiCheck;Integrated Security=True";
+                string comm = @"select DISTINCT c.TABLE_NAME as TableName ,C.COLUMN_NAME AS '欄位名稱',sep.value as '欄位說明',k.type as'主鍵',
                 (DATA_TYPE+'('+CONVERT(nvarchar,CHARACTER_MAXIMUM_LENGTH)+')')AS '資料型態',
-                c.IS_NULLABLE As '不為Null',COLUMN_DEFAULT As '預設值',sep2.value as '備註'
+                c.IS_NULLABLE As '不為Null',COLUMN_DEFAULT As '預設值',sep2.value as '備註',
+				tb.create_date as Object_CreateDay,tb.modify_date as Object_UpdateDay,c.TABLE_SCHEMA as DescriptionName,sp.rows as TotalCount,
+				ISNULL(tsep.value,'') as '表欄位說明',ISNULL(tsep1.value,'') as '表備註'
                 from AiritiCheck.INFORMATION_SCHEMA.Columns as c
                 LEFT JOIN AiritiCheck.sys.types AS ty ON ty.name = c.DATA_TYPE
                 LEFT JOIN AiritiCheck.INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS ISK ON ISK.CONSTRAINT_CATALOG = c.TABLE_CATALOG 
                 AND ISK.TABLE_NAME=c.TABLE_NAME 
                 AND ISK.COLUMN_NAME=C.COLUMN_NAME
                 LEFT JOIN AiritiCheck.sys.key_constraints AS k ON k.name=ISK.CONSTRAINT_NAME
-                LEFT JOIN AiritiCheck.sys.tables AS tb ON tb.name=c.TABLE_NAME
-                LEFT JOIN AiritiCheck.sys.extended_properties as sep ON sep.minor_id=c.ORDINAL_POSITION 
-                And sep.major_id='581577110' 
-                And sep.name ='MS_Description'
-                LEFT JOIN AiritiCheck.sys.extended_properties AS sep2 ON sep.minor_id=sep2.minor_id 
-                And sep.major_id=sep2.major_id 
-                And sep2.name = 'REMARK'
-                where c.TABLE_NAME in ('Account','Account_ETDS','Account_SchInfo','Account_SchInfoRefuse','AccountRefuse') ";
-                //string comm1 = @"select  C.COLUMN_NAME AS '欄位名稱',sep.value as '欄位說明',k.type as'主鍵',
-                //(DATA_TYPE+'('+CONVERT(nvarchar,CHARACTER_MAXIMUM_LENGTH)+')')AS '資料型態',
-                //c.IS_NULLABLE As '不為Null',COLUMN_DEFAULT As '預設值',sep2.value as '備註'
-                //from AiritiCheck.INFORMATION_SCHEMA.Columns as c
-                //LEFT JOIN AiritiCheck.sys.types AS ty ON ty.name = c.DATA_TYPE
-                //LEFT JOIN AiritiCheck.INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS ISK ON ISK.CONSTRAINT_CATALOG = c.TABLE_CATALOG 
-                //AND ISK.TABLE_NAME=c.TABLE_NAME 
-                //AND ISK.COLUMN_NAME=C.COLUMN_NAME
-                //LEFT JOIN AiritiCheck.sys.key_constraints AS k ON k.name=ISK.CONSTRAINT_NAME
-                //LEFT JOIN AiritiCheck.sys.tables AS tb ON tb.name=c.TABLE_NAME
-                //LEFT JOIN AiritiCheck.sys.extended_properties as sep ON sep.minor_id=c.ORDINAL_POSITION 
-                //And sep.major_id='581577110' 
-                //And sep.name ='MS_Description'
-                //LEFT JOIN AiritiCheck.sys.extended_properties AS sep2 ON sep.minor_id=sep2.minor_id 
-                //And sep.major_id=sep2.major_id 
-                //And sep2.name = 'REMARK'
-                //where c.TABLE_NAME in ('Account_ETDS') ";
-                //string comm2 = @"select  C.COLUMN_NAME AS '欄位名稱',sep.value as '欄位說明',k.type as'主鍵',
-                //(DATA_TYPE+'('+CONVERT(nvarchar,CHARACTER_MAXIMUM_LENGTH)+')')AS '資料型態',
-                //c.IS_NULLABLE As '不為Null',COLUMN_DEFAULT As '預設值',sep2.value as '備註'
-                //from AiritiCheck.INFORMATION_SCHEMA.Columns as c
-                //LEFT JOIN AiritiCheck.sys.types AS ty ON ty.name = c.DATA_TYPE
-                //LEFT JOIN AiritiCheck.INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS ISK ON ISK.CONSTRAINT_CATALOG = c.TABLE_CATALOG 
-                //AND ISK.TABLE_NAME=c.TABLE_NAME 
-                //AND ISK.COLUMN_NAME=C.COLUMN_NAME
-                //LEFT JOIN AiritiCheck.sys.key_constraints AS k ON k.name=ISK.CONSTRAINT_NAME
-                //LEFT JOIN AiritiCheck.sys.tables AS tb ON tb.name=c.TABLE_NAME
-                //LEFT JOIN AiritiCheck.sys.extended_properties as sep ON sep.minor_id=c.ORDINAL_POSITION 
-                //And sep.major_id='581577110' 
-                //And sep.name ='MS_Description'
-                //LEFT JOIN AiritiCheck.sys.extended_properties AS sep2 ON sep.minor_id=sep2.minor_id 
-                //And sep.major_id=sep2.major_id 
-                //And sep2.name = 'REMARK'
-                //where c.TABLE_NAME in ('Account_SchInfo') ";
-                //string comm3 = @"select  C.COLUMN_NAME AS '欄位名稱',sep.value as '欄位說明',k.type as'主鍵',
-                //(DATA_TYPE+'('+CONVERT(nvarchar,CHARACTER_MAXIMUM_LENGTH)+')')AS '資料型態',
-                //c.IS_NULLABLE As '不為Null',COLUMN_DEFAULT As '預設值',sep2.value as '備註'
-                //from AiritiCheck.INFORMATION_SCHEMA.Columns as c
-                //LEFT JOIN AiritiCheck.sys.types AS ty ON ty.name = c.DATA_TYPE
-                //LEFT JOIN AiritiCheck.INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS ISK ON ISK.CONSTRAINT_CATALOG = c.TABLE_CATALOG 
-                //AND ISK.TABLE_NAME=c.TABLE_NAME 
-                //AND ISK.COLUMN_NAME=C.COLUMN_NAME
-                //LEFT JOIN AiritiCheck.sys.key_constraints AS k ON k.name=ISK.CONSTRAINT_NAME
-                //LEFT JOIN AiritiCheck.sys.tables AS tb ON tb.name=c.TABLE_NAME
-                //LEFT JOIN AiritiCheck.sys.extended_properties as sep ON sep.minor_id=c.ORDINAL_POSITION 
-                //And sep.major_id='581577110' 
-                //And sep.name ='MS_Description'
-                //LEFT JOIN AiritiCheck.sys.extended_properties AS sep2 ON sep.minor_id=sep2.minor_id 
-                //And sep.major_id=sep2.major_id 
-                //And sep2.name = 'REMARK'
-                //where c.TABLE_NAME in ('Account_SchInfo') ";
-                //string comm4 = @"select  C.COLUMN_NAME AS '欄位名稱',sep.value as '欄位說明',k.type as'主鍵',
-                //(DATA_TYPE+'('+CONVERT(nvarchar,CHARACTER_MAXIMUM_LENGTH)+')')AS '資料型態',
-                //c.IS_NULLABLE As '不為Null',COLUMN_DEFAULT As '預設值',sep2.value as '備註'
-                //from AiritiCheck.INFORMATION_SCHEMA.Columns as c
-                //LEFT JOIN AiritiCheck.sys.types AS ty ON ty.name = c.DATA_TYPE
-                //LEFT JOIN AiritiCheck.INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS ISK ON ISK.CONSTRAINT_CATALOG = c.TABLE_CATALOG 
-                //AND ISK.TABLE_NAME=c.TABLE_NAME 
-                //AND ISK.COLUMN_NAME=C.COLUMN_NAME
-                //LEFT JOIN AiritiCheck.sys.key_constraints AS k ON k.name=ISK.CONSTRAINT_NAME
-                //LEFT JOIN AiritiCheck.sys.tables AS tb ON tb.name=c.TABLE_NAME
-                //LEFT JOIN AiritiCheck.sys.extended_properties as sep ON sep.minor_id=c.ORDINAL_POSITION 
-                //And sep.major_id='581577110' 
-                //And sep.name ='MS_Description'
-                //LEFT JOIN AiritiCheck.sys.extended_properties AS sep2 ON sep.minor_id=sep2.minor_id 
-                //And sep.major_id=sep2.major_id 
-                //And sep2.name = 'REMARK'
-                //where c.TABLE_NAME in ('Account_SchInfoRefuse') ";
-                //string comm5 = @"select  C.COLUMN_NAME AS '欄位名稱',sep.value as '欄位說明',k.type as'主鍵',
-                //(DATA_TYPE+'('+CONVERT(nvarchar,CHARACTER_MAXIMUM_LENGTH)+')')AS '資料型態',
-                //c.IS_NULLABLE As '不為Null',COLUMN_DEFAULT As '預設值',sep2.value as '備註'
-                //from AiritiCheck.INFORMATION_SCHEMA.Columns as c
-                //LEFT JOIN AiritiCheck.sys.types AS ty ON ty.name = c.DATA_TYPE
-                //LEFT JOIN AiritiCheck.INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS ISK ON ISK.CONSTRAINT_CATALOG = c.TABLE_CATALOG 
-                //AND ISK.TABLE_NAME=c.TABLE_NAME 
-                //AND ISK.COLUMN_NAME=C.COLUMN_NAME
-                //LEFT JOIN AiritiCheck.sys.key_constraints AS k ON k.name=ISK.CONSTRAINT_NAME
-                //LEFT JOIN AiritiCheck.sys.tables AS tb ON tb.name=c.TABLE_NAME
-                //LEFT JOIN AiritiCheck.sys.extended_properties as sep ON sep.minor_id=c.ORDINAL_POSITION 
-                //And sep.major_id='581577110' 
-                //And sep.name ='MS_Description'
-                //LEFT JOIN AiritiCheck.sys.extended_properties AS sep2 ON sep.minor_id=sep2.minor_id 
-                //And sep.major_id=sep2.major_id 
-                //And sep2.name = 'REMARK'
-                //where c.TABLE_NAME in ('AccountRefuse') ";
+                LEFT JOIN AiritiCheck.sys.tables AS tb ON tb.name=c.TABLE_NAME                      
+				inner join sys.columns sc
+                on tb.object_id = sc.object_id
+                inner join sys.partitions sp
+                on tb.object_id = sp.object_id
+				left join sys.extended_properties tsep
+				on tsep.major_id = tb.object_id
+				and tsep.minor_id = 0
+				and tsep.name ='MS_Description'
+				left join sys.extended_properties tsep1
+				on tsep1.major_id = tb.object_id
+				and tsep1.minor_id = 0
+				and tsep1.name ='REMARK'     
+				LEFT JOIN AiritiCheck.sys.extended_properties as sep ON sep.minor_id=c.ORDINAL_POSITION
+				And sep.major_id='581577110' 
+				And sep.name ='MS_Description'
+				LEFT JOIN AiritiCheck.sys.extended_properties AS sep2 ON sep.minor_id=sep2.minor_id 
+				And sep.major_id=sep2.major_id 
+				And sep2.name = 'REMARK'
+                where c.TABLE_NAME in ('Account','Account_ETDS','Account_SchInfo','Account_SchInfoRefuse','AccountRefuse')";
+                    
                 SqlConnection Connection = new SqlConnection(conn);//使用連接字串初始SqlConnection物件連接資料庫
-                SqlCommand command = new SqlCommand($"{comm}", Connection);
-                //SqlCommand command1 = new SqlCommand($"{comm1}", Connection);
-                //SqlCommand command2 = new SqlCommand($"{comm2}", Connection);
-                //SqlCommand command3 = new SqlCommand($"{comm3}", Connection);
-                //SqlCommand command4 = new SqlCommand($"{comm4}", Connection);
-                //SqlCommand command5 = new SqlCommand($"{comm5}", Connection);
-
-                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);
-               
+                SqlCommand command = new SqlCommand($"{comm}", Connection);          
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);               
                 sqlDataAdapter.Fill(ds);
             }
             catch
@@ -212,6 +148,70 @@ namespace SchemaNote_A11085.Controllers
 
             }
         }
+
+        public IActionResult ConnectionString()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ConnectionString(string DbConn)
+        {
+            if (DbConn != null)
+            {
+                string DbConnString = DbConn.Replace(@"""", "");
+                TempData["Entry"] = DbConnString;
+                return RedirectToAction("List");
+            }
+            return View("ConnectionString");
+        }
+
+        [HttpPost]
+        public void sp_updateextendedproperty([FromBody] tsp_updateextendedproperty data)
+        {
+            string dbconnection = @"Data Source=JAY\SQLEXPRESS;Initial Catalog=AiritiCheck;Integrated Security=True"; 
+
+            using (SqlConnection conn = new SqlConnection(dbconnection))
+            {
+                try
+                {
+                    conn.Open();
+                    data.target = data.target == "ColumnDescription" ? "MS_Description" : data.target;
+                    string strcomm = data.column == "" ?
+                        $"EXEC sys.sp_updateextendedproperty @name=@data_target, @value=@data_value ," +
+                        $" @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=@data_table" :
+                        $"EXEC sys.sp_updateextendedproperty @name=@data_target, @value=@data_value , " +
+                        $"@level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=@data_table, " +
+                        $"@level2type=N'COLUMN',@level2name=@data_column";
+                    SqlCommand comm = new SqlCommand(strcomm, conn);
+                    comm.Parameters.Add(new SqlParameter("@data_target", data.target));
+                    comm.Parameters.Add(new SqlParameter("@data_value", data.value));
+                    comm.Parameters.Add(new SqlParameter("@data_table", data.table));
+                    comm.Parameters.Add(new SqlParameter("@data_column", data.column));
+                    comm.ExecuteNonQuery();
+                }
+                catch (SqlException e)
+                {                 
+                    //如果還未建立該擴充屬性，就改成新增擴充屬性
+                    string strcomm = data.column == "" ?
+                        $"EXEC sys.sp_addextendedproperty @name=@data_target, @value=@data_value ," +
+                        $" @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=@data_table" :
+                        $"EXEC sys.sp_addextendedproperty @name=@data_target, @value=@data_value , " +
+                        $"@level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=@data_table, " +
+                        $"@level2type=N'COLUMN',@level2name=@data_column";
+                    SqlCommand comm = new SqlCommand(strcomm, conn);
+                    comm.Parameters.Add(new SqlParameter("@data_target", data.target));
+                    comm.Parameters.Add(new SqlParameter("@data_value", data.value));
+                    comm.Parameters.Add(new SqlParameter("@data_table", data.table));
+                    comm.Parameters.Add(new SqlParameter("@data_column", data.column));
+                    comm.ExecuteNonQuery();
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
+
         /// <summary>
         /// 舊版 暫時註解掉
         /// </summary>

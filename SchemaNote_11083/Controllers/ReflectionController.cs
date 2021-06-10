@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace SchemaNote_11083.Controllers
 {
     public class ReflectionController : Controller
@@ -42,7 +43,8 @@ namespace SchemaNote_11083.Controllers
                         table.TtableColumns = ds.Tables[0].DataMapping<TtableColumn>();
 
                     }
-                    
+                    HttpContext.Session.SetString(CDictionary.Current_DBConnection, DBConnection);
+                    ViewBag.ConnectionToken = CDictionary.Current_DBConnection;
                     return PartialView("DapperDBdata", new TtableSchema<IEnumerable<Ttable_dapper>>(tables));
                 }
             }

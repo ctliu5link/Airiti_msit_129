@@ -1,249 +1,129 @@
-﻿@model IEnumerable<SchemaNote_A11085.ViewModel.CAccountViewModel>
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<IGrouping<string, Combine>>
 
 @{
     ViewData["Title"] = "List";
 }
 
-<!-- #region Account -->
-<h4>Account</h4>
-<P>使用者帳號主表</P>
-<p>物件類型</p>
-<p>結構描述名稱</p>
-<p>物件創建日期</p>
-<p>物件修改日期</p>
 
-
-<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
-    <thead>
-        <tr>
-            <th>欄位名稱</th>
-            <th>欄位說明</th>
-            <th>資料型態</th>
-            <th>主鍵</th>
-            <th>不為Null</th>
-            <th>預設值</th>
-            <th>備註</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+@{
+    if (Model is IEnumerable<IGrouping<string, Combine>> && Model != null)
+    {
+        foreach (var item in Model)
         {
-            if (item.Column_Name == "schoolID")
+            string tableName = item.Key;
+
+            var table = item.FirstOrDefault()?.b as b;
+
+            if (table is b)
             {
-                break;
-            }
-            <tr>
-                <td>@item.Column_Name</td>
-                <td>@item.Column_Description</td>
-                <td>@item.Column_PK</td>
-                <td>@item.Column_Type</td>
-                <td>@item.Column_IsNullable</td>
-                <td>@item.Column_Default</td>
-                <td>@item.Column_Remark</td>
-            </tr>
-        }
-    </tbody>
-</table>
-<!-- #endregion -->
+                var Table_description = table.MainUserTable == "" ? "null" : table.MainUserTable;
+                var Table_remark = table.Remark == "" ? "null" : table.Remark;
+                var id = $"{table.TableName}_";
 
-<!-- #region Account_ETDS -->
-<h4>Account_ETDS</h4>
-<P>使用者帳號主表</P>
-<p>物件類型</p>
-<p>結構描述名稱</p>
-<p>物件創建日期</p>
-<p>物件修改日期</p>
+                <div style="position:relative">
+                    <h4 style="display:inline-block ">@table.TableName</h4>
+                    <input id="text_ColumnDescription_@id" style="display:none;margin-left:15px;width:50%" type="text" value="@table.MainUserTable" />
+                    <a id="a_ColumnDescription_@id" style="color: #0080FF;text-decoration:underline;cursor:pointer;margin-left:15px"
+                       onclick="revise_extendedproperty('@table.TableName','','ColumnDescription')">@Table_description</a>
+                    <h4 style="display:inline;position:absolute;right:5px;">筆數 : @table.TotalCount</h4>
+                </div>
+                <div style="display:inline-block;width:48%">
+                    <span>物件類型：</span><span>資料表</span><br />
+                    <span>物件描述名稱：</span><span>@table.DescriptionName</span><br />
+                    <span>物件創建日期：</span><span>@table.Object_CreateDay</span><br />
+                    <span>物件修改日期：</span><span>@table.Object_UpdateDay</span><br />
+                </div>
+                <div style="display:inline-block;width:48%">
+                    <span>備註：</span>
+                    <a id="a_ColumnRemark_@id" style="color: #0080FF;text-decoration:underline;cursor:pointer"
+                       onclick="revise_extendedproperty('@table.TableName','','ColumnRemark')">@Table_remark</a>
+                    <input id="text_ColumnRemark_@id" style="display:none; width:80%" type="text" value="@table.Remark" />
+                </div>
+                <table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
+                    <tr style="text-align:center">
+                        <td style="width:8%">欄位名稱</td>
+                        <td style="width:8%">欄位說明</td>
+                        <td style="width:5%">資料型態</td>
+                        <td style="width:5%">主鍵</td>
+                        <td style="width:5%">不為Null</td>
+                        <td style="width:5%">預設值</td>
+                        <td style="width:40%">備註</td>
+                    </tr>
+                    @*</table>*@
+                    }
 
-<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
-    <thead>
-        <tr>
-            <th>欄位名稱</th>
-            <th>欄位說明</th>
-            <th>資料型態</th>
-            <th>主鍵</th>
-            <th>不為Null</th>
-            <th>預設值</th>
-            <th>備註</th>
-        </tr>
-    </thead>
+                    @foreach (var column in item)
+                    {
+                        if (column.a is a)
+                        {
 
-    <tbody>
-        @{
-            var count = 0;
-        }
+                            bool PK = column.a.Column_PK == 0 ? false : true; //判斷是否為主鍵
+                            bool isNullable = column.a.Column_IsNullable == 0 ? true : false; //判斷是否可以為null
+                            var Column_description = column.a.ColumnDescription == "" ? "null" : column.a.ColumnDescription;
+                            var Column_remark = column.a.ColumnRemark == "" ? "null" : column.a.ColumnRemark;
+                            var idc = $"{column.b.TableName}_{column.a.Column_Name}";
+                            @*<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>*@
+                            <tr>
+                                <td style="text-align:center">@column.a.Column_Name</td>
+                                <td style="text-align:center">
+                                    <input id="text_DescriptionName_@idc" style="display:none" type="text" value="@column.a.ColumnDescription" />
+                                    <a id="a_DescriptionName_@idc" style="color: #0080FF;text-decoration:underline;cursor:pointer"
+                                       onclick="revise_extendedproperty('@column.b.TableName','@column.a.Column_Name', 'DescriptionName')">@Column_description</a>
 
-        @foreach (var item in Model)
-        {
-            //Console.WriteLine(item);
+                                </td>
+                                <td style="text-align:center">@column.a.Column_Type</td>
+                                <td style="text-align:center"><input type="checkbox" checked="@PK" disabled="disabled" /></td>
+                                <td style="text-align:center"><input type="checkbox" checked="@isNullable" disabled="disabled" /></td>
+                                <td>@column.a.Column_Default</td>
+                                <td>
+                                    <a id="a_ColumnRemark_@idc" style="color: #0080FF;text-decoration:underline;cursor:pointer"
+                                       onclick="revise_extendedproperty('@column.b.TableName', '@column.a.Column_Name', 'ColumnRemark')">@Column_remark</a>
+                                    <input id="text_ColumnRemark_@idc" style="display:none;width:100%" type="text" value="@column.a.ColumnRemark" />
+                                </td>
+                            </tr>
 
-            if (item.Column_Name == "schoolID")
-            {
-                count++;
-            }
-            if (count == 1 && item.Column_Name != "ID")
-            {
-                <tr>
-                    <td>@item.Column_Name</td>
-                    <td>@item.Column_Description</td>
-                    <td>@item.Column_PK</td>
-                    <td>@item.Column_Type</td>
-                    <td>@item.Column_IsNullable</td>
-                    <td>@item.Column_Default</td>
-                    <td>@item.Column_Remark</td>
-                </tr>
-            }
-            else if (item.Column_Name == "ID")
-            {
-                break;
-            }
+                        }
 
-        }
-    </tbody>
-</table>
-<!-- #endregion -->
-
-<!-- #region Account_SchInfo -->
-<h4>Account_SchInfo</h4>
-<P>使用者帳號主表</P>
-<p>物件類型</p>
-<p>結構描述名稱</p>
-<p>物件創建日期</p>
-<p>物件修改日期</p>
-
-<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
-    <thead>
-        <tr>
-            <th>欄位名稱</th>
-            <th>欄位說明</th>
-            <th>資料型態</th>
-            <th>主鍵</th>
-            <th>不為Null</th>
-            <th>預設值</th>
-            <th>備註</th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-        @foreach (var item in Model)
-        {
-
-            if (item.Column_Name == "ID")
-            {
-                count++;
-            }
-            if (count == 2 && item.Column_Name != "RefuseTime")
-            {
-                <tr>
-                    <td>@item.Column_Name</td>
-                    <td>@item.Column_Description</td>
-                    <td>@item.Column_PK</td>
-                    <td>@item.Column_Type</td>
-                    <td>@item.Column_IsNullable</td>
-                    <td>@item.Column_Default</td>
-                    <td>@item.Column_Remark</td>
-                </tr>
-            }
-            else if (item.Column_Name == "RefuseTime")
-            {
-                break;
+                    }
+                </table>
+                }
             }
         }
-    </tbody>
-</table>
-<!-- #endregion -->
+    }
 
-<!-- #region Account_SchInfoRefuse -->
-<h4>Account_SchInfoRefuse</h4>
-<P>使用者帳號主表</P>
-<p>物件類型</p>
-<p>結構描述名稱</p>
-<p>物件創建日期</p>
-<p>物件修改日期</p>
 
-<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
-    <thead>
-        <tr>
-            <th>欄位名稱</th>
-            <th>欄位說明</th>
-            <th>資料型態</th>
-            <th>主鍵</th>
-            <th>不為Null</th>
-            <th>預設值</th>
-            <th>備註</th>
-        </tr>
-    </thead>
 
-    <tbody>
 
-        @foreach (var item in Model)
-        {
+    <script>
+        //function revise_extendedproperty(table, column, target)
+        //{
+        //    $(`#a_${target}_${table}_${column}`).css("display","none");
+        //    $(`#text_${target}_${table}_${column}`).css("display", "")
+        //       .attr("onblur", `set_extendedproperty('${table}','${column}','${target}')`);
+        //}
+        function revise_extendedproperty(table, column, target) {
+            console.log($(`#a_${target}_${table}_${column}`).css("display", "none"));
+            console.log($(`#text_${target}_${table}_${column}`).css("display", "")
+                .attr("onblur", `set_extendedproperty('${table}','${column}','${target}')`));
 
-            if (item.Column_Name == "ID")
-            {
-                count++;
-            }
-            if (count == 2 && item.Column_Name != "RefuseTime")
-            {
-                <tr>
-                    <td>@item.Column_Name</td>
-                    <td>@item.Column_Description</td>
-                    <td>@item.Column_PK</td>
-                    <td>@item.Column_Type</td>
-                    <td>@item.Column_IsNullable</td>
-                    <td>@item.Column_Default</td>
-                    <td>@item.Column_Remark</td>
-                </tr>
-            }
-            else if (item.Column_Name == "RefuseTime")
-            {
-                break;
-            }
         }
-    </tbody>
-</table>
-<!-- #endregion -->
+        function set_extendedproperty(table, column, target) {
+            var value = ($(`#text_${target}_${table}_${column}`).css("display", "none").val());
+            $(`#a_${target}_${table}_${column}`).html(value == "" ? 'null' : value).css("display", "");
 
-<!-- #region AccountRefuse -->
-<h4>AccountRefuse</h4>
-<P>使用者帳號主表</P>
-<p>物件類型</p>
-<p>結構描述名稱</p>
-<p>物件創建日期</p>
-<p>物件修改日期</p>
-
-<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
-    <thead>
-        <tr>
-            <th>欄位名稱</th>
-            <th>欄位說明</th>
-            <th>資料型態</th>
-            <th>主鍵</th>
-            <th>不為Null</th>
-            <th>預設值</th>
-            <th>備註</th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-        @foreach (var item in Model)
-        {
-
-            if (item.Column_Name == "RefuseTime")
-            {
-                <tr>
-                    <td>@item.Column_Name</td>
-                    <td>@item.Column_Description</td>
-                    <td>@item.Column_PK</td>
-                    <td>@item.Column_Type</td>
-                    <td>@item.Column_IsNullable</td>
-                    <td>@item.Column_Default</td>
-                    <td>@item.Column_Remark</td>
-                </tr>
-                break;
-            }       
+            $.ajax(
+                {
+                    type: "POST",
+                    contentType: "application/json",
+                    url: `/AiritiSchema/updateExpendedProperty`,
+                    data: JSON.stringify({ "table": `${table}`, "column": `${column}`, "target": `${target}`, "value": `${value}` }),
+                    success: function (data) {
+                    }
+                })
         }
-    </tbody>
-</table>
-<!-- #endregion -->
+
+
+    </script>
