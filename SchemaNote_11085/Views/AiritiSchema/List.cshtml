@@ -52,76 +52,78 @@
                         <td style="width:5%">預設值</td>
                         <td style="width:40%">備註</td>
                     </tr>
+                    @*</table>*@
+                    }
+
+                    @foreach (var column in item)
+                    {
+                        if (column.a is a)
+                        {
+
+                            bool PK = column.a.Column_PK == 0 ? false : true; //判斷是否為主鍵
+                            bool isNullable = column.a.Column_IsNullable == 0 ? true : false; //判斷是否可以為null
+                            var Column_description = column.a.ColumnDescription == "" ? "null" : column.a.ColumnDescription;
+                            var Column_remark = column.a.ColumnRemark == "" ? "null" : column.a.ColumnRemark;
+                            var idc = $"{column.b.TableName}_{column.a.Column_Name}";
+                            @*<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>*@
+                            <tr>
+                                <td style="text-align:center">@column.a.Column_Name</td>
+                                <td style="text-align:center">
+                                    <input id="text_DescriptionName_@idc" style="display:none" type="text" value="@column.a.ColumnDescription" />
+                                    <a id="a_DescriptionName_@idc" style="color: #0080FF;text-decoration:underline;cursor:pointer"
+                                       onclick="revise_extendedproperty('@column.b.TableName','@column.a.Column_Name', 'DescriptionName')">@Column_description</a>
+
+                                </td>
+                                <td style="text-align:center">@column.a.Column_Type</td>
+                                <td style="text-align:center"><input type="checkbox" checked="@PK" disabled="disabled" /></td>
+                                <td style="text-align:center"><input type="checkbox" checked="@isNullable" disabled="disabled" /></td>
+                                <td>@column.a.Column_Default</td>
+                                <td>
+                                    <a id="a_ColumnRemark_@idc" style="color: #0080FF;text-decoration:underline;cursor:pointer"
+                                       onclick="revise_extendedproperty('@column.b.TableName', '@column.a.Column_Name', 'ColumnRemark')">@Column_remark</a>
+                                    <input id="text_ColumnRemark_@idc" style="display:none;width:100%" type="text" value="@column.a.ColumnRemark" />
+                                </td>
+                            </tr>
+
+                        }
+
+                    }
                 </table>
-            }
-
-            foreach (var column in item)
-            {
-                if (column.a is a)
-                {
-
-                    bool PK = column.a.Column_PK == 0 ? false : true; //判斷是否為主鍵
-                    bool isNullable = column.a.Column_IsNullable == 0 ? true : false; //判斷是否可以為null
-                    var Column_description = column.a.ColumnDescription == "" ? "null" : column.a.ColumnDescription;
-                    var Column_remark = column.a.ColumnRemark == "" ? "null" : column.a.ColumnRemark;
-                    var idc = $"{column.b.TableName}_{column.a.Column_Name}";
-                <table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
-                <tr>
-                    <td style="text-align:center">@column.a.Column_Name</td>
-                    <td style="text-align:center">
-                        <input id="text_DescriptionName_@idc" style="display:none" type="text" value="@column.a.ColumnDescription" />
-                        <a id="a_DescriptionName_@idc" style="color: #0080FF;text-decoration:underline;cursor:pointer"
-                           onclick="revise_extendedproperty('@column.b.TableName','@column.a.Column_Name', 'DescriptionName')">@Column_description</a>
-                       
-                    </td>
-                    <td style="text-align:center">@column.a.Column_Type</td>
-                    <td style="text-align:center"><input type="checkbox" checked="@PK" disabled="disabled" /></td>
-                    <td style="text-align:center"><input type="checkbox" checked="@isNullable" disabled="disabled" /></td>
-                    <td>@column.a.Column_Default</td>
-                    <td>
-                        <a id="a_ColumnRemark_@idc" style="color: #0080FF;text-decoration:underline;cursor:pointer"
-                           onclick="revise_extendedproperty('@column.b.TableName', '@column.a.Column_Name', 'ColumnRemark')">@Column_remark</a>
-                        <input id="text_ColumnRemark_@idc" style="display:none;width:100%" type="text" value="@column.a.ColumnRemark" />
-                    </td>
-                </tr>
-                </table>          
                 }
             }
         }
     }
-}
 
 
 
 
-<script>
-    //function revise_extendedproperty(table, column, target)
-    //{
-    //    $(`#a_${target}_${table}_${column}`).css("display","none");
-    //    $(`#text_${target}_${table}_${column}`).css("display", "")
-    //       .attr("onblur", `set_extendedproperty('${table}','${column}','${target}')`);    
-    //}  
-    function revise_extendedproperty(table, column, target)
-    {
-        console.log($(`#a_${target}_${table}_${column}`).css("display", "none"));
-        console.log($(`#text_${target}_${table}_${column}`).css("display", "")
-            .attr("onblur", `set_extendedproperty('${table}','${column}','${target}')`));
+    <script>
+        //function revise_extendedproperty(table, column, target)
+        //{
+        //    $(`#a_${target}_${table}_${column}`).css("display","none");
+        //    $(`#text_${target}_${table}_${column}`).css("display", "")
+        //       .attr("onblur", `set_extendedproperty('${table}','${column}','${target}')`);
+        //}
+        function revise_extendedproperty(table, column, target) {
+            console.log($(`#a_${target}_${table}_${column}`).css("display", "none"));
+            console.log($(`#text_${target}_${table}_${column}`).css("display", "")
+                .attr("onblur", `set_extendedproperty('${table}','${column}','${target}')`));
 
-    }
-    function set_extendedproperty(table, column, target) {
-        var value = ($(`#text_${target}_${table}_${column}`).css("display", "none").val());
-        $(`#a_${target}_${table}_${column}`).html(value==""? 'null':value).css("display", "");
+        }
+        function set_extendedproperty(table, column, target) {
+            var value = ($(`#text_${target}_${table}_${column}`).css("display", "none").val());
+            $(`#a_${target}_${table}_${column}`).html(value == "" ? 'null' : value).css("display", "");
 
-        $.ajax(
-            {
-            type: "POST",
-            contentType:"application/json",
-            url: `/AiritiSchema/updateExpendedProperty`,
-            data: JSON.stringify({ "table": `${table}`, "column": `${column}`, "target": `${target}`, "value": `${value}` }),
-            success: function (data) {
-            }
-        })
-    }
+            $.ajax(
+                {
+                    type: "POST",
+                    contentType: "application/json",
+                    url: `/AiritiSchema/updateExpendedProperty`,
+                    data: JSON.stringify({ "table": `${table}`, "column": `${column}`, "target": `${target}`, "value": `${value}` }),
+                    success: function (data) {
+                    }
+                })
+        }
 
-  
-</script>
+
+    </script>
