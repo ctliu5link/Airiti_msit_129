@@ -1,114 +1,139 @@
-﻿@*@model SchemaNote_A11087.ViewModel.SchemaNoteViewModel*@
-
-@model IEnumerable<SchemaNote_A11087.Models.Account>
+﻿@model IEnumerable<SchemaNote_A11087.Models.TableModel>
+@using SchemaNote_11087.Models;
 @{
     ViewData["Title"] = "Index";
+    List<string> tableNames = ViewBag.TableNames;
+    TableModel table = Model.FirstOrDefault();
 }
+<div class="dropdown">
+    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @table.TableName
+    </a>
+    <div id="tt" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        @foreach (var Ttable in tableNames) //下拉表顯示
+        {
+            <a class="dropdown-item" href="@Url.Action("Index", "Account", new { tableName = Ttable })">@Ttable</a>
+        }
+    </div>
+</div>
+@{
+    var t_Desc = string.IsNullOrWhiteSpace(table.TableMSDescription) ? "(新增)" : table.TableMSDescription;
+    var t_Remark = string.IsNullOrWhiteSpace(table.TableRemark) ? "(新增)" : table.TableRemark;
+    var idt = $"{table.TableName}_";
+    <div style="position:relative">
+        <h4 style="display:inline">@table.TableName</h4>
+        <input id="text_TableMSDescription_@idt" style="display:none;margin-left:20px;width:50%" type="text" value="@t_Desc" />
+        <a id="a_TableMSDescription_@idt" style="color:#ff0000;cursor:pointer;margin-left:20px"
+           onclick="revise_extendedproperty('@table.TableName','','TableMSDescription')">@t_Desc</a>
 
-<h1>Index</h1>
+        <h4 style="display:inline;position:absolute;right:5px">筆數：@table.TotalRows</h4>
+    </div>
+}
+<div style="display:inline-block;width:51%">
+    <span>物件類型：</span><span>資料表</span>
+    <br />
+    @Html.DisplayNameFor(model => model.TableSchema) : @table.TableSchema<br />
+    @Html.DisplayNameFor(model => model.CreateDate): @table.CreateDate<br />
+    @Html.DisplayNameFor(model => model.ModifyDate): @table.ModifyDate<br />
+</div>
+@{
+    <div style="display:inline-block;width:48%">
+        <span>備註：</span>
+        <a id="a_TableRemark_@idt" style="color:#ff0000;cursor:pointer" onclick="revise_extendedproperty('@table.TableName', '', 'TableRemark')">@t_Remark</a>
+        <input id="text_TableRemark_@idt" style="display:none;width:80%" type="text" value="@t_Remark" />
+    </div>
+}
+<table class="table-bordered">
+    <thead>
+        <tr style="text-align:center">
+            <th style="width:8%">
+                @Html.DisplayNameFor(model => model.ColumnName)
+            </th>
+            <th style="width:12%">
+                @Html.DisplayNameFor(model => model.MSDescription)
+            </th>
+            <th style="width:5%">
+                @Html.DisplayNameFor(model => model.DataType)
+            </th>
+            <th style="width:5%">
+                @Html.DisplayNameFor(model => model.IsPK)
+            </th>
+            <th style="width:7%">
+                @Html.DisplayNameFor(model => model.IsNullable)
+            </th>
+            <th style="width:5%">
+                @Html.DisplayNameFor(model => model.ColumnDefault)
+            </th>
+            <th style="width:40%">
+                @Html.DisplayNameFor(model => model.Remark)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            bool PK = item.IsPK == 1 ? true : false;//判斷是否為主鍵
+            bool isNullable = item.IsNullable == "NO" ? true : false;//判斷是否可以為null
 
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.AccountPassword)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ContactEmail)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CustomerId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CustomerFrom)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.RegisterDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AccountType)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AccountStatus)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AccountSdate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AccountEdate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.RegCustomerId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.VerifyId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AppsyncStatus)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.GracePeriod)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Sort)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-    @foreach (var item in Model) {
+            var id = $"{item.TableName}_{item.ColumnName}"; //設定id的欄位規則 (a/text)_(擴充屬性欄位名稱)_(Table名稱)_(欄位名稱)
+
+            //如果擴充屬性未設定或為空字串則顯示(新增)
+            var N_MSDescription = string.IsNullOrWhiteSpace(item.MSDescription) ? "(新增)" : item.MSDescription;
+            var N_Remark = string.IsNullOrWhiteSpace(item.Remark) ? "(新增)" : item.Remark;
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.AccountPassword)
+                    @Html.DisplayFor(modelItem => item.MSDescription)
+                </td>
+                <td style="text-align:center">
+                    <input id="text_MS_Description_@id" style="display:none" type="text" value="@item.MSDescription" />
+                    <a id="a_MS_Description_@id" style="color:#ff0000;cursor:pointer"
+                       onclick="revise_extendedproperty('@item.TableName', '@item.ColumnName','MS_Description')">@N_MSDescription</a>
+                </td>
+                <td style="text-align:center">
+                    @(string.IsNullOrWhiteSpace(item.CharacterMaximumLength) ? item.DataType : string.Format("{0}({1})", item.DataType,item.CharacterMaximumLength))
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ContactEmail)
+                    @Html.DisplayFor(modelItem => item.ColumnDefault)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CustomerId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CustomerFrom)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RegisterDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AccountType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AccountStatus)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AccountSdate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AccountEdate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RegCustomerId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.VerifyId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AppsyncStatus)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.GracePeriod)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Sort)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.AccountId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.AccountId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.AccountId">Delete</a>
+                    <input id="text_Remark_@id" style="display:none;width:100%" type="text" value="@item.Remark" />
+                    <a id="a_Remark_@id" style="color:#ff0000;cursor:pointer"
+                       onclick="revise_extendedproperty('@item.TableName', '@item.ColumnName','Remark')">@N_Remark</a>
                 </td>
             </tr>
+        }
+    </tbody>
+
+</table>
+
+<script>
+    //切換a標籤為input標籤，修改擴充屬性內容。
+    function revise_extendedproperty(tName, column, tItem) {
+        $(`#a_${tItem}_${tName}_${column}`).css("display", "none");
+        $(`#text_${tItem}_${tName}_${column}`).css("display", "").focus()
+            .attr("onblur", `set_extendedproperty('${tName}','${column}','${tItem}')`);
     }
-        </tbody>
-    </table>
+    function set_extendedproperty(tName, column, tItem) {
+        var value = escapeHtml($(`#text_${tItem}_${tName}_${column}`).css("display", "none").val());
+        $(`#a_${tItem}_${tName}_${column}`).html(value == "" ? '(新增)' : value).css("display", "");
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "/Account/updateExpendedProperty",
+            data: JSON.stringify({ "TableName": `${tName}`, "ColumnName": `${column}`, "Item": `${tItem}`, "Value": `${value}` }),
+            success: function (data) {
+            }
+        })
+    }
+
+    //特殊字元轉碼，避免input特殊字元導致錯誤
+    function escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+</script>

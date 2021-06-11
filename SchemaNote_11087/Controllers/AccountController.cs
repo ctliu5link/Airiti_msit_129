@@ -1,74 +1,192 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;//IOptions
+using SchemaNote_11087.Models;
+using SchemaNote_A11087.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using SchemaNote_A11087.Models;
-using System.Data.SqlClient;
-using System.Data;
-using SchemaNote_A11087.ViewModel;
 
 namespace SchemaNote_A11087.Controllers
 {
     public class AccountController : Controller
     {
-        AiritiCheckContext db = new AiritiCheckContext();
-        public IActionResult Index()
+        public string _ConnectionString { get; set; }//宣告全域變數
+
+        public AccountController(IOptions<ConnectionStringConfig> config)
         {
-            DataSet ds = new DataSet();
-            string con = @"Data Source = DESKTOP-13I52L2\SQLEXPRESS; Initial Catalog = AiritiCheck; Integrated Security = True";   
-            string comm = @"select o.TABLE_NAME,o.COLUMN_NAME,o.TABLE_SCHEMA,DATA_TYPE +'('+cast(CHARACTER_MAXIMUM_LENGTH as nvarchar)+')'as 資料型態,k.type as 主鍵,IS_NULLABLE as 不為Null,COLUMN_DEFAULT as 預設值, m.value as 欄位說明,r.value as 備註,
-                    FORMAT(d.create_date, 'd', 'zh-cn' ) 'create_date', FORMAT(d.modify_date, 'd', 'zh-cn' ) 'modify_date'
-                    FROM INFORMATION_SCHEMA.COLUMNS as o
-                    LEFT JOIN sys.tables as d
-                    on d.name=o.TABLE_NAME COLLATE SQL_Latin1_General_CP1_CI_AS
-                    LEFT JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE as pk on pk.COLUMN_NAME=o.COLUMN_NAME
-                    --AND pk.CONSTRAINT_CATALOG = o.TABLE_CATALOG
-                    --AND pk.TABLE_NAME=o.TABLE_NAME
-                    LEFT JOIN sys.key_constraints as k 
-                    on k.name=pk.CONSTRAINT_NAME
-                    LEFT JOIN fn_listextendedproperty(NULL, 'user', 'dbo', 'table', 'Account', 'column',default) AS m
-                    on m.name='MS_Description' and o.COLUMN_NAME = m.objname COLLATE SQL_Latin1_General_CP1_CI_AS 
-                    LEFT JOIN fn_listextendedproperty(NULL, 'user', 'dbo', 'table', 'Account', 'column',default) AS r
-                    on r.name='REMARK'and o.COLUMN_NAME = r.objname COLLATE SQL_Latin1_General_CP1_CI_AS 
-                    WHERE o.TABLE_NAME = 'Account'";
+            _ConnectionString = config.Value.DBConStr;
+        }
 
-            SqlConnection sql = new SqlConnection(con);
+        public IActionResult Index(string tableName = "Account")
+        {
+            var tableNames = GetTableNames();
 
-            SqlCommand command = new SqlCommand($"{comm}", sql);
+            ViewBag.TableNames = tableNames;
 
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-            
-            dataAdapter.Fill(ds);
+            List<TableModel> result = GetTableInfos(tableName);
 
-            List<SchemaNoteViewModel> list = new List<SchemaNoteViewModel>();
-            
-            foreach(DataRow t in ds.Tables[0].Rows)
+            return View(result);
+        }
+
+        [HttpPost]
+        public void updateExpendedProperty([FromBody] TablePropertyEditModel tableProperty) //修改的4個參數>> 擴充名稱，擴充值，資料表名，跟欄位
+        {
+            TableModel tb = GetTableInfo(tableProperty.TableName, tableProperty.ColumnName);
+            if (tb == null)// 無資料就不處理
             {
-                SchemaNote schemaNote = new SchemaNote();
-                schemaNote.table_Name = t["TABLE_NAME"].ToString();
-
-                list.Add(new SchemaNoteViewModel(schemaNote));
+                return;
             }
-            
-                  
-            //var accounts = db.Accounts.ToList();  
-            return View(list);
+            bool isNull = false;
+
+            if (tableProperty.Item == "Remark")
+            {
+                isNull = tb.Remark == null;
+            }
+            else if (tableProperty.Item == "MS_Description")
+            {
+                isNull = tb.MSDescription == null;
+            }
+            else if (tableProperty.Item == "TableRemark")
+            {
+                tableProperty.Item = "Remark";
+                isNull = tb.TableRemark == null;
+            }
+            else if (tableProperty.Item == "TableMSDescription")
+            {
+                tableProperty.Item = "MS_Description";
+                isNull = tb.TableMSDescription == null;
+            }
+            else
+            {
+                return;
+            }
+            string sql = string.Empty;
+            //如果以上4種值是null的話就執行新增，不是的話就修改
+            if (isNull)
+            {
+                sql = $"EXEC sys.sp_addextendedproperty @name=@Item, @value=@Value , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=@TableName";
+                if (string.IsNullOrWhiteSpace(tableProperty.ColumnName) == false)//如果column的值'不'是null或是空值的話，就執行if內帶入第2層級
+                {
+                    sql = $"{sql}, @level2type=N'COLUMN',@level2name=@ColumnName";
+                }
+            }
+            else
+            {
+                sql = $"EXEC sys.sp_updateextendedproperty @name=@Item, @value=@Value , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=@TableName";
+                if (string.IsNullOrWhiteSpace(tableProperty.ColumnName) == false)
+                {
+                    sql = $"{sql}, @level2type=N'COLUMN',@level2name=@ColumnName";
+                }
+            }
+            ExecuteSql(sql, tableProperty);
         }
-        public IActionResult Edit()
+        private List<string> GetTableNames()
         {
-            return View();
+            string sql = @"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES";
+            return QueryList<string>(sql);
+        }
+        private List<TableModel> GetTableInfos(string tableName)
+        {
+            string sql = @"
+SELECT
+	 b.TABLE_NAME TableName
+    ,b.COLUMN_NAME ColumnName
+	,b.TABLE_SCHEMA TableSchema
+    ,b.DATA_TYPE DataType
+    ,b.CHARACTER_MAXIMUM_LENGTH CharacterMaximumLength
+    ,b.COLUMN_DEFAULT ColumnDefault
+    ,b.IS_NULLABLE IsNullable
+	,CASE When pk.COLUMN_NAME = b.COLUMN_NAME Then 1 else 0 end IsPK
+	,sp.rows TotalRows
+	,FORMAT(d.create_date, 'd', 'zh-cn' )  CreateDate
+	,FORMAT(d.modify_date, 'd', 'zh-cn' ) ModifyDate
+	,M.value MSDescription
+	,R.value Remark
+	,tm.value TableMSDescription
+	,tr.value TableRemark
+FROM
+    sys.TABLES a
+    LEFT JOIN INFORMATION_SCHEMA.COLUMNS b on (a.name=b.TABLE_NAME)
+	left join sys.partitions as sp on a.object_id = sp.object_id
+	LEFT JOIN sys.tables as d on d.name=b.TABLE_NAME COLLATE SQL_Latin1_General_CP1_CI_AS
+	LEFT JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE as pk on pk.COLUMN_NAME=b.COLUMN_NAME
+	LEFT JOIN fn_listextendedproperty(NULL, 'user', 'dbo', 'table', @TName, 'column',default) as m on m.name='MS_Description' and b.COLUMN_NAME = m.objname COLLATE SQL_Latin1_General_CP1_CI_AS 
+	LEFT JOIN fn_listextendedproperty(NULL, 'user', 'dbo', 'table', @TName, 'column',default) as r on r.name='REMARK'and b.COLUMN_NAME = r.objname COLLATE SQL_Latin1_General_CP1_CI_AS 
+	LEFT JOIN sys.extended_properties tm on tm.major_id=a.object_id and tm.minor_id = 0 and tm.name ='MS_Description'
+	LEFT JOIN sys.extended_properties tr on tr.major_id=a.object_id and tr.minor_id = 0 and tr.name ='REMARK'
+WHERE
+    a.name= @TName";
+            List<TableModel> result = QueryList<TableModel>(sql, new { TName = tableName });
+
+            return result;
+        }
+        private TableModel GetTableInfo(string tableName, string columnName)
+        {
+            string sql = @"
+SELECT
+	 b.TABLE_NAME TableName
+    ,b.COLUMN_NAME ColumnName
+	,b.TABLE_SCHEMA TableSchema
+    ,b.DATA_TYPE DataType
+    ,b.CHARACTER_MAXIMUM_LENGTH CharacterMaximumLength
+    ,b.COLUMN_DEFAULT ColumnDefault
+    ,b.IS_NULLABLE IsNullable
+	,CASE When pk.COLUMN_NAME = b.COLUMN_NAME Then 1 else 0 end IsPK
+	,sp.rows TotalRows
+	,FORMAT(d.create_date, 'd', 'zh-cn' )  CreateDate
+	,FORMAT(d.modify_date, 'd', 'zh-cn' ) ModifyDate
+	,M.value MSDescription
+	,R.value Remark
+	,tm.value TableMSDescription
+	,tr.value TableRemark
+FROM
+    sys.TABLES a
+    LEFT JOIN INFORMATION_SCHEMA.COLUMNS b on (a.name=b.TABLE_NAME)
+	left join sys.partitions as sp on a.object_id = sp.object_id
+	LEFT JOIN sys.tables as d on d.name=b.TABLE_NAME COLLATE SQL_Latin1_General_CP1_CI_AS
+	LEFT JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE as pk on pk.COLUMN_NAME=b.COLUMN_NAME
+	LEFT JOIN fn_listextendedproperty(NULL, 'user', 'dbo', 'table', @TName, 'column',default) as m on m.name='MS_Description' and b.COLUMN_NAME = m.objname COLLATE SQL_Latin1_General_CP1_CI_AS 
+	LEFT JOIN fn_listextendedproperty(NULL, 'user', 'dbo', 'table', @TName, 'column',default) as r on r.name='REMARK'and b.COLUMN_NAME = r.objname COLLATE SQL_Latin1_General_CP1_CI_AS 
+	LEFT JOIN sys.extended_properties tm on tm.major_id=a.object_id and tm.minor_id = 0 and tm.name ='MS_Description'
+	LEFT JOIN sys.extended_properties tr on tr.major_id=a.object_id and tr.minor_id = 0 and tr.name ='REMARK'
+WHERE
+    a.name= @TName";
+            if (string.IsNullOrWhiteSpace(columnName) == false)
+            {
+                sql += " AND b.COLUMN_NAME = @ColumnName";
+            }
+            TableModel result = QueryFirst<TableModel>(sql, new { TName = tableName, ColumnName = columnName });
+
+            return result;
+        }
+        private List<T> QueryList<T>(string sql, object param = null)
+        {
+            return Query<T>(sql, param).ToList();
+        }
+        private T QueryFirst<T>(string sql, object param = null)
+        {
+            return Query<T>(sql, param).FirstOrDefault();
         }
 
-        //static void Main()
-        //{
-        //    string connectionString = @"Data Source = DESKTOP - 13I52L2\SQLEXPRESS; Initial Catalog = AiritiCheck; Integrated Security = True";
-        //    using (SqlConnection conn = new SqlConnection(connectionString))
-        //    {               
-        //        conn.Open();
-        //        DataTable table = conn.GetSchema("Tables");
+        private IEnumerable<T> Query<T>(string sql, object param = null)//由此查詢
+        {
+            using (var conn = new SqlConnection(_ConnectionString))
+            {
+                var tables = conn.Query<T>(sql, param);
+                return tables;
+            }
+        }
 
-        //    }
-        //}
+        private void ExecuteSql(string sql, object param = null)//to update insert delete
+        {
+            using (SqlConnection conn = new SqlConnection(_ConnectionString))
+            {                
+                conn.Execute(sql, param);
+            }
+        }
     }
 }
