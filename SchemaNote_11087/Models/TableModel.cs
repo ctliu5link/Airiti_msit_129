@@ -37,5 +37,7 @@ namespace SchemaNote_A11087.Models
         public string ModifyDate { get; set; }
         public int TotalRows { get; set; } //資料總筆數
         public string TableName { get; set; }
+        public string TableMSDescription { get; set; }
+        public string TableRemark { get; set; }
     }
 }
