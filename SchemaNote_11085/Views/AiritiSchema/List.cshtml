@@ -1,101 +1,126 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model IEnumerable<SchemaNote_A11085.ViewModel.ColumnViewModel>
+﻿@model IEnumerable<IGrouping<string, Combine>>
+
 @{
-    ViewData["Title"] = "List";
+    ViewData["Title"] = "SQL Server資料結構之維護瀏覽平台";
 }
-@{    
-    foreach (var item in Model)
-    {       
-        var id = $"{item.TableName}_";        
-        var table_description = item.Main_UserTable == "" ? "null" : item.Main_UserTable;
-        var table_remark = item.Remark == "" ? "(null)" : item.Remark;
-        <div style="position:relative">
-            <h4 style="display:inline-block ">@item.TableName</h4>
-            <input id="text_Description_@id" style="display:none;margin-left:15px;width:50%" type="text" value="@item.Main_UserTable" />
-            <a id="a_Description_@id" style="color: #0080FF;text-decoration:underline;cursor:pointer;margin-left:15px"
-               onclick="revise_extendedproperty('@item.TableName','','Description')">@item.Main_UserTable</a>
-            <h4 style="display:inline;position:absolute;right:5px;">筆數 : @item.TotalCount</h4>
-        </div>
-        <div style="display:inline-block;width:48%">
-            <span>物件類型：</span><span>資料表</span><br />
-            <span>物件描述名稱：</span><span>@item.DescriptionName</span><br />
-            <span>物件創建日期：</span><span>@item.Object_CreateDay</span><br />
-            <span>物件修改日期：</span><span>@item.Object_UpdateDay</span><br />
-        </div>
-        <div style="display:inline-block;width:48%">
-            <span>備註：</span>
-            <a id="a_REMARK_@id" style="color: #0080FF;text-decoration:underline;cursor:pointer" onclick="revise_extendedproperty('@item.TableName','','REMARK')">@table_remark</a>
-            <input id="text_REMARK_@id" style="display:none; width:80%" type="text" value="@item.Remark" />
-        </div>
 
-        <table class="table-bordered">
-            <tr style="text-align:center">
-                <td style="width:8%">欄位名稱</td>
-                <td style="width:8%">欄位說明</td>
-                <td style="width:5%">資料型態</td>
-                <td style="width:5%">主鍵</td>
-                <td style="width:5%">不為Null</td>
-                <td style="width:5%">預設值</td>
-                <td style="width:40%">備註</td>
-            </tr>
 
-            @*@foreach (var item1 in Model)
+@{
+    if (Model is IEnumerable<IGrouping<string, Combine>> && Model != null)
+    {
+        foreach (var item in Model)
+        {
+            string tableName = item.Key;
+
+            var table = item.FirstOrDefault()?.b as b;
+
+            if (table is b)
             {
+                var Table_description = table.MainUserTable == "" ? "null" : table.MainUserTable;
+                var Table_remark = table.Remark == "" ? "null" : table.Remark;
+                var id = $"{table.TableName}_";
 
-                bool PK = item1.Column_PK == 0 ? false : true; //判斷是否為主鍵
-                bool isNullable = item1.Column_IsNullable == 0 ? true : false; //判斷是否可以為null
+                <div style="position:relative">
+                    <h4 style="display:inline-block ">@table.TableName</h4>
+                    <input id="text_ColumnDescription_@id" style="display:none;margin-left:15px;width:50%" type="text" value="@table.MainUserTable" />
+                    <a id="a_ColumnDescription_@id" style="color: #0080FF;text-decoration:underline;cursor:pointer;margin-left:15px"
+                       onclick="revise_extendedproperty('@table.TableName','','ColumnDescription')">@Table_description</a>
+                    <h4 style="display:inline;position:absolute;right:5px;">筆數 : @table.TotalCount</h4>
+                </div>
+                <div style="display:inline-block;width:48%">
+                    <span>物件類型：</span><span>資料表</span><br />
+                    <span>物件描述名稱：</span><span>@table.DescriptionName</span><br />
+                    <span>物件創建日期：</span><span>@table.Object_CreateDay</span><br />
+                    <span>物件修改日期：</span><span>@table.Object_UpdateDay</span><br />
+                </div>
+                <div style="display:inline-block;width:48%">
+                    <span>備註：</span>
+                    <a id="a_ColumnRemark_@id" style="color: #0080FF;text-decoration:underline;cursor:pointer"
+                       onclick="revise_extendedproperty('@table.TableName','','ColumnRemark')">@Table_remark</a>
+                    <input id="text_ColumnRemark_@id" style="display:none; width:80%" type="text" value="@table.Remark" />
+                </div>
+                <table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
+                    <tr style="text-align:center">
+                        <td style="width:8%">欄位名稱</td>
+                        <td style="width:8%">欄位說明</td>
+                        <td style="width:5%">資料型態</td>
+                        <td style="width:5%">主鍵</td>
+                        <td style="width:5%">不為Null</td>
+                        <td style="width:5%">預設值</td>
+                        <td style="width:40%">備註</td>
+                    </tr>
+                    @*</table>*@
+                    }
 
-            
-                var idc = $"{item1.TableName}_{item1.Column_Name}";
+                    @foreach (var column in item)
+                    {
+                        if (column.a is a)
+                        {
 
-                
-                var column_description = item1.Column_Description == "" ? "null" : item1.Column_Description;
-                var column_remark = item1.Column_Remark == "" ? "null" : item1.Column_Remark;
+                            bool PK = column.a.Column_PK == 0 ? false : true; //判斷是否為主鍵
+                            bool isNullable = column.a.Column_IsNullable == 0 ? true : false; //判斷是否可以為null
+                            var Column_description = column.a.ColumnDescription == "" ? "null" : column.a.ColumnDescription;
+                            var Column_remark = column.a.ColumnRemark == "" ? "null" : column.a.ColumnRemark;
+                            var idc = $"{column.b.TableName}_{column.a.Column_Name}";
+                            @*<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>*@
+                            <tr>
+                                <td style="text-align:center">@column.a.Column_Name</td>
+                                <td style="text-align:center">
+                                    <input id="text_DescriptionName_@idc" style="display:none" type="text" value="@column.a.ColumnDescription" />
+                                    <a id="a_DescriptionName_@idc" style="color: #0080FF;text-decoration:underline;cursor:pointer"
+                                       onclick="revise_extendedproperty('@column.b.TableName','@column.a.Column_Name', 'DescriptionName')">@Column_description</a>
 
-                <tr>
-                    <td style="text-align:center">@item1.Column_Name</td>
-                    <td style="text-align:center">
-                        <input id="text_Description_@idc" style="display:none" type="text" value="@item1.Column_Description" />
-                        <a id="a_Description_@idc" style="color: #0080FF;text-decoration:underline;cursor:pointer"
-                           onclick="revise_extendedproperty('@item1.TableName','@item1.Column_Name', 'Description')">@column_description</a>
-                    </td>
-                    <td style="text-align:center">@item1.Column_Type</td>
-                    <td style="text-align:center"><input type="checkbox" checked="@PK" disabled="disabled" /></td>
-                    <td style="text-align:center"><input type="checkbox" checked="@isNullable" disabled="disabled" /></td>
-                    <td>@item1.Column_Default</td>
-                    <td>
-                        <a id="a_REMARK_@idc" style="color: #0080FF;text-decoration:underline;cursor:pointer"
-                           onclick="revise_extendedproperty('@item.TableName', '@item1.Column_Name', 'REMARK')">@column_remark</a>
-                        <input id="text_REMARK_@idc" style="display:none;width:100%" type="text" value="@item1.Column_Remark" />
-                    </td>
-                </tr>
+                                </td>
+                                <td style="text-align:center">@column.a.Column_Type</td>
+                                <td style="text-align:center"><input type="checkbox" checked="@PK" disabled="disabled" /></td>
+                                <td style="text-align:center"><input type="checkbox" checked="@isNullable" disabled="disabled" /></td>
+                                <td>@column.a.Column_Default</td>
+                                <td>
+                                    <a id="a_ColumnRemark_@idc" style="color: #0080FF;text-decoration:underline;cursor:pointer"
+                                       onclick="revise_extendedproperty('@column.b.TableName', '@column.a.Column_Name', 'ColumnRemark')">@Column_remark</a>
+                                    <input id="text_ColumnRemark_@idc" style="display:none;width:100%" type="text" value="@column.a.ColumnRemark" />
+                                </td>
+                            </tr>
 
-            }*@
-        </table>
-    }
-}
-<script>
-    //切換a標籤為input標籤，修改擴充屬性內容。
-    function revise_extendedproperty(table, column, target) {
-        $(`#a_${target}_${table}_${column}`).css("display","none");
-        $(`#text_${target}_${table}_${column}`).css("display", "").focus()
-            .attr("onblur", `set_extendedproperty('${table}','${column}','${target}')`);
-    }
+                        }
 
-    //呼叫updateSchema修改擴充屬性內容
-    function set_extendedproperty(table, column, target) {
-        var value = escapeHtml($(`#text_${target}_${table}_${column}`).css("display","none").val());
-        $(`#a_${target}_${table}_${column}`).html(value == "" ? 'null':value).css("display", "");
-
-        $.ajax({
-            type: "POST",
-            contentType:"application/json",
-            url: `/Home/updateExpendedProperty`,
-            data: JSON.stringify({ "table": `${table}`, "column": `${column}`, "target": `${target}`, "value": `${value}` }),
-            success: function (data) {
+                    }
+                </table>
+                }
             }
-        })
+        }
     }
-</script>
+
+
+
+
+    <script>
+        //function revise_extendedproperty(table, column, target)
+        //{
+        //    $(`#a_${target}_${table}_${column}`).css("display","none");
+        //    $(`#text_${target}_${table}_${column}`).css("display", "")
+        //       .attr("onblur", `set_extendedproperty('${table}','${column}','${target}')`);
+        //}
+        function revise_extendedproperty(table, column, target) {
+            console.log($(`#a_${target}_${table}_${column}`).css("display", "none"));
+            console.log($(`#text_${target}_${table}_${column}`).css("display", "")
+                .attr("onblur", `set_extendedproperty('${table}','${column}','${target}')`));
+
+        }
+        function set_extendedproperty(table, column, target) {
+            var value = ($(`#text_${target}_${table}_${column}`).css("display", "none").val());
+            $(`#a_${target}_${table}_${column}`).html(value == "" ? 'null' : value).css("display", "");
+
+            $.ajax(
+                {
+                    type: "POST",
+                    contentType: "application/json",
+                    url: `/AiritiSchema/sp_updateextendedproperty`,
+                    data: JSON.stringify({ "table": `${table}`, "column": `${column}`, "target": `${target}`, "value": `${value}` }),
+                    success: function (data) {
+                    }
+                })
+        }
+
+
+    </script>

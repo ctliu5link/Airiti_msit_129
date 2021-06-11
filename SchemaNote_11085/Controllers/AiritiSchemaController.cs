@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 namespace SchemaNote_A11085.Controllers
 {
     public class AiritiSchemaController : Controller
-    {
+    {       
         DataSet ds = new DataSet();
         AiritiCheckContext db = new AiritiCheckContext();
         //private readonly AiritiCheckContext db_AiritiCheck;
@@ -36,77 +37,74 @@ namespace SchemaNote_A11085.Controllers
         //        list.Add(new CAccountViewModel(n));
         //    }
         //    return list;
-        //}
+        //}      
 
-        public IActionResult List()
+        public ActionResult List()
         {
             //ScheNoteViewModel SchemaNoteVM = new ScheNoteViewModel();
             //var table = from c in (new AiritiCheckContext()).Accounts
             //            select c;
             //string a = $"http\n....";
             //Console.WriteLine(a);
-            AiritiDB1();
+            //AiritiDB1();
+
+
             AiritiDB();
 
-            List<ColumnViewModel> list = new List<ColumnViewModel>();
-                      
+            List<Combine> list = new List<Combine>();
+            IEnumerable<IGrouping<string, Combine>> q = null;
             foreach (DataRow item in ds.Tables[0].Rows)//選擇第幾張表
-            { 
-                //TableColumn tc = new TableColumn();
-    
-                //tc.Main_UserTable = item["表欄位說明"].ToString();          
-                //tc.DescriptionName = item["DescriptionName"].ToString();
-                //tc.Object_CreateDay = item["Object_CreateDay"].ToString();
-                //tc.Object_UpdateDay = item["Object_UpdateDay"].ToString();
-                //tc.TotalCount = item["TotalCount"].ToString();
-                //tc.Remark = item["表備註"].ToString();
-
-                //AiritiTable A = new AiritiTable();
-                ColumnViewModel model = new ColumnViewModel();
-
-                model.TableName = item["TableName"].ToString();
-                model.Main_UserTable = item["表欄位說明"].ToString();
-                model.DescriptionName = item["DescriptionName"].ToString();
-                model.Object_CreateDay = item["Object_CreateDay"].ToString();
-                model.Object_UpdateDay = item["Object_UpdateDay"].ToString();
-                model.TotalCount = item["TotalCount"].ToString();
-                model.Remark = item["表備註"].ToString();
-                model.Column_Name = item["欄位名稱"].ToString();
-                model.Column_Description = item["欄位說明"].ToString();        
+            {               
+                Combine model = new Combine();       
+                model.b.TableName = item["TableName"].ToString();
+                model.b.MainUserTable = item["表欄位說明"].ToString();
+                model.b.DescriptionName = item["DescriptionName"].ToString();
+                model.b.Object_CreateDay = item["Object_CreateDay"].ToString();
+                model.b.Object_UpdateDay = item["Object_UpdateDay"].ToString();
+                model.b.TotalCount = item["TotalCount"].ToString();
+                model.b.Remark = item["表備註"].ToString();
+                model.a.Column_Name = item["欄位名稱"].ToString();
+                model.a.ColumnDescription = item["欄位說明"].ToString();
                 if (item["主鍵"].ToString() == "PK")
                 {
-                    model.Column_PK = 1;
+                    model.a.Column_PK = 1;
                 }
                 else
                 {
-                    model.Column_PK = 0;
-                }           
-                model.Column_Type = item["資料型態"].ToString();
-                if (item["不為Null"].ToString() == "Yes")
+                    model.a.Column_PK = 0;
+                }
+                //model.a.Column_IsNullable = (item["主鍵"].ToString() == "PK") ? 1 : 0;
+                model.a.Column_Type = item["資料型態"].ToString();
+                //model.a.Column_IsNullable = item["不為Null"].ToString();
+                if (item["不為Null"].ToString() == "NO")
                 {
-                    model.Column_IsNullable = 1;
+                    model.a.Column_IsNullable = 1;
                 }
                 else
                 {
-                    model.Column_IsNullable = 0;
+                    model.a.Column_IsNullable = 0;
                 }
-                model.Column_Default = item["預設值"].ToString();
-                model.Column_Remark = item["備註"].ToString();
-
-             
+                model.a.Column_Default = item["預設值"].ToString();
+                model.a.ColumnRemark = item["備註"].ToString();
                 list.Add(model);
+               
+                q = from L in list
+                        group L by L.b.TableName into X
+                        select X;
+                                
             }
             //ScheNoteViewModel schema = new ScheNoteViewModel();
             //schema.SchemaNote = list;            
-            return View(list);         
+            return View(q);         
         }
 
         public void AiritiDB()
-        {
-            try
-            {
-                string conn = @"Data Source=JAY\SQLEXPRESS;Initial Catalog=AiritiCheck;Integrated Security=True";
-                string comm = @"select DISTINCT c.TABLE_NAME as TableName ,C.COLUMN_NAME AS '欄位名稱',sep.value as '欄位說明',k.type as'主鍵',
+        {  
+            //string dbStringconn = TempData["Entry"].ToString();
+            string conn =
+            //dbStringconn;
+            @"Data Source=JAY\SQLEXPRESS;Initial Catalog=AiritiCheck;Integrated Security=True";
+            string comm = @"select DISTINCT c.TABLE_NAME as TableName ,C.COLUMN_NAME AS '欄位名稱',sep.value as '欄位說明',k.type as'主鍵',
                 (DATA_TYPE+'('+CONVERT(nvarchar,CHARACTER_MAXIMUM_LENGTH)+')')AS '資料型態',
                 c.IS_NULLABLE As '不為Null',COLUMN_DEFAULT As '預設值',sep2.value as '備註',
 				tb.create_date as Object_CreateDay,tb.modify_date as Object_UpdateDay,c.TABLE_SCHEMA as DescriptionName,sp.rows as TotalCount,
@@ -142,36 +140,73 @@ namespace SchemaNote_A11085.Controllers
                 SqlCommand command = new SqlCommand($"{comm}", Connection);          
                 SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);               
                 sqlDataAdapter.Fill(ds);
-            }
-            catch
-            {
-
-            }
+         
+            
         }
 
-        public void AiritiDB1()
-        {
-            try
-            {
-                string conn1 = @"Data Source=JAY\SQLEXPRESS;Initial Catalog=AiritiCheck;Integrated Security=True";             
-
-                string comm1 = @"select st.name as Table_Name,count(st.name) as Column_qty
-                                                from sys.tables st inner join INFORMATION_SCHEMA.COLUMNS ic on st.name = ic.TABLE_NAME group by st.name";
-                SqlConnection Connection1 = new SqlConnection(conn1);
-                SqlCommand command1 = new SqlCommand($"{comm1}", Connection1);
-                SqlDataAdapter sqlDataAdapter1 = new SqlDataAdapter(command1);          
-                sqlDataAdapter1.Fill(ds);
-            }
-            catch
-            {
-
-            }
-        }
-
-        public IActionResult ConnectionString ()
+        public IActionResult ConnectionString()
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult ConnectionString(string DbConn)
+        {
+            if (DbConn != null)
+            {
+                string DbConnString = DbConn.Replace(@"""", "");
+                TempData["Entry"] = DbConnString;
+                return RedirectToAction("List");
+            }
+            return View("ConnectionString");
+        }
+
+        [HttpPost]
+        public void sp_updateextendedproperty([FromBody] tsp_updateextendedproperty property)
+        {
+            string dbconnection = @"Data Source=JAY\SQLEXPRESS;Initial Catalog=AiritiCheck;Integrated Security=True"; 
+
+            using (SqlConnection conn = new SqlConnection(dbconnection))
+            {
+                try
+                {
+                    conn.Open();
+                    property.target = property.target == "ColumnDescription" ? "MS_Description" : property.target;
+                    string strcomm = property.column == "" ?
+                        $"EXEC sys.sp_updateextendedproperty @name=@data_target, @value=@data_value ," +
+                        $" @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=@data_table" :
+                        $"EXEC sys.sp_updateextendedproperty @name=@data_target, @value=@data_value , " +
+                        $"@level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=@data_table, " +
+                        $"@level2type=N'COLUMN',@level2name=@data_column";
+                    SqlCommand comm = new SqlCommand(strcomm, conn);
+                    comm.Parameters.Add(new SqlParameter("@data_target", property.target));
+                    comm.Parameters.Add(new SqlParameter("@data_value", property.value));
+                    comm.Parameters.Add(new SqlParameter("@data_table", property.table));
+                    comm.Parameters.Add(new SqlParameter("@data_column", property.column));
+                    comm.ExecuteNonQuery();
+                }
+                catch (SqlException e)
+                {                 
+                    //如果還未建立該擴充屬性，就改成新增擴充屬性
+                    string strcomm = property.column == "" ?
+                        $"EXEC sys.sp_addextendedproperty @name=@data_target, @value=@data_value ," +
+                        $" @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=@data_table" :
+                        $"EXEC sys.sp_addextendedproperty @name=@data_target, @value=@data_value , " +
+                        $"@level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=@data_table, " +
+                        $"@level2type=N'COLUMN',@level2name=@data_column";
+                    SqlCommand comm = new SqlCommand(strcomm, conn);
+                    comm.Parameters.Add(new SqlParameter("@data_target", property.target));
+                    comm.Parameters.Add(new SqlParameter("@data_value", property.value));
+                    comm.Parameters.Add(new SqlParameter("@data_table", property.table));
+                    comm.Parameters.Add(new SqlParameter("@data_column", property.column));
+                    comm.ExecuteNonQuery();
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
+
         /// <summary>
         /// 舊版 暫時註解掉
         /// </summary>

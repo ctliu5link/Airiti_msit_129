@@ -18,7 +18,21 @@ namespace SchemaNote_A11085.Controllers
         //    _logger = logger;
         //}
 
-        
+        //public IActionResult ConnectionString()
+        //{
+        //    return View();
+        //}
+        //[HttpPost]
+        //public IActionResult ConnectionString(string DbConn)
+        //{
+        //    if (DbConn != null)
+        //    {
+        //        string DbConnString = DbConn.Replace(@"""", "");
+        //        TempData["Entry"] = DbConnString;
+        //        return RedirectToAction("List");
+        //    }
+        //    return View("ConnectionString");
+        //}
 
         public IActionResult Index()
         {
@@ -31,10 +45,10 @@ namespace SchemaNote_A11085.Controllers
             return View();
         }
 
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
-        //{
-        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //}
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
     }
 }

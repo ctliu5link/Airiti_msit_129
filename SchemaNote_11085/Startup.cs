@@ -50,7 +50,7 @@ namespace SchemaNote_A11085
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=AiritiSchema}/{action=list}/{id?}");
+                    pattern: "{controller=AiritiSchema}/{action=ConnectionString}/{id?}");
             });
         }
     }
