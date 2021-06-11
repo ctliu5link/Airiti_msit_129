@@ -99,14 +99,12 @@ namespace SchemaNote_A11085.Controllers
         }
 
         public void AiritiDB()
-        {
-            try
-            {
-                //string dbStringconn = TempData["Entry"].ToString();
-                string conn =
-                //dbStringconn;
-                @"Data Source=JAY\SQLEXPRESS;Initial Catalog=AiritiCheck;Integrated Security=True";
-                string comm = @"select DISTINCT c.TABLE_NAME as TableName ,C.COLUMN_NAME AS '欄位名稱',sep.value as '欄位說明',k.type as'主鍵',
+        {  
+            //string dbStringconn = TempData["Entry"].ToString();
+            string conn =
+            //dbStringconn;
+            @"Data Source=JAY\SQLEXPRESS;Initial Catalog=AiritiCheck;Integrated Security=True";
+            string comm = @"select DISTINCT c.TABLE_NAME as TableName ,C.COLUMN_NAME AS '欄位名稱',sep.value as '欄位說明',k.type as'主鍵',
                 (DATA_TYPE+'('+CONVERT(nvarchar,CHARACTER_MAXIMUM_LENGTH)+')')AS '資料型態',
                 c.IS_NULLABLE As '不為Null',COLUMN_DEFAULT As '預設值',sep2.value as '備註',
 				tb.create_date as Object_CreateDay,tb.modify_date as Object_UpdateDay,c.TABLE_SCHEMA as DescriptionName,sp.rows as TotalCount,
@@ -142,11 +140,8 @@ namespace SchemaNote_A11085.Controllers
                 SqlCommand command = new SqlCommand($"{comm}", Connection);          
                 SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);               
                 sqlDataAdapter.Fill(ds);
-            }
-            catch
-            {
-
-            }
+         
+            
         }
 
         public IActionResult ConnectionString()
@@ -166,7 +161,7 @@ namespace SchemaNote_A11085.Controllers
         }
 
         [HttpPost]
-        public void sp_updateextendedproperty([FromBody] tsp_updateextendedproperty data)
+        public void sp_updateextendedproperty([FromBody] tsp_updateextendedproperty property)
         {
             string dbconnection = @"Data Source=JAY\SQLEXPRESS;Initial Catalog=AiritiCheck;Integrated Security=True"; 
 
@@ -175,34 +170,34 @@ namespace SchemaNote_A11085.Controllers
                 try
                 {
                     conn.Open();
-                    data.target = data.target == "ColumnDescription" ? "MS_Description" : data.target;
-                    string strcomm = data.column == "" ?
+                    property.target = property.target == "ColumnDescription" ? "MS_Description" : property.target;
+                    string strcomm = property.column == "" ?
                         $"EXEC sys.sp_updateextendedproperty @name=@data_target, @value=@data_value ," +
                         $" @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=@data_table" :
                         $"EXEC sys.sp_updateextendedproperty @name=@data_target, @value=@data_value , " +
                         $"@level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=@data_table, " +
                         $"@level2type=N'COLUMN',@level2name=@data_column";
                     SqlCommand comm = new SqlCommand(strcomm, conn);
-                    comm.Parameters.Add(new SqlParameter("@data_target", data.target));
-                    comm.Parameters.Add(new SqlParameter("@data_value", data.value));
-                    comm.Parameters.Add(new SqlParameter("@data_table", data.table));
-                    comm.Parameters.Add(new SqlParameter("@data_column", data.column));
+                    comm.Parameters.Add(new SqlParameter("@data_target", property.target));
+                    comm.Parameters.Add(new SqlParameter("@data_value", property.value));
+                    comm.Parameters.Add(new SqlParameter("@data_table", property.table));
+                    comm.Parameters.Add(new SqlParameter("@data_column", property.column));
                     comm.ExecuteNonQuery();
                 }
                 catch (SqlException e)
                 {                 
                     //如果還未建立該擴充屬性，就改成新增擴充屬性
-                    string strcomm = data.column == "" ?
+                    string strcomm = property.column == "" ?
                         $"EXEC sys.sp_addextendedproperty @name=@data_target, @value=@data_value ," +
                         $" @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=@data_table" :
                         $"EXEC sys.sp_addextendedproperty @name=@data_target, @value=@data_value , " +
                         $"@level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=@data_table, " +
                         $"@level2type=N'COLUMN',@level2name=@data_column";
                     SqlCommand comm = new SqlCommand(strcomm, conn);
-                    comm.Parameters.Add(new SqlParameter("@data_target", data.target));
-                    comm.Parameters.Add(new SqlParameter("@data_value", data.value));
-                    comm.Parameters.Add(new SqlParameter("@data_table", data.table));
-                    comm.Parameters.Add(new SqlParameter("@data_column", data.column));
+                    comm.Parameters.Add(new SqlParameter("@data_target", property.target));
+                    comm.Parameters.Add(new SqlParameter("@data_value", property.value));
+                    comm.Parameters.Add(new SqlParameter("@data_table", property.table));
+                    comm.Parameters.Add(new SqlParameter("@data_column", property.column));
                     comm.ExecuteNonQuery();
                 }
                 finally

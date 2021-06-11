@@ -1,10 +1,7 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model IEnumerable<IGrouping<string, Combine>>
+﻿@model IEnumerable<IGrouping<string, Combine>>
 
 @{
-    ViewData["Title"] = "List";
+    ViewData["Title"] = "SQL Server資料結構之維護瀏覽平台";
 }
 
 
@@ -118,7 +115,7 @@
                 {
                     type: "POST",
                     contentType: "application/json",
-                    url: `/AiritiSchema/updateExpendedProperty`,
+                    url: `/AiritiSchema/sp_updateextendedproperty`,
                     data: JSON.stringify({ "table": `${table}`, "column": `${column}`, "target": `${target}`, "value": `${value}` }),
                     success: function (data) {
                     }
