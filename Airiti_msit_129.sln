@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchemaNote_11085", "SchemaN
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchemaNote_11087", "SchemaNote_11087\SchemaNote_11087.csproj", "{3CCADCAC-1213-4C7D-B85B-225DCC33A264}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchemaNote_11086", "..\新增資料夾 (2)\實作用\SchemaNote\SchemaNote_11086\SchemaNote_11086\SchemaNote_11086.csproj", "{DBCDBE2E-D375-4894-9D98-E45EDC257E17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchemaNote_11086", "SchemaNote_11086\SchemaNote_11086.csproj", "{54E1C3F9-B342-4DE9-932B-39C4DA0C6FB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +47,10 @@ Global
 		{3CCADCAC-1213-4C7D-B85B-225DCC33A264}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CCADCAC-1213-4C7D-B85B-225DCC33A264}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CCADCAC-1213-4C7D-B85B-225DCC33A264}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DBCDBE2E-D375-4894-9D98-E45EDC257E17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DBCDBE2E-D375-4894-9D98-E45EDC257E17}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DBCDBE2E-D375-4894-9D98-E45EDC257E17}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DBCDBE2E-D375-4894-9D98-E45EDC257E17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54E1C3F9-B342-4DE9-932B-39C4DA0C6FB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54E1C3F9-B342-4DE9-932B-39C4DA0C6FB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54E1C3F9-B342-4DE9-932B-39C4DA0C6FB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54E1C3F9-B342-4DE9-932B-39C4DA0C6FB1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
