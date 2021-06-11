@@ -9,18 +9,18 @@ namespace SchemaNote_A11085.Models
     public class a
     {
         public string Column_Name { get; set; }
-        public string Column_Description { get; set; }
+        public string ColumnDescription { get; set; }
         public int Column_PK { get; set; }
         public string Column_Type { get; set; }
         public int Column_IsNullable { get; set; }
         public string Column_Default { get; set; }
-        public string Column_Remark { get; set; }
+        public string ColumnRemark { get; set; }
        
     }
     public class b
     {
         public string TableName { get; set; }
-        public string Main_UserTable { get; set; }
+        public string MainUserTable { get; set; }
         //public string ObjectType { get; set; }
         public string DescriptionName { get; set; }
         public string Object_CreateDay { get; set; }
