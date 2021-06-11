@@ -14,7 +14,7 @@ namespace SchemaNote_A11087.Controllers
 {
     public class AccountController : Controller
     {
-        public string _ConnectionString { get; set; }//宣告全域變數
+        public string _ConnectionString { get; set; }
 
         public AccountController(IOptions<ConnectionStringConfig> config)
         {
@@ -24,16 +24,13 @@ namespace SchemaNote_A11087.Controllers
         public IActionResult Index(string tableName = "Account")
         {
             var tableNames = GetTableNames();
-
             ViewBag.TableNames = tableNames;
-
             List<TableModel> result = GetTableInfos(tableName);
-
             return View(result);
         }
 
         [HttpPost]
-        public void updateExpendedProperty([FromBody] TablePropertyEditModel tableProperty) //修改的4個參數>> 擴充名稱，擴充值，資料表名，跟欄位
+        public void updateExpendedProperty([FromBody] TablePropertyEditModel tableProperty) //傳入修改4個參數>> 擴充名稱，擴充值，資料表名，跟欄位
         {
             TableModel tb = GetTableInfo(tableProperty.TableName, tableProperty.ColumnName);
             if (tb == null)// 無資料就不處理
@@ -180,7 +177,6 @@ WHERE
                 return tables;
             }
         }
-
         private void ExecuteSql(string sql, object param = null)//to update insert delete
         {
             using (SqlConnection conn = new SqlConnection(_ConnectionString))
