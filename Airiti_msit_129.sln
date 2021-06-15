@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchemaNote_11087", "SchemaN
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchemaNote_11086", "SchemaNote_11086\SchemaNote_11086.csproj", "{54E1C3F9-B342-4DE9-932B-39C4DA0C6FB1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelBinding_11087", "ModelBinding_11087\ModelBinding_11087.csproj", "{792F6B05-A94B-4C7D-8E4C-9DC905853B8A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{54E1C3F9-B342-4DE9-932B-39C4DA0C6FB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54E1C3F9-B342-4DE9-932B-39C4DA0C6FB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54E1C3F9-B342-4DE9-932B-39C4DA0C6FB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{792F6B05-A94B-4C7D-8E4C-9DC905853B8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{792F6B05-A94B-4C7D-8E4C-9DC905853B8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{792F6B05-A94B-4C7D-8E4C-9DC905853B8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{792F6B05-A94B-4C7D-8E4C-9DC905853B8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
