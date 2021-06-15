@@ -99,12 +99,14 @@ namespace SchemaNote_A11085.Controllers
         }
 
         public void AiritiDB()
-        {  
-            //string dbStringconn = TempData["Entry"].ToString();
-            string conn =
-            //dbStringconn;
-            @"Data Source=JAY\SQLEXPRESS;Initial Catalog=AiritiCheck;Integrated Security=True";
-            string comm = @"select DISTINCT c.TABLE_NAME as TableName ,C.COLUMN_NAME AS '欄位名稱',sep.value as '欄位說明',k.type as'主鍵',
+        {
+            try
+            {
+                //string dbStringconn = TempData["Entry"].ToString();
+                string conn =
+                //dbStringconn;
+                @"Data Source=JAY\SQLEXPRESS;Initial Catalog=AiritiCheck;Integrated Security=True";
+                string comm = @"select DISTINCT c.TABLE_NAME as TableName ,C.COLUMN_NAME AS '欄位名稱',sep.value as '欄位說明',k.type as'主鍵',
                 (DATA_TYPE+'('+CONVERT(nvarchar,CHARACTER_MAXIMUM_LENGTH)+')')AS '資料型態',
                 c.IS_NULLABLE As '不為Null',COLUMN_DEFAULT As '預設值',sep2.value as '備註',
 				tb.create_date as Object_CreateDay,tb.modify_date as Object_UpdateDay,c.TABLE_SCHEMA as DescriptionName,sp.rows as TotalCount,
