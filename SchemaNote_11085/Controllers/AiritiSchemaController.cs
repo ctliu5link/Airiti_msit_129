@@ -137,16 +137,22 @@ namespace SchemaNote_A11085.Controllers
 				And sep.major_id=sep2.major_id 
 				And sep2.name = 'REMARK'
                 where c.TABLE_NAME in ('Account','Account_ETDS','Account_SchInfo','Account_SchInfoRefuse','AccountRefuse')";
-                    
-                SqlConnection Connection = new SqlConnection(conn);//使用連接字串初始SqlConnection物件連接資料庫
-                SqlCommand command = new SqlCommand($"{comm}", Connection);          
-                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);               
-                sqlDataAdapter.Fill(ds);
-         
-            
-        }
 
-        public IActionResult ConnectionString()
+                SqlConnection Connection = new SqlConnection(conn);//使用連接字串初始SqlConnection物件連接資料庫
+                SqlCommand command = new SqlCommand($"{comm}", Connection);
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);
+                sqlDataAdapter.Fill(ds);
+            }
+
+
+            catch
+            {
+
+            }
+        }
+          
+
+            public IActionResult ConnectionString()
         {
             return View();
         }
