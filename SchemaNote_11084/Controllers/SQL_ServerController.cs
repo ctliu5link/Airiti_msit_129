@@ -30,14 +30,26 @@ namespace SchemaNote_11084.Controllers
         public IActionResult Index()
         {            
             ViewBag.lisTableName = mGetTableName();
+            List<TResult> resultT;
             List<TResult> result;
             
+            // 預設表為 Account
             using (var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
-            {                
-                result = conn.Query<TResult>("dbo.spGetall", null, commandType: System.Data.CommandType.StoredProcedure).ToList();              
-            }
+            {
+                //result = conn.Query<TResult>("dbo.spGetall", null, commandType: System.Data.CommandType.StoredProcedure).ToList();              
+                DynamicParameters pmT = new DynamicParameters();
+                pmT.Add("@TName", "Account", dbType: System.Data.DbType.String, System.Data.ParameterDirection.Input);
+                resultT = conn.Query<TResult>("dbo.spTable", pmT, commandType: System.Data.CommandType.StoredProcedure).ToList();
 
-            return View(result);
+                DynamicParameters pm = new DynamicParameters();
+                pm.Add("@TName", "Account", dbType: System.Data.DbType.String, System.Data.ParameterDirection.Input);
+                result = conn.Query<TResult>("dbo.spMy", pm, commandType: System.Data.CommandType.StoredProcedure).ToList();
+            }
+            List<List<TResult>> a = new List<List<TResult>>();
+            a.Add(resultT);
+            a.Add(result);
+
+            return View(a);
         }
 
         /// <summary>
@@ -64,26 +76,29 @@ namespace SchemaNote_11084.Controllers
             return list;
         }
                 
-        public IActionResult Filter(string? cate)
+        public IActionResult Filter(string cate)
         {
+            List<TResult> resultT;
             List<TResult> result;
-            
+
             using (var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                if (cate == "All")
-                    result = conn.Query<TResult>("dbo.spGetAll", null, commandType: System.Data.CommandType.StoredProcedure).ToList();
-                else
-                {
-                    DynamicParameters pm = new DynamicParameters();
-                    pm.Add("@TName", cate, dbType: System.Data.DbType.String, System.Data.ParameterDirection.Input);
-                    result = conn.Query<TResult>("dbo.spMy", pm, commandType: System.Data.CommandType.StoredProcedure).ToList();
-                }
-                
+                DynamicParameters pmT = new DynamicParameters();
+                pmT.Add("@TName", cate, dbType: System.Data.DbType.String, System.Data.ParameterDirection.Input);
+                resultT = conn.Query<TResult>("dbo.spTable", pmT, commandType: System.Data.CommandType.StoredProcedure).ToList();
+
+                DynamicParameters pm = new DynamicParameters();
+                pm.Add("@TName", cate, dbType: System.Data.DbType.String, System.Data.ParameterDirection.Input);
+                result = conn.Query<TResult>("dbo.spMy", pm, commandType: System.Data.CommandType.StoredProcedure).ToList();
             }
-            return PartialView("Filter", result);
+            List<List<TResult>> a = new List<List<TResult>>();
+            a.Add(resultT);
+            a.Add(result);
+
+            return PartialView("Filter", a);
         }
 
-        public IActionResult Edit(string? Id, string? Column)
+        public IActionResult Edit(string Id, string Column)
         {
             ViewBag.lisTableName = mGetTableName();
             
@@ -111,29 +126,64 @@ namespace SchemaNote_11084.Controllers
             if (r != null)
             {                
                 using (var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
-                {                    
-                    conn.Execute("sp_updateextendedproperty", new
-                    {   name = "MS_Description",
-                        level0type = "SCHEMA",
-                        level0name = "dbo",
-                        level1type = "TABLE",
-                        level1name = r.Table_Name,
-                        level2type = "COLUMN",
-                        level2name = r.COLUMN_NAME,
-                        value = r.欄位說明
-                    }, commandType: System.Data.CommandType.StoredProcedure);
-
-                    conn.Execute("sp_updateextendedproperty", new
+                {
+                    try
                     {
-                        name = "REMARK",
-                        level0type = "SCHEMA",
-                        level0name = "dbo",
-                        level1type = "TABLE",
-                        level1name = r.Table_Name,
-                        level2type = "COLUMN",
-                        level2name = r.COLUMN_NAME,
-                        value = r.備註
-                    }, commandType: System.Data.CommandType.StoredProcedure);
+                        conn.Execute("sp_updateextendedproperty", new
+                        {
+                            name = "MS_Description",
+                            level0type = "SCHEMA",
+                            level0name = "dbo",
+                            level1type = "TABLE",
+                            level1name = r.Table_Name,
+                            level2type = "COLUMN",
+                            level2name = r.COLUMN_NAME,
+                            value = r.欄位說明
+                        }, commandType: System.Data.CommandType.StoredProcedure);
+                    }
+                    catch (SqlException e)
+                    {
+                        conn.Execute("sp_addextendedproperty", new
+                        {
+                            name = "MS_Description",
+                            level0type = "SCHEMA",
+                            level0name = "dbo",
+                            level1type = "TABLE",
+                            level1name = r.Table_Name,
+                            level2type = "COLUMN",
+                            level2name = r.COLUMN_NAME,
+                            value = r.欄位說明
+                        }, commandType: System.Data.CommandType.StoredProcedure);
+                    }
+
+                    try
+                    {
+                        conn.Execute("sp_updateextendedproperty", new
+                        {
+                            name = "REMARK",
+                            level0type = "SCHEMA",
+                            level0name = "dbo",
+                            level1type = "TABLE",
+                            level1name = r.Table_Name,
+                            level2type = "COLUMN",
+                            level2name = r.COLUMN_NAME,
+                            value = r.備註
+                        }, commandType: System.Data.CommandType.StoredProcedure);
+                    }
+                    catch (SqlException e)
+                    {
+                        conn.Execute("sp_addextendedproperty", new
+                        {
+                            name = "REMARK",
+                            level0type = "SCHEMA",
+                            level0name = "dbo",
+                            level1type = "TABLE",
+                            level1name = r.Table_Name,
+                            level2type = "COLUMN",
+                            level2name = r.COLUMN_NAME,
+                            value = r.備註
+                        }, commandType: System.Data.CommandType.StoredProcedure);
+                    }
                 }
             }
 
@@ -145,6 +195,23 @@ namespace SchemaNote_11084.Controllers
             var o = HttpContext.Session.GetObject<TResult>("Result_Old");
             x.Log(DateTime.Now.ToString(), emp.FAccount, r, o);
 
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult EditTable(string Id)
+        {           
+            if (Id != null && Id != "All")
+            {
+                TResult result;
+                using (var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+                {
+                    DynamicParameters pm = new DynamicParameters();
+                    pm.Add("@TName", Id, dbType: System.Data.DbType.String, System.Data.ParameterDirection.Input);
+                    result = conn.Query<TResult>("dbo.spTable", pm, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
+                }
+
+                return PartialView("EditTable", result);
+            }
             return RedirectToAction("Index");
         }
 

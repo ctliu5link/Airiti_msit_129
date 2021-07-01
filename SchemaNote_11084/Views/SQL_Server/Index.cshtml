@@ -1,8 +1,8 @@
-﻿@model IEnumerable<SchemaNote_11084.Models.TResult>
+﻿@model IEnumerable<IEnumerable<SchemaNote_11084.Models.TResult>>
 
 @{
     ViewData["Title"] = "List";
-    var lisTableName = ViewBag.lisTableName;    
+    var lisTableName = ViewBag.lisTableName;
 }
 
 <header>
@@ -68,10 +68,17 @@
                                 <label class="col-lg-3 control-label">表名:</label>
                                 <select class="filter" id="Filter_Status">
                                     <option value="" disabled selected>請選擇</option>
-                                    <option selected="selected" value="All">All</option>
                                     @for (int i = 0; i < lisTableName.Count; i++)
                                     {
-                                        <option value="@lisTableName[i]"> @lisTableName[i] </option>
+                                        if (i == 0)
+                                        {
+                                            <option selected="selected" value="@lisTableName[i]"> @lisTableName[i] </option>
+                                        }
+
+                                        else
+                                        {
+                                            <option value="@lisTableName[i]"> @lisTableName[i] </option>
+                                        }
                                     }
                                 </select>
                             </div>
@@ -83,8 +90,65 @@
                     <div class="card">
                         <table class="table table-bordered table-hover">
                             <thead>
+                                <tr style="text-align:center">                                    
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Skip(1).Single().欄位說明)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Skip(1).Single().備註)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Take(1))
+                                {
+                                    foreach (var i in item)
+                                    {
+
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => i.欄位說明)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => i.備註)
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-success" onclick="editT()">編輯</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <br />
+                    <div class="card">
+                        <table class="table table-bordered table-hover">
+                            <thead>
                                 <tr style="text-align:center">
                                     <th>
+                                        @Html.DisplayNameFor(model => model.Skip(1).Single().COLUMN_NAME)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Skip(1).Single().TABLE_SCHEMA)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Skip(1).Single().資料型態)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Skip(1).Single().主鍵)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Skip(1).Single().預設值)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Skip(1).Single().欄位說明)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Skip(1).Single().備註)
+                                    </th>
+                                    @*<th>
                                         @Html.DisplayNameFor(model => model.COLUMN_NAME)
                                     </th>
                                     <th>
@@ -101,18 +165,42 @@
                                     </th>
                                     <th>
                                         @Html.DisplayNameFor(model => model.欄位說明)
-                                    </th>                                    
+                                    </th>
                                     <th>
                                         @Html.DisplayNameFor(model => model.備註)
-                                    </th>
+                                    </th>*@
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model)
+                                @foreach (var item in Model.Skip(1))
                                 {
+                                    foreach (var i in item)
+                                    {
+
                                     <tr>
                                         <td>
+                                            @Html.DisplayFor(modelItem => i.COLUMN_NAME)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => i.TABLE_SCHEMA)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => i.資料型態)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => i.主鍵)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => i.預設值)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => i.欄位說明)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => i.備註)
+                                        </td>
+                                        @*<td>
                                             @Html.DisplayFor(modelItem => item.COLUMN_NAME)
                                         </td>
                                         <td>
@@ -129,14 +217,15 @@
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.欄位說明)
-                                        </td>                                        
+                                        </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.備註)
-                                        </td>
+                                        </td>*@
                                         <td>
-                                            <a class="btn btn-success" onclick="edit('@item.COLUMN_NAME')">編輯</a>
+                                            <a class="btn btn-success" onclick="edit('@i.COLUMN_NAME')">編輯</a>
                                         </td>
                                     </tr>
+                                    }
                                 }
                             </tbody>
                         </table>
@@ -190,6 +279,24 @@
             type: "get",
             dataType: "html",
             url: "/SQL_Server/LogList",            
+            success: function (data) {
+                console.log("edit");
+                $('#iRepalce').html(data);
+            },
+            error: function (msg) {
+                alert("error:" + msg);
+            }
+        })
+    }
+
+    function editT() {
+        id = $("#Filter_Status").val();
+
+        $.ajax({
+            type: "get",
+            dataType: "html",
+            url: "/SQL_Server/EditTable",
+            data: { id: id },
             success: function (data) {
                 console.log("edit");
                 $('#iRepalce').html(data);
