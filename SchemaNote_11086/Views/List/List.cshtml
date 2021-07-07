@@ -1,0 +1,179 @@
+﻿@model SchemaNote_11086.ViewModels.inputViewModel
+@*@model IEnumerable<SchemaNote_11086.ViewModels.SchemaNoteViewModel>*@
+@*@model System.Collections.Generic.List<SchemaNote_11086.ViewModels.SchemaNoteViewModel>*@
+
+<head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        table, th, td {
+           
+        }
+        th {
+            margin: 5px;
+            padding: 10px;
+        }
+        td {
+            margin: 5px;
+            padding: 10px;
+            font-family: 微軟正黑體;
+        }
+    </style>
+</head>
+@*<button onclick="abc()"> test</button>*@
+@{
+    if ((Model is SchemaNote_11086.ViewModels.inputViewModel)&&Model!=null)
+    {
+        foreach (var table in Model.tableNames)
+        {
+            //給予id的變數tablename
+            var tid = $"{table.Table_Name}_";
+            //命名規則  標籤(a/input)_擴充屬性_tid
+
+            //擴充屬性設定，若無則為("新增註解")
+            var table_description = "";
+            if (table.Table_Description == "")
+            {
+                table_description = "(點此新增註解)";
+            }
+            else
+            {
+                table_description = table.Table_Description;
+            }
+            var table_remark = (table.Table_REMARK == "") ? "(點此新增註解)" : table.Table_REMARK;
+    <div class="table-secondary">
+        <h2 style="display:inline;">@table.Table_Name</h2>
+        <span style="padding-left:10px">
+            <input id="input_Description_@tid" style="display:none" value="@table.Table_Description" />
+            <a id="a_Description_@tid" style="color:blue;cursor:pointer;"
+               onclick="updata_tabledescription('@table.Table_Name','','Description')">@table_description</a>
+        </span>
+        <h3  style="display:inline;float:right;" >總筆數:@table.Total_Rows</h3>
+    </div>
+    <div>
+        <span>物件類型：資料表</span> <div style="display:inline;padding-left:20%">備註:</div><br />
+        <div style="display:inline;">
+            <span>物件描述名稱：</span><span>@table.Table_Schema</span>
+            <span style="padding-left:20%">
+                <input id="input_REMARK_@tid" style="display:none" value="@table.Table_REMARK" />
+                <a id="a_REMARK_@tid" style="color:blue;cursor:pointer;display:inline"
+                   onclick="updata_tabledescription('@table.Table_Name','','REMARK')">@table_remark</a>
+            </span>
+            <br />
+        </div>
+        <span>物件創建日期：</span><span>@table.Create_Date</span><br />
+        <span>物件修改日期：</span><span>@table.Modify_Date</span><br />
+
+    </div>
+        <table class="table-bordered" >
+            <tr style="text-align:center">
+                <th style="width:15%">欄位名稱</th>
+                <th style="width:15%">欄位說明</th>
+                <th style="width:5%">資料型態</th>
+                <th style="width:5%">主鍵</th>
+                <th style="width:5%">不為Null</th>
+                <th style="width:15%">預設值</th>
+                <th style="width:40%">備註</th>
+            </tr>
+
+            @foreach (var column in table.TtableColumns)
+            {
+                //設定checkbox顯示
+                bool pk = column.PK == 1 ? true : false;
+                bool 不為null = column.IS_Nullable == 0 ? true : false;
+
+                //給予id的變數tablename
+                var cid = $"{table.Table_Name}_{column.Column_Name}";
+                //命名規則  標籤(a/input)_擴充屬性_cid
+
+                //擴充屬性設定，若無則為("新增註解")
+                var column_description = (column.Description == "") ? "(點此新增註解)" : column.Description;
+                var colum_remark = (column.REMARK == "") ? "(點此新增註解)" : column.REMARK;
+
+                <tr>
+                    <td style="text-align:center;">@column.Column_Name</td>
+
+                    <td style="text-align:center;">
+                        <a id="a_Description_@cid" style="color:blue;cursor:pointer;"
+                           onclick="updata_tabledescription('@table.Table_Name', '@column.Column_Name', 'Description')">@column_description</a>
+                        <input id="input_Description_@cid" style="display:none" value="@column.Description" />
+                    </td>
+
+                    <td style="text-align:center;">@column.Data_Type</td>
+                    <td style="text-align:center;"><input type="checkbox" checked="@pk" disabled="disabled" /></td>
+                    <td style="text-align:center;"><input type="checkbox" checked="@不為null" disabled="disabled" /></td>
+                    <td style="text-align:center;">@column.Column_Default</td>
+
+                    <td style="text-align:center;">
+                        <a id="a_REMARK_@cid" style="color:blue;cursor:pointer;padding:20px;"
+                           onclick="updata_tabledescription('@table.Table_Name', '@column.Column_Name', 'REMARK')">@colum_remark</a>
+                        <input id="input_REMARK_@cid" style="display:none" value="@column.REMARK" />
+                    </td>
+                </tr>
+
+            }
+        </table>
+            }
+        }
+    }
+
+
+
+<script>
+    //將a標籤切換成input開始進行修改
+    //function updata_tabledescription() {
+    //    document.getElementById("a_tabledescription").style.display = "none";
+    //    //document.getElementById("input_tabledescription").style.display = "";
+    //    $("#input_tabledescription").css("display", "");
+    ////}
+    function updata_tabledescription(table,column,target) {
+        $(`#a_${target}_${table}_${column}`).css("display", "none");
+        $(`#input_${target}_${table}_${column}`).css("display", "").attr("onblur", `set_extendedproperty('${table}','${column}','${target}')`);
+    }
+
+
+    //function abc() {
+    //    var abc = "123";
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "/List/updataSchema",
+    //        data: { "data": data },
+    //        success: function () {
+
+    //        }
+    //    })
+    //}
+    //呼叫updateSchema修改擴充屬性內容
+    function set_extendedproperty(table, column, target) {
+
+        var value =EscapeHTML($(`#input_${target}_${table}_${column}`).css("display", "none").val());
+        $(`#a_${target}_${table}_${column}`).html(value == "" ? '(新增註解)' : value).css("display", "");
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: `/List/updataSchema`,
+            data: JSON.stringify({ "table": `${table}`, "column": `${column}`, "target": `${target}`, "value": `${value}` }),
+            success: function (data) {
+            }
+        })
+    }
+
+    //特殊字元轉碼，避免input出錯
+    function EscapeHTML(stringdata) {
+        //stringdata = "" + stringdata;
+        return stringdata
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&apos;")
+            .replace("/", "&#x2F;")
+            .replace(/=/, "&#x3D;")
+            .replace(/`/, '&#x60;');
+    }
+
+
+</script>

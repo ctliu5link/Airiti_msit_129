@@ -1,0 +1,138 @@
+﻿@model SchemaNote_11086.ViewModels.inputViewModel
+@*@model IEnumerable<SchemaNote_11086.ViewModels.SchemaNoteViewModel>*@
+@*@model System.Collections.Generic.List<SchemaNote_11086.ViewModels.SchemaNoteViewModel>*@
+
+
+@*<div>物件創建時間</div>*@
+<button onclick="abc()"> 123</button>
+<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
+    <thead>
+        <tr style="text-align:center">
+            <th>資料表</th>
+            <th>資料表說明</th>
+            <th>資料備註</th>
+            <th>結構描述名稱</th>
+            <th>建立時間</th>
+            <th>修改時間</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var table in Model.tableNames)
+        {
+            //var table_remark = "";
+            //if (table.t表備註 == "")
+            //{
+            //    table_remark = "(新增註解)";
+            //}
+            //else
+            //{
+            //    table_remark = table.t表備註;
+            //}
+            //var table_description = table.t表說明 == "" ? "(新增註解)" : table.t表說明;
+            ////var table_remark = table.t表備註 == "" ? "(新增註解)" : table.t表備註;
+
+            //var tableid = $"{table.tableName}"; //為每個標籤製作一個獨立id
+
+        <tr>
+            <td>@table.Table_Name</td>
+            @*<td style="text-align:center">@table.tableName</td>*@
+            @*<td style="text-align:center">@table_description</td>*@
+            @*<td style="text-align:center">
+                <input id="input_tabledescription_@tableid" style="display:none" value="@table_description"/>  
+                <a id="a_tabledescription_@tableid" onclick="updata_tabledescription(`@table.tableName`)" style="color:blue;cursor:pointer;">@table_description</a>
+
+            </td>*@
+            @*<td style="text-align:center">@table_remark</td>*@
+            @*<td style="text-align:center">
+                <a style="color:blue;cursor:pointer;">@table_remark</a>
+
+            </td>
+            <td style="text-align:center">@table.t結構描述</td>
+            <td style="text-align:center">@table.t創建時間</td>
+            <td style="text-align:center">@table.t修改時間</td>*@
+
+        </tr>
+        }
+    </tbody>
+</table>
+
+<table class="table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
+    <thead>
+        <tr style="text-align:center">
+            <th style="width:10%">欄位名稱</th>
+            @*<th style="width:10%">欄位說明</th>*@
+            <th style="width:10%">資料型態</th>
+            @*<th style="width:8%">主鍵</th>
+            <th style="width:8%">不為Null</th>*@
+            <th style="width:20%">預設值</th>
+            @*<th style="width:40%">備註</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var column in Model.tableColumns)
+        {
+            <tr>
+                <td style="text-align:center">@column.Column_Name</td>
+                <td style="text-align:center">@column.Data_Type</td>
+              
+                <td style="text-align:center">@column.Column_Default</td>
+                
+            </tr>
+        }
+        @*@foreach (var column in Model.show)
+        {
+            bool PK = column.c主鍵 == "Y" ? true : false;
+            bool isNullable = column.c不為Null == "NO" ? true:false;
+
+            var column_description = column.c欄位說明 == "" ? "(新增註解)" : column.c欄位說明;
+            var column_remark = column.c欄位備註 == "" ? "(新增註解)" : column.c欄位備註;
+        <tr>
+            <td style="text-align:center">@column.columnName</td>
+            <td style="text-align:center">
+                <a style="color:blue;cursor:pointer;">@column_description</a>
+
+            </td>
+            <td style="text-align:center">@column.c資料型別</td>
+            <td style="text-align:center"><input type="checkbox" checked="@PK" disabled="disabled" /></td>
+            <td style="text-align:center"><input type="checkbox" checked="@isNullable" disabled="disabled" /></td>
+            <td style="text-align:center">@column.c預設值</td>
+            <td style="text-align:center">
+                <a style="color:blue;cursor:pointer;">@column_remark</a>
+
+            </td>
+        </tr>
+        }*@
+        @*@foreach (var t in Model)
+        {
+            <tr>
+                <td> @Html.DisplayFor(modelItem => t.columnName)</td>
+            </tr>
+        }*@
+    </tbody>
+    </table>
+@*<script>
+    //將a標籤切換成input開始進行修改
+    //function updata_tabledescription() {
+    //    document.getElementById("a_tabledescription").style.display = "none";
+    //    //document.getElementById("input_tabledescription").style.display = "";
+    //    $("#input_tabledescription").css("display", "");
+    //}
+    function updata_tabledescription(table) {
+        $(`#a_tabledescription_${table}`).css("display", "none");
+        $(`#input_tabledescription_${table}`).css("display", "");
+    }
+
+    function abc() {
+        var abc = "123";
+        $.ajax({
+            type: "POST",
+            url: "/List/updataSchema",
+            data: { "data": data },
+            success: function ( ){
+               
+            }
+        })
+    }
+    
+
+</script>*@
