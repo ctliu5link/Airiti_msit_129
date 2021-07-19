@@ -1,16 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ModelBinding_11083.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
+using ModelBinding_11083.Models;
 
 namespace ModelBinding_11083.Controllers
 {
     public class DefaultController : Controller
     {
+        // GET: Default
         public ActionResult SimpleBinding(string Name, int Age)
         {
+
             return Content(nameof(Name) + ":" + Name + ", " + nameof(Age) + ":" + Age);
         }
 
@@ -77,5 +79,4 @@ namespace ModelBinding_11083.Controllers
             return File(bytes, System.Net.Mime.MediaTypeNames.Application.Octet/*application/octet-stream*/, "img.png");
         }
     }
-
 }
