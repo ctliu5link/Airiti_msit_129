@@ -6,30 +6,34 @@ using System.Threading.Tasks;
 
 namespace SchemaNote_11083.ViewModels
 {
-    //public class TtableSchema 
-    //{
-    //    public TtableSchema(Ttable[] p_t)
-    //    {
-    //        this.Ttable = p_t;
-    //    }
-    //    public Ttable[] Ttable { get; set; }
-    //}
 
-    public class TtableSchema<T> //傳到cshtml用的viewmodel;泛型
+  public class TtableSchema<T> //傳到cshtml用的viewmodel;泛型
+  {
+    private bool isNull;
+    private T _ttable;
+
+    public TtableSchema()
     {
-        public TtableSchema(T p_t)
-        {
-            this.Ttable = p_t;
-        }
-        public T Ttable { get; set; }
+      this.isNull = true;
+    }
+    public TtableSchema(T p_t,string Method)
+    {
+      this._ttable = p_t;
+      this.isNull = false;
+      this.Method = Method;
+    }
+    public T Ttable
+    {
+      get { return this._ttable; }
+      set
+      {
+        this._ttable = value;
+        this.isNull = value == null ? true : false;
+      }
     }
 
-    //public class TtableSchema_dapper //傳到cshtml用的viewmodel
-    //{
-    //    public TtableSchema_dapper(IEnumerable<Ttable_dapper> p_t)
-    //    {
-    //        this.Ttable = p_t;
-    //    }
-    //    public IEnumerable<Ttable_dapper> Ttable { get; set; }
-    //}
+    public string Method { get; set; }
+
+    public bool IsNull { get { return this.isNull; } }
+  }
 }

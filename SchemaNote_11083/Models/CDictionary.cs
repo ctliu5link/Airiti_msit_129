@@ -7,6 +7,6 @@ namespace SchemaNote_11083.Models
 {
     public static class CDictionary
     {
-        public static string Current_DBConnection = "Current_DBConnection"; //目前連結DB用的session key
+        public static readonly string Current_DBConnection = "Current_DBConnection"; //目前連結DB用的session key
     }
 }

@@ -14,30 +14,6 @@ namespace SchemaNote_11083.Models
         public long Total_Rows { get; set; }
         public string Table_Description { get; set; }
         public string Table_REMARK { get; set; }
-        public TtableColumn[] TtableColumns { get; set; } //該資料表的欄位
-    }
-
-    public class Ttable_dapper //需要的資料表資料內容
-    {
-        public string Table_Name { get; set; }
-        public string Table_Schema { get; set; }
-        public string Create_Date { get; set; }
-        public string Modify_Date { get; set; }
-        public long Total_Rows { get; set; }
-        public string Table_Description { get; set; }
-        public string Table_REMARK { get; set; }
-        public IEnumerable<TtableColumn> TtableColumns { get; set; } //該資料表的欄位
-    }
-
-    public class Ttable_Reflection //需要的資料表資料內容
-    {
-        public string Table_Name { get; set; }
-        public string Table_Schema { get; set; }
-        public string Create_Date { get; set; }
-        public string Modify_Date { get; set; }
-        public long Total_Rows { get; set; }
-        public string Table_Description { get; set; }
-        public string Table_REMARK { get; set; }
         public IEnumerable<TtableColumn> TtableColumns { get; set; } //該資料表的欄位
     }
 }

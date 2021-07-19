@@ -11,6 +11,7 @@ namespace SchemaNote_11083.Models
         public string column { get; set; }
         public string target { get; set; }
         public string value { get; set; }
+        public string method1 { get; set; }
 
     }
 }

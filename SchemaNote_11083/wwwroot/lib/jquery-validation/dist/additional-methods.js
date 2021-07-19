@@ -9,8 +9,7 @@
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 		define( ["jquery", "./jquery.validate"], factory );
-	} else if (typeof module === "object" && module.ex
-		s) {
+	} else if (typeof module === "object" && module.exs) {
 		module.exports = factory( require( "jquery" ) );
 	} else {
 		factory( jQuery );

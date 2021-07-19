@@ -1,0 +1,361 @@
+﻿@{
+
+    ViewBag.Title = "Home Page";
+}
+
+@model List<ModelBinding_11083.ViewModels.DataBindingViewModel>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous">
+
+
+</script>
+<script>
+
+    //將物件轉為urlencode字串
+    function objToURL(object, preprop) {
+        var str = [];
+        for (var prop in object) {
+            var forNextProp = preprop ? preprop + "[" + prop + "]" : `${prop}`;
+            if (object[prop] != null) {
+                if (typeof object[prop] != 'object') {
+                    str.push(preprop ? `${preprop}[${prop}]=${object[prop]}` : `${prop}=${object[prop]}`)
+                }
+                else {
+                    str.push(objToURL(object[prop], forNextProp))
+                }
+            }
+        }
+        return str.join("&")
+    }
+    //使用到的物件及參數
+    const ctJSON = "application/json";
+    const ctURL = "application/x-www-form-urlencoded";
+    var hTom = { "Name": "Tom", "Age": "15" };
+    var hVivian = { "Name": "Vivian", "Age": "20" };
+    var pVivian = { "Name": "Vivian", "Age": "20", "Friends": [] };
+    var pMike = { "Name": "Mike", "Age": "21", "Friends": [] };
+    var pTom = { "Name": "Tom", "Age": "15", "Friends": [pVivian, pMike] };
+
+    var obj_SimpleBinding = { "Name": "Tom", "Age": "15" };
+    var obj_ModelBindObj = { "data": { "Name": "Tom", "Age": "15" }};
+    var obj_SimpleModelBindArray = { "Name": ["Tom", "Tommy", "Mike"], "Age": ["15", `16`, `17`, `18`] };
+    var obj_ModelBindingArray = { "data": [hTom, hVivian] };
+    var obj_ModelBindingNestedObj = { "data": pTom };
+    var obj_ModelBindingArrayNestedObj = { "data": [pTom, pMike] };
+
+    var usingList = {
+        "SimpleBinding": obj_SimpleBinding,
+        "ModelBindObj": obj_ModelBindObj,
+        "SimpleModelBindArray": obj_SimpleModelBindArray,
+        "ModelBindingArray": obj_ModelBindingArray,
+        "ModelBindingNestedObj": obj_ModelBindingNestedObj,
+        "ModelBindingArrayNestedObj":obj_ModelBindingArrayNestedObj
+    }
+
+
+    //依不同action取得不同結果
+    function getResult(object, CT, action, returnType) {
+        $.ajax({
+            type: "POST",
+            contentType: CT,
+            url: `/Default/${action}`,
+            data: CT == 'application/json' ? JSON.stringify(object) : objToURL(object),
+            success: function (data) {
+                resultTarget = CT == 'application/json' ? `return_json_${action}` : `return_url_${action}`;
+                result = returnType == 'text' ? data : JSON.stringify(data);
+                $(`#${resultTarget}`).html(result);
+            }
+        });
+    }
+
+    //依不同主題將資料填入
+    function bindingData(object, topic, returnType) {
+        $(`#inputObj_${topic}`).html(JSON.stringify(object));
+        $(`#outUrlencoded_${topic}`).html(objToURL(object));
+        $(`#outJSON_${topic}`).html(JSON.stringify(object));
+
+        getResult(object, ctURL, topic, returnType);
+        getResult(object, ctJSON, topic, returnType);
+    }
+
+    //使用byte將圖檔傳到server
+    function uploadByte() {
+
+        //用FileReader將檔案以ArrayBuffer形式讀取
+        var reader = new FileReader();
+        reader.readAsArrayBuffer($("#uploadByte")[0].files[0]);
+        reader.onloadend = function () {
+
+            //用XMLHttpRequest將binary data以POST傳回server
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", `@Url.Action("SendByte","Default")`); //設定呼叫的action
+            xhr.setRequestHeader('Content-Type', 'application/octet-stream'); //設定requestion的header
+            xhr.responseType = "arraybuffer"; //預計接收傳回值的型態
+
+            //send後執行的方法
+            xhr.onload = function () {
+                if (this.status == 200) {
+                    var blob = new Blob([this.response], { type: "image/jpg" }); //
+                    var objectURL = URL.createObjectURL(blob);
+                    var downLoad = document.createElement("a");
+                    downLoad.href = objectURL;
+                    downLoad.download = "Photo.jpg";
+
+                    downLoad.click();
+                    downLoad.href = "";
+                    URL.revokeObjectURL(objectURL);
+                }
+            }
+            xhr.send(this.result);
+        }
+    }
+
+</script>
+
+uploadByte :
+<input id="uploadByte" type="file" />
+<input type="button" value="upload" onclick="uploadByte()" />
+
+<form action="/Default/SendByte" method="post" enctype="multipart/form-data">
+    <input id="uploadFile13" type="file" name="fileBase" />
+    <input type="submit" />
+</form>
+
+
+@{
+    foreach (var data in Model)
+
+    {
+        <h1>@data.Topic</h1>
+        <div style="background-color:mediumseagreen">
+            <h2>@data.Para</h2>
+            <h3>輸入object</h3>
+            <p id="inputObj_@data.Topic" style="background-color:white">
+                @data.Obj_JSON
+            </p>
+            <div style="display:inline-block; width:40%">
+                <h3>送出內容：urlencoded</h3>
+                <p id="outUrlencoded_@data.Topic" style="background-color:white">
+
+                </p>
+                <h3>返回：@data.ReturnType</h3>
+                <p id="return_url_@data.Topic" style="background-color:white">
+
+                </p>
+            </div>
+            <div style="display:inline-block; width:40%">
+                <h3>送出內容：JSON</h3>
+                <p id="outJSON_@data.Topic" style="background-color:white">
+
+                </p>
+                <h3>返回：@data.ReturnType</h3>
+                <p id="return_json_@data.Topic" style="background-color:white">
+
+                </p>
+            </div>
+        </div>
+        <script>
+            console.log(JSON.parse(`@data.Obj_JSON`))
+            bindingData(JSON.parse(`@data.Obj_JSON`), `@data.Topic`, `@data.ReturnType`);
+        </script>
+    }
+}
+
+@*SimpleBinding*@
+<div style="background-color:mediumseagreen">
+    <h2>(string Name, int Age)</h2>
+    <h3>輸入object</h3>
+    <p id="inputObj_SimpleBinding" style="background-color:white">
+
+    </p>
+    <div style="display:inline-block; width:40%">
+        <h3>送出內容：urlencoded</h3>
+        <p id="outUrlencoded_SimpleBinding" style="background-color:white">
+
+        </p>
+        <h3>返回：text</h3>
+        <p id="return_url_SimpleBinding" style="background-color:white">
+
+        </p>
+    </div>
+    <div style="display:inline-block; width:40%">
+        <h3>送出內容：JSON</h3>
+        <p id="outJSON_SimpleBinding" style="background-color:white">
+
+        </p>
+        <h3>返回：text</h3>
+        <p id="return_json_SimpleBinding" style="background-color:white">
+
+        </p>
+    </div>
+</div>
+<script>
+    //bindingData(obj_SimpleBinding, `SimpleBinding`, `text`)
+</script>
+
+@*ModelBindObj*@
+<div style="background-color:mediumseagreen">
+    <h2>(Human data)</h2>
+    <h3>輸入object</h3>
+    <p id="inputObj_ModelBindObj" style="background-color:white">
+
+    </p>
+    <div style="display:inline-block; width:40%">
+        <h3>送出內容：urlencoded</h3>
+        <p id="outUrlencoded_ModelBindObj" style="background-color:white">
+
+        </p>
+        <h3>返回：JSON</h3>
+        <p id="return_url_ModelBindObj" style="background-color:white">
+
+        </p>
+    </div>
+    <div style="display:inline-block; width:40%">
+        <h3>送出內容：JSON</h3>
+        <p id="outJSON_ModelBindObj" style="background-color:white">
+
+        </p>
+        <h3>返回：JSON</h3>
+        <p id="return_json_ModelBindObj" style="background-color:white">
+
+        </p>
+    </div>
+</div>
+<script>
+    //bindingData(obj_ModelBindObj, `ModelBindObj`, `json`);
+</script>
+
+@*SimpleModelBindArray*@
+<div style="background-color:mediumseagreen">
+    <h2>(string[] Name, int[] Age)</h2>
+    <h3>輸入object</h3>
+    <p id="inputObj_SimpleModelBindArray" style="background-color:white">
+
+    </p>
+    <div style="display:inline-block; width:40%">
+        <h3>送出內容：urlencoded</h3>
+        <p id="outUrlencoded_SimpleModelBindArray" style="background-color:white">
+
+        </p>
+        <h3>返回：Text</h3>
+        <p id="return_url_SimpleModelBindArray" style="background-color:white">
+
+        </p>
+    </div>
+    <div style="display:inline-block; width:40%">
+        <h3>送出內容：Text</h3>
+        <p id="outJSON_SimpleModelBindArray" style="background-color:white">
+
+        </p>
+        <h3>返回：Text</h3>
+        <p id="return_json_SimpleModelBindArray" style="background-color:white">
+
+        </p>
+    </div>
+
+</div>
+<script>
+    //bindingData(obj_SimpleModelBindArray, `SimpleModelBindArray`, `text`)
+</script>
+
+@*ModelBindingArray*@
+<div style="background-color:mediumseagreen">
+    <h2>(Human[] data)</h2>
+    <h3>輸入object</h3>
+    <p id="inputObj_ModelBindingArray" style="background-color:white">
+
+    </p>
+    <div style="display:inline-block; width:40%">
+        <h3>送出內容：urlencoded</h3>
+        <p id="outUrlencoded_ModelBindingArray" style="background-color:white">
+
+        </p>
+        <h3>返回：JSON</h3>
+        <p id="return_url_ModelBindingArray" style="background-color:white">
+
+        </p>
+    </div>
+    <div style="display:inline-block; width:40%">
+        <h3>送出內容：JSON</h3>
+        <p id="outJSON_ModelBindingArray" style="background-color:white">
+
+        </p>
+        <h3>返回：JSON</h3>
+        <p id="return_json_ModelBindingArray" style="background-color:white">
+
+        </p>
+    </div>
+
+</div>
+<script>
+    //bindingData(obj_ModelBindingArray, `ModelBindingArray`, `json`);
+</script>
+
+
+@*ModelBindingNestedObj*@
+<div style="background-color:mediumseagreen">
+    <h2>(Person data)</h2>
+    <h3>輸入object</h3>
+    <p id="inputObj_ModelBindingNestedObj" style="background-color:white">
+
+    </p>
+    <div style="display:inline-block; width:40%">
+        <h3>送出內容：urlencoded</h3>
+        <p id="outUrlencoded_ModelBindingNestedObj" style="background-color:white">
+
+        </p>
+        <h3>返回：JSON</h3>
+        <p id="return_url_ModelBindingNestedObj" style="background-color:white">
+
+        </p>
+    </div>
+    <div style="display:inline-block; width:40%">
+        <h3>送出內容：JSON</h3>
+        <p id="outJSON_ModelBindingNestedObj" style="background-color:white">
+
+        </p>
+        <h3>返回：JSON</h3>
+        <p id="return_json_ModelBindingNestedObj" style="background-color:white">
+
+        </p>
+    </div>
+
+</div>
+<script>
+    //bindingData(obj_ModelBindingNestedObj, `ModelBindingNestedObj`, `json`);
+</script>
+
+@*ModelBindingArrayNestedObj*@
+<div style="background-color:mediumseagreen">
+    <h2>(Person[] data)</h2>
+    <h3>輸入object</h3>
+    <p id="inputObj_ModelBindingArrayNestedObj" style="background-color:white">
+
+    </p>
+    <div style="display:inline-block; width:40%">
+        <h3>送出內容：urlencoded</h3>
+        <p id="outUrlencoded_ModelBindingArrayNestedObj" style="background-color:white">
+
+        </p>
+        <h3>返回：JSON</h3>
+        <p id="return_url_ModelBindingArrayNestedObj" style="background-color:white">
+
+        </p>
+    </div>
+    <div style="display:inline-block; width:40%">
+        <h3>送出內容：JSON</h3>
+        <p id="outJSON_ModelBindingArrayNestedObj" style="background-color:white">
+
+        </p>
+        <h3>返回：JSON</h3>s
+        <p id="return_json_ModelBindingArrayNestedObj" style="background-color:white">
+
+        </p>
+    </div>
+
+</div>
+<script>
+    //bindingData(obj_ModelBindingArrayNestedObj, `ModelBindingArrayNestedObj`, `json`);
+</script>
