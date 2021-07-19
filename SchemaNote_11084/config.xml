@@ -13,5 +13,6 @@
     <info time="2021/5/31 上午 07:53:45" editor="Leo" message="更新資料表：Account_ETDS&#xA;欄位：schoolID&#xA;備註：關聯 CETDSchoolCustomer.schoolID2 =&gt; 關聯 CETDSchoolCustomer.schoolID3" />
     <info time="2021/5/31 上午 07:56:47" editor="Tom" message="更新資料表：Account_SchInfo&#xA;欄位：StudentShip&#xA;欄位說明：身份代碼1 =&gt; 身份代碼&#xA;備註：Identity.StudentShip1 =&gt; Identity.StudentShip" />
     <info time="2021/5/31 上午 07:57:22" editor="Tom" message="更新資料表：Account_SchInfo&#xA;欄位：StudentShip&#xA;欄位說明：身份代碼 =&gt; 身份代碼2" />
+    <info time="2021/6/7 上午 08:33:13" editor="Leo" message="更新資料表：Account&#xA;欄位：AccountID&#xA;備註： =&gt; 333" />
   </Log>
 </root>

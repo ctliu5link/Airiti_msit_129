@@ -1,7 +1,7 @@
 ﻿$(document).keyup(function (e) {
     if (e.shiftKey && e.keyCode == 49 ) { //Shift + 1
-        $("#txtAccount").val(1);
-        $("#txtPassword").val(452333);
+        $("#txtAccount").val("Leo");
+        $("#txtPassword").val(12345678);
     }
     else if (e.shiftKey && e.keyCode == 50) { //Shift + 2
         $("#txtAccount").val(2);

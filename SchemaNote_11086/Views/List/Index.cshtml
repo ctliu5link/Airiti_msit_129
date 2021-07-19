@@ -21,28 +21,36 @@
             border-radius: 4px;
             cursor: pointer;
         }
-/*
+        /*
             input[type=submit]:hover {
                 background-color: #45a049;
             }*/
 
-     /*   div {
+        /*   div {
             border-radius: 5px;
             background-color: #f2f2f2;
             padding: 20px;
         }*/
     </style>
 </head>
+
 <body>
 
     <h3>SQL Server資料結構之維護瀏覽平台</h3>
 
     <div>
+        <div>
+            <input type="button" class="btn btn-primary" value="Demo"  onclick="dbconnect()"/>
+        </div>
         <form method="post">
-            <input class="inputa" type="text" name="db字串" /><input type="submit" value="送出" placeholder="輸入文字" />
+            <input id="dblink" class="inputa" type="text" name="db字串" /><input type="submit" value="送出" placeholder="輸入文字" />
         </form>
         @*<form action="/action_page.php">
-        </form>*@
+            </form>*@
     </div>
-
 </body>
+<script>
+    function dbconnect() {
+        document.getElementById("dblink").value ="Data Source =.; Initial Catalog = AiritiCheck; Integrated Security = True";
+    }
+</script>

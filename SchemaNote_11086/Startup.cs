@@ -24,6 +24,9 @@ namespace SchemaNote_11086
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            //µù¥USession
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +45,9 @@ namespace SchemaNote_11086
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            //±Ò¥ÎSession
+            app.UseSession();
+
             app.UseRouting();
 
             app.UseAuthorization();
@@ -50,7 +56,8 @@ namespace SchemaNote_11086
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=list}/{action=Index}/{id?}");
+                //pattern: "{controller=List}/{action=Index}/{id?}");
             });
         }
     }
