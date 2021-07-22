@@ -5,25 +5,26 @@ using System.Web.Mvc;
 
 namespace ModelBinding_11083.Controllers
 {
-    public class HomeController : Controller
+  public class HomeController : Controller
+  {
+
+    public ActionResult Index()
     {
-        public ActionResult Index()
-        {
-            return View(ModelBinding.getList());
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
+      return View(ModelBinding.getList());
     }
+
+    public ActionResult About()
+    {
+      ViewBag.Message = "Your application description page.";
+
+      return View();
+    }
+
+    public ActionResult Contact()
+    {
+      ViewBag.Message = "Your contact page.";
+
+      return View();
+    }
+  }
 }
