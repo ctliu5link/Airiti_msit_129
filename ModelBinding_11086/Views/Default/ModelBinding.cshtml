@@ -1,0 +1,402 @@
+﻿<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<head>
+    <style>
+        h2 {
+            color: brown
+        }
+
+        #left, #right {
+            padding: 10px;
+            display: inline-block;
+            width: 450px;
+            font-size: larger;
+            font-weight: bold;
+        }
+
+        #left {
+            margin: 4px 20px 2px 4px;
+        }
+
+        #InputObject {
+            background-color: snow;
+            width: 920px;
+            font-size: larger;
+            font-weight: bold;
+        }
+
+        #left2, #SimpleBinding, #ModelBindObj, #SimpleModelBindArray, #ModelBindingArray,
+        #ModelBindingNestedObj, #ModelBindingArrayNestedObj, #SendByte {
+            padding: 10px;
+            display: inline-block;
+            background-color: snow;
+            width: 450px;
+            font-size: larger;
+            font-weight: bold;
+            margin: 4px 20px 2px 4px;
+        }
+
+        #right2, #SimpleBindingJson, #ModelBindObjJson, #SimpleModelBindArrayJson, #ModelBindingArrayJason,
+        #ModelBindingNestedObjJson, #ModelBindingArrayNestedObjJson, #SendByteJson {
+            padding: 10px;
+            display: inline-block;
+            background-color: snow;
+            width: 450px;
+            font-size: larger;
+            font-weight: bold;
+        }
+    </style>
+
+
+</head>
+<!-- #region 區塊名稱 --> <!-- #endregion -->
+
+<h1>ModelBinding</h1>
+
+<div style="background-color:cadetblue;padding:100px">
+
+
+
+    <!-- #region (SimpleBinding) -->
+    <h2>(string Name, int Age)</h2>
+    <div>
+        <h3>輸入:object</h3>
+        <div id="InputObject">
+            {<br />"Name":Jay",<br />"Age:21<br />}
+        </div>
+    </div>
+    <div>
+        <div id="left">送出內容:依據[application/x-www-form-urlencoded]編碼</div>
+        <div id="right">送出內容:依據[application/json]編碼</div><br />
+        <div id="left2">Name=Jay&Age=21</div>
+        <div id="right2">{"Name"="Jay",Age=21}</div>
+    </div>
+    <div>
+        <h3 id="left">返回text</h3>
+        <h3 id="right">返回text</h3>
+    </div>
+    <div>
+        <div id="SimpleBinding"></div>
+        <div id="SimpleBindingJson"></div>
+    </div>
+    <!-- #endregion -->
+    <!-- #region (ModelBindObj) -->
+    <h2>(Human data)</h2>
+    <div>
+        <h3>輸入:object</h3>
+        <div id="InputObject">
+            {<br />"Name":Jay",<br />"Age:21<br />}
+        </div>
+    </div>
+    <div>
+        <div id="left">送出內容:依據[application/x-www-form-urlencoded]編碼</div>
+        <div id="right">送出內容:依據[application/json]編碼</div><br />
+        <div id="left2">Name=Jay&Age=21</div>
+        <div id="right2">{"Name"="Jay",Age=21}</div>
+    </div>
+    <div>
+        <h3 id="left">返回text</h3>
+        <h3 id="right">返回text</h3>
+    </div>
+    <div>
+        <div id="ModelBindObj"></div>
+        <div id="ModelBindObjJson"></div>
+    </div>
+    <!-- #endregion -->
+    <!-- #region (SimpleModelBindArray) -->
+    <h2>(string[] Name, int[] Age)</h2>
+    <div>
+        <h3>輸入:object</h3>
+        <div id="InputObject">
+            {<br />"Name":Jay",<br />"Age:21<br />}
+        </div>
+    </div>
+    <div>
+        <div id="left">送出內容:依據[application/x-www-form-urlencoded]編碼</div>
+        <div id="right">送出內容:依據[application/json]編碼</div><br />
+        <div id="left2">Name=Jay&Age=21</div>
+        <div id="right2">{"Name"="Jay",Age=21}</div>
+    </div>
+    <div>
+        <h3 id="left">返回text</h3>
+        <h3 id="right">返回text</h3>
+    </div>
+    <div>
+        <div id="SimpleModelBindArray"></div>
+        <div id="SimpleModelBindArrayJson"></div>
+    </div>
+    <!-- #endregion -->
+    <!-- #region (ModelBindingArray) -->
+    <h2>(Human[] data)</h2>
+    <div>
+        <h3>輸入:object</h3>
+        <div id="InputObject">
+            {<br />"Name":Jay",<br />"Age:21<br />}
+        </div>
+    </div>
+    <div>
+        <div id="left">送出內容:依據[application/x-www-form-urlencoded]編碼</div>
+        <div id="right">送出內容:依據[application/json]編碼</div><br />
+        <div id="left2">Name=Jay&Age=21</div>
+        <div id="right2">Name=Jay&Age=21</div>
+    </div>
+    <div>
+        <h3 id="left">返回text</h3>
+        <h3 id="right">返回text</h3>
+    </div>
+    <div>
+        <div id="ModelBindingArray"></div>
+        <div id="ModelBindingArrayJason"></div>
+    </div>
+    <!-- #endregion -->
+    <!-- #region (ModelBindingNestedObj) -->
+    <h2>(Person data)</h2>
+    <div>
+        <h3>輸入:object</h3>
+        <div id="InputObject">
+            {<br />"Name":Jay",<br />"Age:21<br />}
+        </div>
+    </div>
+    <div>
+        <div id="left">送出內容:依據[application/x-www-form-urlencoded]編碼</div>
+        <div id="right">送出內容:依據[application/json]編碼</div><br />
+        <div id="left2">Name=Jay&Age=21</div>
+        <div id="right2">{"Name"="Jay",Age=21}</div>
+    </div>
+    <div>
+        <h3 id="left">返回text</h3>
+        <h3 id="right">返回text</h3>
+    </div>
+    <div>
+        <div id="ModelBindingNestedObj"></div>
+        <div id="ModelBindingNestedObjJson"></div>
+    </div>
+    <!-- #endregion -->
+    <!-- #region (ModelBindingArrayNestedObj) -->
+    <h2>(Person[] data)</h2>
+    <div>
+        <h3>輸入:object</h3>
+        <div id="InputObject">
+            {<br />"Name":Jay",<br />"Age:21<br />}
+        </div>
+    </div>
+    <div>
+        <div id="left">送出內容:依據[application/x-www-form-urlencoded]編碼</div>
+        <div id="right">送出內容:依據[application/json]編碼</div><br />
+        <div id="left2">Name=Jay&Age=21</div>
+        <div id="right2">{"Name"="Jay",Age=21}</div>
+    </div>
+    <div>
+        <h3 id="left">返回text</h3>
+        <h3 id="right">返回text</h3>
+    </div>
+    <div>
+        <div id="ModelBindingArrayNestedObj"></div>
+        <div id="ModelBindingArrayNestedObjJson"></div>
+    </div>
+    <!-- #endregion -->
+    <!-- #region SendFile -->
+    <div>
+        <h2>(SendFile)</h2>
+        <form method="post" enctype="multipart/form-data" action="@Url.Action("SendFile")">
+            <input name="fileBase" type="file" value="選擇檔案" />
+            <input type="submit" value="上傳" />
+        </form>
+    </div>
+    <!-- #endregion -->
+    <!-- #region (SendByte) -->
+    <h2>(SendByte)</h2>
+    <div>
+        <h3>輸入:object</h3>
+        <div id="InputObject">
+            {<br />"Name":Jay",<br />"Age:21<br />}
+        </div>
+    </div>
+    <div>
+        <div id="left">送出內容:依據[application/x-www-form-urlencoded]編碼</div>
+        <div id="right">送出內容:依據[application/json]編碼</div><br />
+        <div id="left2">Name=Jay&Age=21</div>
+        <div id="right2">Name=Jay&Age=21</div>
+    </div>
+    <div>
+        <h3 id="left">返回text</h3>
+        <h3 id="right">返回text</h3>
+    </div>
+    <div>
+        <div id="SendByte"></div>
+        <div id="SendByteJson"></div>
+    </div>
+    <!-- #endregion -->
+
+
+</div>
+
+<script>
+    var Name = "Jay";
+    var Age = 21;
+
+    $.ajax({
+        type: "Post",
+        //已經在Default層
+        url: `SimpleBinding`,
+        /*url: `Default/SimpleBinding`,*/
+        contenttype: `application/x-www-form-urlencoded`,
+        data: { "Name": Name, "Age": Age },
+        success: function (data) {
+            /*console.log(data);*/
+            $("#SimpleBinding").html(data);
+
+        }
+    });
+    $.ajax({
+        type: "post",
+        url: `SimpleBinding`,
+        contenttype: `application/json`,
+        data: { "Name": Name, "Age": Age },
+        /* data: JSON.stringify({ "Name": Name, "Age": Age }),*/
+        success: function (data) {
+            /*   console.log(data);*/
+            $("#SimpleBindingJson").html(data);
+        }
+    });
+
+
+    $.ajax({
+        type: "Post",
+        url: `ModelBindObj`,
+        contenttype: `application/x-www-form-urlencoded`,
+        data: { "Name": Name, "Age": Age },
+        success: function (data) {
+            /*   console.log(data);*/
+            $("#ModelBindObj").html(`Name:${data.Name}, Age:${data.Age}`);
+        }
+    });
+    $.ajax({
+        type: "Post",
+        url: `ModelBindObj`,
+        contenttype: `application/json`,
+        data: { "Name": Name, "Age": Age },
+        success: function (data) {
+            /*  console.log(data);*/
+            $("#ModelBindObjJson").html(`Name:${data.Name}, Age:${data.Age}`);
+        }
+    });
+
+    $.ajax({
+        type: "Post",
+        url: `SimpleModelBindArray`,
+        contenttype: `application/x-www-form-urlencoded`,
+        data: { "Name": Name, "Age": Age },
+        success: function (data) {
+            /*   console.log(data);*/
+            $("#SimpleModelBindArray").html(`${data}`);
+        }
+    })
+    $.ajax({
+        type: "Post",
+        url: `SimpleModelBindArray`,
+        contenttype: `application/json`,
+        data: { "Name": Name, "Age": Age },
+        success: function (data) {
+            /*   console.log(data);*/
+            $("#SimpleModelBindArrayJson").html(`${data}`);
+        }
+    })
+
+
+    var data = [{ "Name": "Jay", "Age": 21 }];
+
+    //var data = new Array();
+    //data.push({ "Name": "Jay", "Age":21});
+    $.ajax({
+        type: "Post",
+        url: `ModelBindingArray`,
+        contenttype: `application/x-www-form-urlencoded`,
+        data: { data},
+        success: function (data) {
+             console.log(data);
+            $("#ModelBindingArray").html(`Name:${data[0].Name},Age:${data[0].Age}`);
+        }
+    });
+    $.ajax({
+        type: "Post",
+        url: `ModelBindingArray`,
+        contenttype: `application/json`,
+        data: { data},
+        success: function (data) {
+
+            $("#ModelBindingArrayJason").html(`Name:${data[0].Name},Age:${data[0].Age}`);
+        }
+    });
+
+
+
+    $.ajax({
+        type: "Post",
+        url: `ModelBindingNestedObj`,
+        contenttype: `application/x-www-form-urlencoded`,
+        data: { "Name": Name, "Age": Age },
+        success: function (data) {
+            /*console.log(data);*/
+            $("#ModelBindingNestedObj").html(`Name:${data.Name}, Age:${data.Age}`);
+        }
+    })
+    $.ajax({
+        type: "Post",
+        url: `ModelBindingNestedObj`,
+        contenttype: `application/json`,
+        data: { "Name": Name, "Age": Age },
+        success: function (data) {
+            /*console.log(data);*/
+            $("#ModelBindingNestedObjJson").html(`Name:${data.Name}, Age:${data.Age}`);
+        }
+    })
+
+    $.ajax({
+        type: "Post",
+        url: `ModelBindingArrayNestedObj`,
+        contenttype: `application/x-www-form-urlencoded`,
+        data: { data },
+        success: function (data) {
+            /*console.log(data);*/
+            $("#ModelBindingArrayNestedObj").html(`Name:${data[0].Name}, Age:${data[0].Age}`);
+        }
+    })
+    $.ajax({
+        type: "Post",
+        url: `ModelBindingArrayNestedObj`,
+        contenttype: `application/json`,
+        data: { data },
+        success: function (data) {
+            console.log(data);
+            $("#ModelBindingArrayNestedObjJson").html(`Name:${data[0].Name}, Age:${data[0].Age}`);
+        }
+    })
+
+
+
+    $.ajax({
+        type: "Post",
+        url: `SendByte`,
+        contenttype: `application/x-www-form-urlencoded`,
+        data: { "Name": Name, "Age": Age },
+        success: function (data) {
+            /* console.log(data);*/
+            $("#SendByte").html(data);
+        }
+    })
+    $.ajax({
+        type: "Post",
+        url: `SendByte`,
+        contenttype: `application/json`,
+        data: { "Name": Name, "Age": Age },
+        success: function (data) {
+            /* console.log(data);*/
+            $("#SendByteJson").html(data);
+        }
+    })
+
+
+
+
+</script>

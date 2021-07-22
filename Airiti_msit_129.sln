@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelBinding_11084", "Model
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelBinding_11083", "ModelBinding_11083\ModelBinding_11083.csproj", "{0F68B6AA-30BF-4FF9-B0B7-1796088A103F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchemaNote_11086", "SchemaNote_11086\SchemaNote_11086.csproj", "{86A0F9B4-CA5D-468B-BA11-250EC428688C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelBinding_11086", "..\新增資料夾\新增資料夾 (2)\ModelBinding_11086\ModelBinding_11086\ModelBinding_11086.csproj", "{EFC8D5F6-830C-44E8-A51D-8B7148DA443F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +73,14 @@ Global
 		{0F68B6AA-30BF-4FF9-B0B7-1796088A103F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F68B6AA-30BF-4FF9-B0B7-1796088A103F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F68B6AA-30BF-4FF9-B0B7-1796088A103F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86A0F9B4-CA5D-468B-BA11-250EC428688C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86A0F9B4-CA5D-468B-BA11-250EC428688C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86A0F9B4-CA5D-468B-BA11-250EC428688C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86A0F9B4-CA5D-468B-BA11-250EC428688C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFC8D5F6-830C-44E8-A51D-8B7148DA443F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFC8D5F6-830C-44E8-A51D-8B7148DA443F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFC8D5F6-830C-44E8-A51D-8B7148DA443F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFC8D5F6-830C-44E8-A51D-8B7148DA443F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
