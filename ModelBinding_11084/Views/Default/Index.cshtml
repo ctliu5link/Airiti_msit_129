@@ -1,0 +1,114 @@
+﻿@model List<ModelBinding_11084.ViewModels.TemplateViewModel>
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    textarea {
+        resize:none
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script>
+    
+
+    //將物件轉為urlencode字串
+    function objToURL(object, preprop) {
+        var str = [];
+        for (var prop in object) {
+            var forNextProp = preprop ? preprop + "[" + prop + "]" : `${prop}`;
+            if (object[prop] != null) {
+                if (typeof object[prop] != 'object') {
+                    str.push(preprop ? `${preprop}[${prop}]=${object[prop]}` : `${prop}=${object[prop]}`)
+                }
+                else {
+                    str.push(objToURL(object[prop], forNextProp))
+                }
+            }
+        }
+        return str.join("&")
+    }
+
+    //使用到的物件及參數
+    const ctJSON = "application/json";
+    const ctURL = "application/x-www-form-urlencoded";
+
+
+
+    //依不同action取得不同結果
+    function getResult(object, CT, action, returnType) {
+        $.ajax({
+            type: "POST",
+            contentType: CT,
+            url: `/Default/${action}`,
+            data: CT == 'application/json' ? JSON.stringify(object) : objToURL(object),
+            success: function (data) {
+                resultTarget = CT == 'application/json' ? `return_json_${action}` : `return_url_${action}`;
+                result = returnType == 'text' ? data : JSON.stringify(data);
+                $(`#${resultTarget}`).html(result);
+            }
+        });
+    }
+
+    //依不同主題將資料填入
+    function bindingData(object, topic, returnType) {
+        $(`#inputObj_${topic}`).html(JSON.stringify(object));
+        console.log(object);
+        $(`#outUrlencoded_${topic}`).html(encodeURI(object));
+        $(`#outJSON_${topic}`).html(JSON.stringify(object));
+
+        getResult(object, ctURL, topic, returnType);
+        getResult(object, ctJSON, topic, returnType);
+    }
+
+
+    function prettyPrint(id) {
+        var ugly = document.getElementById(id).value;
+        var obj = JSON.parse(ugly);
+        var pretty = JSON.stringify(obj, undefined, 4);
+        document.getElementById(id).value = pretty;
+    }
+</script>
+
+<h2>Default</h2>
+@{
+    foreach (var data in Model)
+    {
+        <h1>@data.bindingType</h1>
+        <div style="background-color:cornflowerblue; padding:20px">
+            <h2>@data.actionParameter</h2>
+
+            <h3>輸入 (object)</h3>
+            <textarea id="inputObj_@data.bindingType" disabled="disabled" style="width:200px;height:100px;">@data.objJSON.ToString()</textarea>
+
+            <h3>送出內容：根據【application/x-www-urlencoded】編碼</h3>
+            <p id="outUrlencoded_@data.bindingType" style="background-color:white">
+
+            </p>
+            <h3>返回：@data.returnType</h3>
+            <p id="return_url_@data.bindingType" style="background-color:white">
+
+            </p>
+            <h3>送出內容：根據【application/json】編碼</h3>
+            <textarea id="outJSON_@data.bindingType" disabled="disabled" style="width:200px;height:100px;">
+
+            </textarea>
+            <h3>返回：@data.returnType</h3>
+            <p id="return_json_@data.bindingType" style="background-color:white">
+
+            </p>
+        </div>
+        <script>
+            bindingData(JSON.parse(`@data.objJSON`), `@data.bindingType`, `@data.returnType`);
+            prettyPrint("inputObj_@data.bindingType")
+            prettyPrint("outJSON_@data.bindingType")
+        </script>
+    }
+}
+
+<script>
+
+    
+    
+
+</script>
