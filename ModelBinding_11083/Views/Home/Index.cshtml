@@ -75,11 +75,11 @@
             //send後執行的方法
             xhr.onload = function () {
                 if (this.status == 200) {
-                    var blob = new Blob([this.response], { type: "image/jpg" }); //
+                    var blob = new Blob([this.response], { type: "image/png" }); //
                     var objectURL = URL.createObjectURL(blob);
                     var downLoad = document.createElement("a");
                     downLoad.href = objectURL;
-                    downLoad.download = "Photo.jpg";
+                    downLoad.download = "Photo.png";
 
                     downLoad.click();
                     downLoad.href = "";
@@ -92,15 +92,15 @@
 
 </script>
 
+
 uploadByte :
 <input id="uploadByte" type="file" />
-<input type="button" value="upload" onclick="uploadByte()" />
+<input type="button" value="sendByte" onclick="uploadByte()" />
 
-<form action="/Default/SendByte" method="post" enctype="multipart/form-data">
+<form action="/Default/SendFile" method="post" enctype="multipart/form-data">
     <input id="uploadFile13" type="file" name="fileBase" />
-    <input type="submit" />
+    <input type="submit" value="sendFile" />
 </form>
-
 
 @{
     foreach (var data in Model)
